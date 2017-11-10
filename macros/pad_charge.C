@@ -32,7 +32,6 @@ void  pad_charge(){
   int nbins=100;
   int Ndefaultevents=0;
   // int cut_adc=400000;
-  int adc_min = 200;
   bool ExitAtEnd=0;
   bool Eweight=0;
   bool doFit=0;
@@ -52,7 +51,7 @@ void  pad_charge(){
     }
     else if (string( gApplication->Argv(iarg))=="-w"){
       Eweight=1;
-    else if (string( gApplication->Argv(iarg))=="-d"){
+    } else if (string( gApplication->Argv(iarg))=="-d"){
       DEBUG=true;
     } else if (string( gApplication->Argv(iarg))=="--fit"){
      doFit=1;
@@ -94,17 +93,17 @@ void  pad_charge(){
 
   // Histoes
 
-  TH1F* MaxCharge = new TH1F("max charge","tmin for non contained track",100,0,100);
-  TH1F* htmax=new TH1F("htmax","tmax for non contained track",100,280,380);
-
-  TH1F* RowNumber = new TH1F("nRow","Number of row", 24, 0. , 24);
+  TH1F* ClusterCharge = new TH1F("cluster_charge","Cluster charge",100,0,10000);
+  TH1F* PadPerCluster = new TH1F("pads_per_cluster","Pads per cluster",10,0,10);
 
   vector<TH1F*> MaximumSep;
   //vector<TH1F*> 
   MaximumSep.resize(24, NULL);
   for (int i = 0; i < 24; ++i) {
-    MaximumSep[i] = new TH1F(Form("maxSep%i", i),"Maximum X separation between pads", 24, 0. , 24);
+    MaximumSep[i] = new TH1F(Form("maxSep%i", i),"Maximum X separation between pads", 70, 0. , 70);
   }
+
+  TH1F* MaximumSepEvent = new TH1F("maxSep","Maximum X separation between pads", 70, 0. , 70);
   
 
   //************************************************************
@@ -112,9 +111,10 @@ void  pad_charge(){
   //****************** LOOP OVER FILES  ************************
   //************************************************************
   //************************************************************
-  int events_raw = 0;
-  int events_not_empty = 0;
-  int events_one_track = 0;
+  int events_raw        = 0;
+  int events_not_empty  = 0;
+  int events_long       = 0;
+  int events_one_track  = 0;
 
   TFile*f=0;
   for (uint ifile=0;ifile< listOfFiles.size();ifile++){
@@ -156,13 +156,6 @@ void  pad_charge(){
     if (DEBUG)  
       cout << "Imax = " << Imax << " Imin = " << Imin << " Jmax = " << Jmax << " Jmin = " << Jmin << endl;
 
-
-    // TODO Think about it
-    /*for (uint i=0; i<jPad->size(); i++){
-       cout << " i " << i << " jPad " << (*jPad)[i] << endl;
-    }*/
-
-
     gStyle->SetPalette(1);
     gStyle->SetOptStat(0);
     int Nevents=Ndefaultevents;
@@ -174,11 +167,6 @@ void  pad_charge(){
 
     t->SetBranchAddress("PadphysChannels", &listOfChannels );
     t->SetBranchAddress("PadADCvsTime"   , &listOfSamples );
-
-    // float good_evt = 0;
-    // float adc_tot = 0;
-    int nb_evt = 0;
-
  
     if (Nevents<=0) Nevents=t->GetEntries();
     if (Nevents>t->GetEntries()) Nevents=t->GetEntries();
@@ -205,25 +193,28 @@ void  pad_charge(){
 
       if (DEBUG)
         cout << "event i " << ievt << endl;
+
       t->GetEntry(ievt);
 
-      TH2F* PadDisplay=new TH2F("PadDisplay","I vs J of hits",72,-0.5,71+0.5,24,0-0.5,23+0.5);
+      ++events_raw;
+
+      TH2F* PadDisplay = new TH2F("PadDisplay","I vs J of hits",72,-0.5,71+0.5,24,0-0.5,23+0.5);
     
       int adc_sum = 0;
-      int adc_side = 0 ;
-      int adc_up = 0 ;
-      int adc_down = 0 ;
-      int adc_calc = 0;
-      
-    
-      //  PadDisplay->Reset();
-      //PadSelection->Reset();
-
   
       for (int i = 0; i < 24; i++)
         listofRow[i]=0; 
 
       listofT.clear();
+
+      TH1F* ClusterCharge_temp = new TH1F("cluster_charge_temp","Cluster charge",100,0,10000);
+      TH1F* PadPerCluster_temp = new TH1F("pads_per_cluster_temp","Pads per cluster",10,0,10);
+
+      //************************************************************
+      //************************************************************
+      //*****************LOOP OVER CHANNELS ************************
+      //************************************************************
+      //************************************************************
 
       cout << "channel size " << listOfChannels->size() << endl;
       for (uint ic=0; ic< listOfChannels->size(); ic++){
@@ -251,48 +242,82 @@ void  pad_charge(){
         }
 
         if (adcmax<0) continue; // remove noise 
+
         listofT.push_back(itmax);
         listofRow[(*iPad)[chan]]=1; //the row has been hit 
     
-        /*
-        if (((*jPad)[chan]<2) || ((*jPad)[chan]>69)) {
-          adc_side += adcmax ;
-        } else {adc_sum += adcmax;}
-        if ((*iPad)[chan]<2) {
-          adc_down += adcmax;
-        } else if ((*iPad)[chan]>21) {
-          adc_up += adcmax;
-        } else {adc_calc += adcmax;}
-        */
         adc_sum += adcmax;
    
         float weight=1;
         if (Eweight) weight=adcmax;
-        if (adcmax>thr) {hout->Fill(itmax,weight); hadc->Fill(adcmax);}
           
         PadDisplay->Fill((*jPad)[chan],(*iPad)[chan],adcmax);
       } //loop over channels
 
+      int Nrow = 0;
+      for (int i = 0; i < 24; i++)
+        Nrow+=listofRow[i];
+
+      if (Nrow < 1)
+        continue;
+      ++events_not_empty;
+
       // Loop over pads i j
-      for (int i = 0; i < Imax; ++i) {
+      int MaxSepEvent = 0;
+      for (int i = 0; i <= Imax; ++i) {
         int prev = 1E6;
-        int MaxSep = -1;
+        int MaxSepRow = -1;
+        int PadPerCl = 0;
+        int ChargeCl = 0;
         // int hit = 0;
-        for (int j = 0; j < Jmax; ++j) {
-          if (PadDisplay->GetBinContent(i, j) > 0) {
-            if (j - prev - 1 > MaxSep)
-              MaxSep = j - prev - 1;
+        for (int j = 0; j <= Jmax; ++j) {
+          int adcmax = PadDisplay->GetBinContent(j, i);
+          ChargeCl += adcmax;
+          if (adcmax > 0) {
+            if (j - prev - 1 > MaxSepRow)
+              MaxSepRow = j - prev - 1;
             prev = j;
+            ++PadPerCl;
           }
         }
-        if (MaxSep >= 0)
-          MaximumSep[i]->Fill(MaxSep);
-    
-      }
-    }
-  }
-  
-  MaximumSep[23]->Draw();
+        if (MaxSepRow >= 0)
+          MaximumSep[i]->Fill(MaxSepRow);
+        if (MaxSepRow > MaxSepEvent)
+          MaxSepEvent = MaxSepRow;
+
+        if (ChargeCl>0) {
+          //cout << ChargeCl << endl;
+          ClusterCharge_temp->Fill(ChargeCl);  
+          PadPerCluster_temp->Fill(PadPerCl);
+        }
+      }  // end of PAD scan
+
+      MaximumSepEvent->Fill(MaxSepEvent);
+
+      if (MaxSepEvent > 2)
+        continue;
+      ++events_one_track;
+
+      if (Nrow < 18)
+        continue;
+      ++events_long;
+
+      cout << "temp_max " << ClusterCharge_temp->GetMaximum() << endl;
+      ClusterCharge->Add(ClusterCharge_temp);
+      cout << "sum_max " << ClusterCharge->GetMaximum() << endl;
+      PadPerCluster->Add(PadPerCluster_temp);
+
+    } // end of loops over events
+  } // end of loops over files
+
+  cout << "Total events number     : " << events_raw << endl;
+  cout << "Not empty events number : " << events_not_empty << endl;
+  cout << "One track events number : " << events_one_track << endl;
+  cout << "Long track events number: " << events_long << endl;
+
+  //MaximumSepEvent->Draw();
+  ClusterCharge->Draw();
+  //PadPerCluster->Draw();
 
   cout << "END" << endl;
   if (ExitAtEnd) {getchar(); exit(0);}
