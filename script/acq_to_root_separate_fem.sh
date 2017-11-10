@@ -18,7 +18,7 @@ do
   cp $path ~/INSTALLFCC/DataWriter_devel/temp/$f_acq
   
   # loop over fems
-  for ((j=0; j<1; j++));
+  for ((j=0; j<7; j++));
   do
     f_root_new=${f_acq%.*}"_fem"$j".root"
     echo "**********************************************"
@@ -40,7 +40,7 @@ if  $merge
 then
   echo "Merging the subruns"
   # loop over fems
-  for ((j=0; j<1; j++));
+  for ((j=0; j<7; j++));
   do
     hadd "data_root/${f_acq%.*.*}_fem$j.root" "data_root/${f_acq%.*.*}."*"_fem$j.root"
   done
