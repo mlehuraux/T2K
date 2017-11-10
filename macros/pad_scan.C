@@ -1,4 +1,4 @@
-#define THIS_NAME tpc_gain_study
+#define THIS_NAME pad_scan
 #define NOINTERACTIVE_OUTPUT
 #define OVERRIDE_OPTIONS
 #include <iostream>
@@ -16,7 +16,7 @@ make SRC="mydict.C tpc_gain_study.C"  EXE=test.exe
 
 */
 
-/*
+/*tpc_gain_study
 What we need to study:
 1) maximum separation in the row. for 2 tracks substraction. How often?
 2) Number of pads per cluster
@@ -24,14 +24,14 @@ What we need to study:
 4) Qmax destribution 
 */
 
-void  tpc_gain_study(){
+void  pad_scan(){
 
-  bool DEBUG = true;
+  bool DEBUG = false;
 
   int thr=100;     //seuil
   int nbins=100;
   int Ndefaultevents=0;
-  int cut_adc=400000;
+  // int cut_adc=400000;
   int adc_min = 200;
   bool ExitAtEnd=0;
   bool Eweight=0;
@@ -52,6 +52,8 @@ void  tpc_gain_study(){
     }
     else if (string( gApplication->Argv(iarg))=="-w"){
       Eweight=1;
+    else if (string( gApplication->Argv(iarg))=="-d"){
+      DEBUG=true;
     } else if (string( gApplication->Argv(iarg))=="--fit"){
      doFit=1;
     }
@@ -94,8 +96,8 @@ void  tpc_gain_study(){
   TH1F* hout=new TH1F("htime","Time",nbins,0,600);
   hout->Sumw2();
   TH1F* hadc=new TH1F("hadc","hadc",500,0,5000);
-  TH1F* evadc=new TH1F("evadc","evadc",500,0,10000);
-  TH1F* adc=new TH1F("adc","adc",100,0,500000);
+  // TH1F* evadc=new TH1F("evadc","evadc",500,0,10000);
+  // TH1F* adc=new TH1F("adc","adc",100,0,500000);
   //TH2F* PadDisplay=new TH2F("PadDisplay","I vs J of hits",72,-0.5,71+0.5,24,0-0.5,23+0.5);
   TH1F* htmin=new TH1F("htmin","tmin for non contained track",100,0,100);
   TH1F* htmax=new TH1F("htmax","tmax for non contained track",100,280,380);
@@ -171,8 +173,8 @@ void  tpc_gain_study(){
     t->SetBranchAddress("PadphysChannels", &listOfChannels );
     t->SetBranchAddress("PadADCvsTime"   , &listOfSamples );
 
-    float good_evt = 0;
-    float adc_tot = 0;
+    // float good_evt = 0;
+    // float adc_tot = 0;
     int nb_evt = 0;
 
  
@@ -224,8 +226,10 @@ void  tpc_gain_study(){
       cout << "channel size " << listOfChannels->size() << endl;
       for (uint ic=0; ic< listOfChannels->size(); ic++){
         int chan= (*listOfChannels)[ic];
-        if (DEBUG)
+        if (DEBUG) {
           cout << "channel " << chan << endl;
+          cout << "i = " << (*iPad)[chan] << "   j = " << (*jPad)[chan] << endl;
+        }
         // find out the maximum
         float adcmax=-1; 
         int itmax=-1;
@@ -271,7 +275,7 @@ void  tpc_gain_study(){
       for (int i = 0; i < Imax; ++i) {
         int prev = 1E6;
         int MaxSep = -1;
-        int hit 
+        // int hit = 0;
         for (int j = 0; j < Jmax; ++j) {
           if (PadDisplay->GetBinContent(i, j) > 0) {
             if (j - prev - 1 > MaxSep)
@@ -279,7 +283,7 @@ void  tpc_gain_study(){
             prev = j;
           }
         }
-        if (MaximumSep >= 0)
+        if (MaxSep >= 0)
           MaximumSep[i]->Fill(MaxSep);
       } 
 
@@ -326,12 +330,12 @@ void  tpc_gain_study(){
 
       if (ievt<10){
         cout << " event " << ievt  <<endl;
-        TCanvas* c1 = new TCanvas();
-        c1->Clear();
+        //TCanvas* c1 = new TCanvas();
+        //c1->Clear();
         PadDisplay->Draw("colz"); 
-        c1->Print("../pad.png");
+        //c1->Print("../pad.png");
         //PadSelection->Draw("colz");
-        //gPad->Update();
+        gPad->Update();
         cout << "Draw ADC?" << endl;
         char res;
         cin >> res;
@@ -373,7 +377,8 @@ void  tpc_gain_study(){
               }
             }
             adc1->Draw();
-            c1->Print("../adc.png");
+            gPad->Update();
+            //c1->Print("../adc.png");
 
             cout << "Continue?" << endl;
             char cont;
