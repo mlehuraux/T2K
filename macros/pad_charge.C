@@ -43,7 +43,7 @@ void  pad_charge(){
     if (string( gApplication->Argv(iarg))=="-f" || string( gApplication->Argv(iarg))=="--file" ){
       iarg++;
       file=gApplication->Argv(iarg);
-      if (file.Contains("root")) {
+      if (file.Contains(".root")) {
         
         cout << "adding filename" <<" " << file << endl;
         listOfFiles.push_back(file);
@@ -102,7 +102,7 @@ void  pad_charge(){
     }
   } //Argument parsing
 
-  //TCanvas *c1 = new TCanvas("c1","evadc",900,700);
+  TCanvas *c1 = new TCanvas("c1","evadc",900,700);
 
   // Histoes
 
@@ -217,7 +217,10 @@ void  pad_charge(){
 
       ++events_raw;
 
-      TH2F* PadDisplay = new TH2F("PadDisplay","I vs J of hits",72,-0.5,71+0.5,24,0-0.5,23+0.5);
+      vector< vector<int> > PadDisplay;
+      PadDisplay.resize(Jmax+1);
+      for (int z=0; z <= Jmax; ++z)
+        PadDisplay[z].resize(Imax, 0);
     
       int adc_sum = 0;
   
@@ -225,9 +228,6 @@ void  pad_charge(){
         listofRow[i]=0; 
 
       listofT.clear();
-
-      TH1F* ClusterCharge_temp = new TH1F("cluster_charge_temp","Cluster charge",100,0,10000);
-      TH1F* PadPerCluster_temp = new TH1F("pads_per_cluster_temp","Pads per cluster",10,0,10);
 
       //************************************************************
       //************************************************************
@@ -268,7 +268,7 @@ void  pad_charge(){
         float weight=1;
         if (Eweight) weight=adcmax;
           
-        PadDisplay->Fill((*jPad)[chan],(*iPad)[chan],adcmax);
+        PadDisplay[(*jPad)[chan]][(*iPad)[chan]] = adcmax;
       } //loop over channels
 
       int Nrow = 0;
@@ -281,6 +281,8 @@ void  pad_charge(){
 
       vector<Float_t> cluster_charge;
       cluster_charge.clear();
+      vector<Float_t> pads_per_cluster;
+      pads_per_cluster.clear();
 
       // Loop over pads i j
       int MaxSepEvent = 0;
@@ -291,7 +293,7 @@ void  pad_charge(){
         int ChargeCl = 0;
         // int hit = 0;
         for (int j = 0; j <= Jmax; ++j) {
-          int adcmax = PadDisplay->GetBinContent(j+1, i+1);
+          int adcmax = PadDisplay[j][i];
           if (DEBUG) {
               cout << "i = " << i << "   j = " << j  << "    adc_max = " << adcmax << endl;
           }
@@ -309,14 +311,12 @@ void  pad_charge(){
           MaxSepEvent = MaxSepRow;
 
         if (ChargeCl>0) {
-          ClusterCharge_temp->Fill(ChargeCl);  
-          PadPerCluster_temp->Fill(PadPerCl);
           cluster_charge.push_back(ChargeCl);
+          pads_per_cluster.push_back(PadPerCl);
         }
 
 
       }  // end of PAD scan
-      cout << endl;
       sort(cluster_charge.begin(), cluster_charge.begin()+cluster_charge.size()-1);
       Float_t norm_cluster = 0.;
       Int_t i_max = round(alpha * cluster_charge.size());
@@ -326,6 +326,10 @@ void  pad_charge(){
       norm_cluster *= 1 / (alpha * cluster_charge.size());
 
       MaximumSepEvent->Fill(MaxSepEvent);
+      for (Int_t i = 0; i < cluster_charge.size(); ++i) {
+        ClusterCharge->Fill(cluster_charge[i]);
+        PadPerCluster->Fill(pads_per_cluster[i]);
+      }
 
       if (MaxSepEvent > 2)
         continue;
@@ -335,9 +339,7 @@ void  pad_charge(){
         continue;
       ++events_long;
 
-      ClusterCharge->Add(ClusterCharge_temp);
       ClusterNormCharge->Fill(norm_cluster);
-      PadPerCluster->Add(PadPerCluster_temp);
 
     } // end of loops over events
   } // end of loops over files
@@ -347,15 +349,21 @@ void  pad_charge(){
   cout << "One track events number : " << events_one_track << endl;
   cout << "Long track events number: " << events_long << endl;
 
-  //MaximumSepEvent->Draw();
-  //ClusterCharge->Draw();
-  //PadPerCluster->Draw();
-  //NrowHist->Draw();
+  MaximumSepEvent->Draw();
+  c1->Print("figure/MaxSep.png");
+
+  ClusterCharge->Draw();
+  c1->Print("figure/ClusterCharge.png");
+
+  PadPerCluster->Draw();
+  c1->Print("figure/PadPerCluster.png");
+
+  NrowHist->Draw();
   gStyle->SetOptStat("RMne");
   gStyle->SetOptFit(0111);
-  ClusterNormCharge->Fit("gaus");
-  
+  ClusterNormCharge->Fit("gaus");  
   ClusterNormCharge->Draw();
+  c1->Print("figure/TruncEnergy.png");
 
   cout << "END" << endl;
   if (ExitAtEnd) {getchar(); exit(0);}
