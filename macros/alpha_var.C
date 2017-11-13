@@ -1,4 +1,4 @@
-#define THIS_NAME pad_charge
+#define THIS_NAME alpha_var
 #define NOINTERACTIVE_OUTPUT
 #define OVERRIDE_OPTIONS
 #include <iostream>
@@ -24,7 +24,7 @@ What we need to study:
 4) Qmax destribution 
 */
 
-void  pad_charge(){
+void  alpha_var(){
 
   bool DEBUG = false;
 
@@ -104,36 +104,12 @@ void  pad_charge(){
 
   TCanvas *c1 = new TCanvas("c1","evadc",900,700);
 
-  // Histoes
-
-  TH1F* ClusterCharge     = new TH1F("cluster_charge","Cluster charge",100,0,10000);
-  TH1F* ClusterNormCharge = new TH1F("cluster_norm_charge","Truncated mean energy deposit",100,0,2000);
-  
-  TH1F* PadPerCluster     = new TH1F("pads_per_cluster","Pads per cluster",10,0,10);
-
-  TH1F* NrowHist          = new TH1F("n_row", "number of rows per event", 26, 0, 26);
-
-  vector<TH1F*> MaximumSep;
-  //vector<TH1F*> 
-  MaximumSep.resize(24, NULL);
-  for (int i = 0; i < 24; ++i) {
-    MaximumSep[i] = new TH1F(Form("maxSep%i", i),"Maximum X separation between pads", 73, 0. , 73);
-  }
-
-  TH1F* MaximumSepEvent = new TH1F("maxSep","Maximum X separation between pads", 73, 0. , 73);
-
-  Float_t alpha = 0.7;
-  
-
   //************************************************************
   //************************************************************
   //****************** LOOP OVER FILES  ************************
   //************************************************************
   //************************************************************
-  int events_raw        = 0;
-  int events_not_empty  = 0;
-  int events_long       = 0;
-  int events_one_track  = 0;
+  vector< vector<int > > EventClusters;
 
   TFile*f=0;
   for (uint ifile=0;ifile< listOfFiles.size();ifile++){
@@ -198,8 +174,6 @@ void  pad_charge(){
 
     int listofRow[24]; //to count how many rows have been hit
 
-    vector <int> listofT ;
-
     //************************************************************
     //************************************************************
     //****************** LOOP OVER EVENTS ************************
@@ -215,20 +189,13 @@ void  pad_charge(){
 
       t->GetEntry(ievt);
 
-      ++events_raw;
-
       vector< vector<int> > PadDisplay;
       PadDisplay.resize(Jmax+1);
       for (int z=0; z <= Jmax; ++z)
         PadDisplay[z].resize(Imax, 0);
-      TH2F* PadDisplay1=new TH2F("PadDisplay","I vs J of hits",72,-0.5,71+0.5,24,0-0.5,23+0.5);
-    
-      int adc_sum = 0;
-  
+
       for (int i = 0; i < 24; i++)
         listofRow[i]=0; 
-
-      listofT.clear();
 
       //************************************************************
       //************************************************************
@@ -261,16 +228,12 @@ void  pad_charge(){
           cout << "i = " << (*iPad)[chan] << "   j = " << (*jPad)[chan]  << "    adc_max = " << adcmax << endl;
         }
 
-        listofT.push_back(itmax);
         listofRow[(*iPad)[chan]]=1; //the row has been hit 
-    
-        adc_sum += adcmax;
-   
+       
         float weight=1;
         if (Eweight) weight=adcmax;
           
-        PadDisplay[(*jPad)[chan]][(*iPad)[chan]] += adcmax;
-        PadDisplay1->Fill((*jPad)[chan], (*iPad)[chan], adcmax);
+        PadDisplay[(*jPad)[chan]][(*iPad)[chan]] = adcmax;
       } //loop over channels
 
       int Nrow = 0;
@@ -279,98 +242,107 @@ void  pad_charge(){
 
       if (Nrow < 1)
         continue;
-      ++events_not_empty;
 
-      vector<Float_t> cluster_charge;
+      vector<int> cluster_charge;
       cluster_charge.clear();
-      vector<Float_t> pads_per_cluster;
-      pads_per_cluster.clear();
 
       // Loop over pads i j
       int MaxSepEvent = 0;
       for (int i = 0; i <= Imax; ++i) {
         int prev = 1E6;
         int MaxSepRow = -1;
-        int PadPerCl = 0;
         int ChargeCl = 0;
         // int hit = 0;
         for (int j = 0; j <= Jmax; ++j) {
           int adcmax = PadDisplay[j][i];
-          int adcmax1 = PadDisplay1->GetBinContent(j+1, i+1);
-          if (adcmax != adcmax1)
-            cout << adcmax << "   " << adcmax1 << endl;
-          if (DEBUG) {
-              cout << "i = " << i << "   j = " << j  << "    adc_max = " << adcmax << endl;
-          }
+
           ChargeCl += adcmax;
           if (adcmax > 0) {
             if (j - prev - 1 > MaxSepRow)
               MaxSepRow = j - prev - 1;
             prev = j;
-            ++PadPerCl;
           }
         }
-        if (MaxSepRow >= 0)
-          MaximumSep[i]->Fill(MaxSepRow);
+
         if (MaxSepRow > MaxSepEvent)
           MaxSepEvent = MaxSepRow;
 
-        if (ChargeCl>0) {
+        if (ChargeCl>0) 
           cluster_charge.push_back(ChargeCl);
-          pads_per_cluster.push_back(PadPerCl);
-        }
-
-
       }  // end of PAD scan
+
       sort(cluster_charge.begin(), cluster_charge.begin()+cluster_charge.size()-1);
-      Float_t norm_cluster = 0.;
-      Int_t i_max = round(alpha * cluster_charge.size());
-      for (int i = 0; i < std::min(i_max, int(cluster_charge.size())); ++i) 
-        norm_cluster += cluster_charge[i];
 
-      norm_cluster *= 1 / (alpha * cluster_charge.size());
-
-      MaximumSepEvent->Fill(MaxSepEvent);
-      for (Int_t i = 0; i < cluster_charge.size(); ++i) {
-        ClusterCharge->Fill(cluster_charge[i]);
-        PadPerCluster->Fill(pads_per_cluster[i]);
-      }
-
+      // Selection
+      // 1 cut    one track
       if (MaxSepEvent > 2)
         continue;
-      ++events_one_track;
-      NrowHist->Fill(Nrow);
+
+      // 2 cut    long track
       if (Nrow < 20)
         continue;
-      ++events_long;
 
-      ClusterNormCharge->Fill(norm_cluster);
+      // store the vector of clusters per event that passed the selection
+      EventClusters.push_back(cluster_charge);
 
     } // end of loops over events
   } // end of loops over files
 
-  cout << "Total events number     : " << events_raw << endl;
-  cout << "Not empty events number : " << events_not_empty << endl;
-  cout << "One track events number : " << events_one_track << endl;
-  cout << "Long track events number: " << events_long << endl;
+  // loop over alpha vars per optimization
+  // define opt vars
+  TH1F* BestResol;
+  Float_t best_resolution = 1.;
+  Float_t best_alpha = 1.;
+  // loop over alpha
+  Float_t min   = 0.5;
+  Float_t max   = 0.9;
+  Int_t   Nstep = 4;
 
-  MaximumSepEvent->Draw();
-  c1->Print("figure/MaxSep.png");
+  Float_t step = (max- min) / Nstep;
 
-  ClusterCharge->Draw();
-  c1->Print("figure/ClusterCharge.png");
+  for (Int_t z = 0; z < Nstep; ++z) {
+    Float_t alpha = min + z * step;
+    TH1F* ClusterNormCharge = new TH1F("cluster_norm_charge","Truncated mean energy deposit",100,0,2000);
 
-  PadPerCluster->Draw();
-  c1->Print("figure/PadPerCluster.png");
+    for (Int_t j = 0; j < EventClusters.size(); ++j) {
+      Float_t norm_cluster = 0.;
+      Int_t i_max = round(alpha * EventClusters[j].size());
+      Int_t v_size = (i_max < int(EventClusters[j].size())) ? i_max : int(EventClusters[j].size());
+      for (int i = 0; i < v_size ; ++i) 
+        norm_cluster += EventClusters[j][i];
 
-  NrowHist->Draw();
+      norm_cluster *= 1 / (alpha * EventClusters[j].size());
+
+      ClusterNormCharge->Fill(norm_cluster);
+    }
+    ClusterNormCharge->Fit("gaus");
+    TF1 *fit = ClusterNormCharge->GetFunction("gaus");
+    Float_t constant  = fit->GetParameter(0);
+    Float_t mean      = fit->GetParameter(1);
+    Float_t sigma     = fit->GetParameter(2);
+
+    cout << "****************************************************" << endl;
+    cout << "alpha = " << alpha << endl;
+    cout << "constant = " << constant << endl;
+    cout << "mean     = " << mean << endl;
+    cout << "sigma    = " << sigma << endl;
+
+    Float_t resol = sigma / mean; 
+
+    if (resol < best_resolution) {
+      BestResol       = (TH1F*)ClusterNormCharge->Clone();
+      best_alpha      = alpha;
+      best_resolution = resol;
+    }
+  }
+
+  
   gStyle->SetOptStat("RMne");
   gStyle->SetOptFit(0111);
-  ClusterNormCharge->Fit("gaus");  
-  ClusterNormCharge->Draw();
-  c1->Print("figure/TruncEnergy.png");
+  BestResol->Fit("gaus");  
+  BestResol->Draw();
+  c1->Print("figure/TruncEnergyBest.png");
 
   cout << "END" << endl;
-  if (ExitAtEnd) {getchar(); exit(0);}
 }
 
