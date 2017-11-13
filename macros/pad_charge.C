@@ -220,8 +220,8 @@ void  pad_charge(){
       vector< vector<int> > PadDisplay;
       PadDisplay.resize(Jmax+1);
       for (int z=0; z <= Jmax; ++z)
-        PadDisplay[z].resize(Imax, 0);
-      TH2F* PadDisplay1=new TH2F("PadDisplay","I vs J of hits",72,-0.5,71+0.5,24,0-0.5,23+0.5);
+        PadDisplay[z].resize(Imax+1, 0);
+      //TH2F* PadDisplay1=new TH2F("PadDisplay","I vs J of hits",72,-0.5,71+0.5,24,0-0.5,23+0.5);
     
       int adc_sum = 0;
   
@@ -270,7 +270,7 @@ void  pad_charge(){
         if (Eweight) weight=adcmax;
           
         PadDisplay[(*jPad)[chan]][(*iPad)[chan]] += adcmax;
-        PadDisplay1->Fill((*jPad)[chan], (*iPad)[chan], adcmax);
+        //PadDisplay1->Fill((*jPad)[chan], (*iPad)[chan], adcmax);
       } //loop over channels
 
       int Nrow = 0;
@@ -296,9 +296,7 @@ void  pad_charge(){
         // int hit = 0;
         for (int j = 0; j <= Jmax; ++j) {
           int adcmax = PadDisplay[j][i];
-          int adcmax1 = PadDisplay1->GetBinContent(j+1, i+1);
-          if (adcmax != adcmax1)
-            cout << adcmax << "   " << adcmax1 << endl;
+          //int adcmax1 = PadDisplay1->GetBinContent(j+1, i+1);
           if (DEBUG) {
               cout << "i = " << i << "   j = " << j  << "    adc_max = " << adcmax << endl;
           }

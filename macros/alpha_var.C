@@ -192,7 +192,7 @@ void  alpha_var(){
       vector< vector<int> > PadDisplay;
       PadDisplay.resize(Jmax+1);
       for (int z=0; z <= Jmax; ++z)
-        PadDisplay[z].resize(Imax, 0);
+        PadDisplay[z].resize(Imax+1, 0);
 
       for (int i = 0; i < 24; i++)
         listofRow[i]=0; 
@@ -294,13 +294,13 @@ void  alpha_var(){
   Float_t best_resolution = 1.;
   Float_t best_alpha = 1.;
   // loop over alpha
-  Float_t min   = 0.5;
+  Float_t min   = 0.3;
   Float_t max   = 0.9;
-  Int_t   Nstep = 4;
+  Int_t   Nstep = 6;
 
   Float_t step = (max- min) / Nstep;
 
-  for (Int_t z = 0; z < Nstep; ++z) {
+  for (Int_t z = 0; z <= Nstep; ++z) {
     Float_t alpha = min + z * step;
     TH1F* ClusterNormCharge = new TH1F("cluster_norm_charge","Truncated mean energy deposit",100,0,2000);
 
@@ -315,6 +315,8 @@ void  alpha_var(){
 
       ClusterNormCharge->Fill(norm_cluster);
     }
+    gStyle->SetOptStat("RMne");
+    gStyle->SetOptFit(0111);
     ClusterNormCharge->Fit("gaus");
     TF1 *fit = ClusterNormCharge->GetFunction("gaus");
     Float_t constant  = fit->GetParameter(0);
@@ -342,6 +344,11 @@ void  alpha_var(){
   BestResol->Fit("gaus");  
   BestResol->Draw();
   c1->Print("figure/TruncEnergyBest.png");
+
+  cout << "****************************************************" << endl;
+  cout << "alpha    = " << best_alpha << endl;
+  cout << "resol    = " << best_resolution << endl;
+
 
   cout << "END" << endl;
 }
