@@ -1,7 +1,7 @@
 path_ini=$(pwd)
 cd ~/suvorov/data_temp/
-
-array=($(cat ~/suvorov/FileList/acq/run5206.list))
+run=$1
+array=($(cat ~/suvorov/FileList/acq/run$run.list))
 
 merge=true
 
@@ -10,7 +10,6 @@ mkdir temp
 # loop over subruns
 for ((i=0; i<${#array[@]}; i++));
 do
-  echo "$i"
   path=${array[$i]}
   f_acq=${path##*/}
   f_root=${f_acq%.*}".root"
@@ -24,8 +23,12 @@ do
     echo "**********************************************"
     echo "Creating $f_root_new"
     echo "**********************************************"
-    
-    ./bin/acqToRootConverterExe -t $j -m 1 -f  "temp/$f_acq" --noxml
+    k=1
+    if (($j==1))
+      then
+      k=2
+    fi
+    ./bin/acqToRootConverterExe -t $j -m $k -f  "temp/$f_acq" --noxml
     ls -l temp/
     mv temp/$f_root ~/suvorov/data_root/$f_root_new
   done
