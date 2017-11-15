@@ -298,8 +298,15 @@ void  alpha_var(){
   Float_t max   = 0.9;
   Int_t   Nstep = 6;
 
+   TGraphAsymmErrors* gr = new  TGraphAsymmErrors();
+
   Float_t step = (max- min) / Nstep;
 
+  //************************************************************
+  //************************************************************
+  //*****************LOOP OVER ALPHA ;;;************************
+  //************************************************************
+  //************************************************************
   for (Int_t z = 0; z <= Nstep; ++z) {
     Float_t alpha = min + z * step;
     TH1F* ClusterNormCharge = new TH1F("cluster_norm_charge","Truncated mean energy deposit",100,0,2000);
@@ -329,7 +336,9 @@ void  alpha_var(){
     cout << "mean     = " << mean << endl;
     cout << "sigma    = " << sigma << endl;
 
-    Float_t resol = sigma / mean; 
+    Float_t resol = sigma / mean;
+
+    gr->SetPoint(z, alpha, resol);
 
     if (resol < best_resolution) {
       BestResol       = (TH1F*)ClusterNormCharge->Clone();
@@ -344,6 +353,9 @@ void  alpha_var(){
   BestResol->Fit("gaus");  
   BestResol->Draw();
   c1->Print("figure/TruncEnergyBest.png");
+  gr->Draw("aplm");
+  c1->Print("figure/Resolution_alpha.png");
+
 
   cout << "****************************************************" << endl;
   cout << "alpha    = " << best_alpha << endl;
