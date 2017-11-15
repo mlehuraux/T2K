@@ -362,6 +362,7 @@ void  pad_charge(){
   c1->Print("figure/PadPerCluster.png");
 
   NrowHist->Draw();
+  c1->Print("figure/TrackLength.png");
   gStyle->SetOptStat("RMne");
   gStyle->SetOptFit(0111);
   ClusterNormCharge->Fit("gaus");  
