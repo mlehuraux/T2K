@@ -26,7 +26,7 @@ What we need to study:
 
 void  pad_charge(){
 
-  bool DEBUG = false;
+  bool DEBUG = true;
 
   int thr=100;     //seuil
   int nbins=100;
@@ -149,30 +149,19 @@ void  pad_charge(){
     vector<int> *iPad(0);
     vector<int> *jPad(0);
     TTree * tgeom= (TTree*) f->Get("femGeomTree");
+    int Jmin, Imin, Jmax, Imax;
     tgeom->SetBranchAddress("jPad", &jPad );
     tgeom->SetBranchAddress("iPad", &iPad );
+    tgeom->SetBranchAddress("jPadMin", &Jmin );
+    tgeom->SetBranchAddress("iPadMin", &Imin );
+    tgeom->SetBranchAddress("jPadMax", &Jmax );
+    tgeom->SetBranchAddress("iPadMax", &Imax );
     tgeom->GetEntry(0); // put into memory geometry info
     cout << "reading geometry" << endl;
     cout << "jPad->size() " << jPad->size() <<endl;
     cout << "iPad->size() " << iPad->size() <<endl;
 
-    int Imax = -1;
-    int Imin = 10000000;
-    int Jmax = -1;
-    int Jmin = 10000000;
-
-    for (unsigned long i = 0; i < jPad->size(); ++i) {
-      if (Imax < (*iPad)[i])
-        Imax = (*iPad)[i];
-      if (Imin > (*iPad)[i])
-        Imin = (*iPad)[i];
-      if (Jmax < (*jPad)[i])
-        Jmax = (*jPad)[i];
-      if (Jmin > (*jPad)[i])
-        Jmin = (*jPad)[i];
-    }
-
-    if (DEBUG)  
+    if (DEBUG)
       cout << "Imax = " << Imax << " Imin = " << Imin << " Jmax = " << Jmax << " Jmin = " << Jmin << endl;
 
     gStyle->SetPalette(1);
