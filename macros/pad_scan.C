@@ -52,7 +52,7 @@ void  pad_scan(){
     }
     else if (string( gApplication->Argv(iarg))=="-w"){
       Eweight=1;
-    else if (string( gApplication->Argv(iarg))=="-d"){
+    }else if (string( gApplication->Argv(iarg))=="-d"){
       DEBUG=true;
     } else if (string( gApplication->Argv(iarg))=="--fit"){
      doFit=1;
@@ -140,19 +140,31 @@ void  pad_scan(){
     int Jmax = -1;
     int Jmin = 10000000;
 
+    int ImaxI, IminI, JmaxI, JminI;
+
     for (unsigned long i = 0; i < jPad->size(); ++i) {
-      if (Imax < (*iPad)[i])
+      if (Imax < (*iPad)[i]) {
         Imax = (*iPad)[i];
-      if (Imin > (*iPad)[i])
+        ImaxI = i;
+      }
+      if (Imin > (*iPad)[i]) {
         Imin = (*iPad)[i];
-      if (Jmax < (*jPad)[i])
+        IminI = i;
+      }
+      if (Jmax < (*jPad)[i]) {
         Jmax = (*jPad)[i];
-      if (Jmin > (*jPad)[i])
+        JmaxI = i;
+      }
+      if (Jmin > (*jPad)[i]) {
         Jmin = (*jPad)[i];
+        JminI = i;
+      }
     }
 
-    if (DEBUG)  
+    if (DEBUG) { 
       cout << "Imax = " << Imax << " Imin = " << Imin << " Jmax = " << Jmax << " Jmin = " << Jmin << endl;
+      cout << "ImaxI = " << Imax << " IminI = " << Imin << " JmaxI = " << Jmax << " JminI = " << Jmin << endl;
+    }
 
 
     // TODO Think about it
