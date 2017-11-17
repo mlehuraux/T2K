@@ -34,6 +34,7 @@
   cout << "Pad Panel: w,ymin,ymax = " 
        << width << ", " << ymin << ", " << ymax << endl;
   TGraph* graph = new TGraph();
+  int point = 0;
 
   for (int i=0; i<kPhysChannelMax; i++) {
     int id, row, col;
