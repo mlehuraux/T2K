@@ -285,8 +285,7 @@ void  pad_charge(){
         continue;
       ++events_not_empty;
 
-      vector<Float_t> cluster_charge;
-      vector<Int_t>   cluster_row;
+      vector< pair<Float_t, Int_t> > cluster_charge;
       cluster_charge.clear();
       vector<Float_t> pads_per_cluster;
       pads_per_cluster.clear();
@@ -314,24 +313,23 @@ void  pad_charge(){
           MaxSepEvent = MaxSepRow;
 
         if (ChargeCl>0) {
-          cluster_charge.push_back(ChargeCl);
-          cluster_row.push_back(i);
+          cluster_charge.push_back(make_pair(ChargeCl, i));
           pads_per_cluster.push_back(PadPerCl);
         }
 
 
       }  // end of PAD scan
-      sort(cluster_charge.begin(), cluster_charge.begin()+cluster_charge.size()-1);
+      sort(cluster_charge.begin(), cluster_charge.end());
       Float_t norm_cluster = 0.;
       Int_t i_max = round(alpha * cluster_charge.size());
       for (int i = 0; i < std::min(i_max, int(cluster_charge.size())); ++i) 
-        norm_cluster += cluster_charge[i];
+        norm_cluster += cluster_charge[i].first;
 
       norm_cluster *= 1 / (alpha * cluster_charge.size());
 
       MaximumSepEvent->Fill(MaxSepEvent);
       for (UInt_t i = 0; i < cluster_charge.size(); ++i) {
-        ClusterCharge->Fill(cluster_charge[i]);
+        ClusterCharge->Fill(cluster_charge[i].first);
       }
 
       if (MaxSepEvent > 2)
@@ -349,7 +347,7 @@ void  pad_charge(){
       ClusterNormCharge->Fill(norm_cluster);
 
       for (UInt_t i = 0; i < cluster_charge.size(); ++i) {
-        ChargePerRow[cluster_row[i]]->Fill(cluster_charge[i]);
+        ChargePerRow[cluster_charge[i].second]->Fill(cluster_charge[i].first);
         PadPerCluster->Fill(pads_per_cluster[i]);
       }
 
