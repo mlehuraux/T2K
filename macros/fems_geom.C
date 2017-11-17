@@ -34,12 +34,6 @@
   cout << "Pad Panel: w,ymin,ymax = " 
        << width << ", " << ymin << ", " << ymax << endl;
   TGraph* graph = new TGraph();
-  int point = 0;
-  vector<int> dot;
-  dot.push_back(0);
-  dot.push_back(71);
-  //dot.push_back(1657);
-  //dot.push_back(1726);
 
   for (int i=0; i<kPhysChannelMax; i++) {
     int id, row, col;
@@ -56,19 +50,12 @@
 
   padGeomFile.close();
 
-  //const double xscale =1.;
-  //const double yscale =1.;
-
-  const double scale  = 1.;//0.95/3;          // scale down further for padding 
+  const double scale  = 1.;
   const double xscale = scale * 1./tpcPanelWidth;
   const double yscale = scale * 1./tpcPanelHeight;
 
   for (int iFem=0; iFem<kFEM; iFem++) {
-
-   //for (int iDot = 0; iDot < dot.size(); ++iDot) {
    for (int ipad=0; ipad<kPhysChannelMax; ipad++) {
-    //int ipad=dot[iDot];
-    // Transform pad geom to (0,0) ~ (1,1)
     double xCorner[kNPoints];
     double yCorner[kNPoints];
     
