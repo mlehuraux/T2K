@@ -33,6 +33,13 @@
 
   cout << "Pad Panel: w,ymin,ymax = " 
        << width << ", " << ymin << ", " << ymax << endl;
+  TGraph* graph = new TGraph();
+  int point = 0;
+  vector<int> dot;
+  dot.push_back(0);
+  dot.push_back(71);
+  //dot.push_back(1657);
+  //dot.push_back(1726);
 
   for (int i=0; i<kPhysChannelMax; i++) {
     int id, row, col;
@@ -49,65 +56,67 @@
 
   padGeomFile.close();
 
-  const double xscale =1.;
-  const double yscale =1.;
+  //const double xscale =1.;
+  //const double yscale =1.;
+
+  const double scale  = 1.;//0.95/3;          // scale down further for padding 
+  const double xscale = scale * 1./tpcPanelWidth;
+  const double yscale = scale * 1./tpcPanelHeight;
 
   for (int iFem=0; iFem<kFEM; iFem++) {
 
+   //for (int iDot = 0; iDot < dot.size(); ++iDot) {
    for (int ipad=0; ipad<kPhysChannelMax; ipad++) {
-
+    //int ipad=dot[iDot];
     // Transform pad geom to (0,0) ~ (1,1)
     double xCorner[kNPoints];
     double yCorner[kNPoints];
     
      for (int ic=0; ic<kNPoints; ic++) {
+        double xCor = x[ipad][ic] * xscale ;
+        double yCor = ( y[ipad][ic] + 1520 )* yscale ;
         if (iFem==2) {
-          double xCor = x[ipad][ic] * xscale ;
-          double yCor = ( y[ipad][ic] + 1520 )* yscale ;
-          xCorner[ic] = xCor*cos(0.149488369/1.33) - yCor*sin(0.149488369/1.33) + 0.5;
-          yCorner[ic] = yCor*cos(0.149488369/1.33) + xCor*sin(0.149488369/1.33) + 0.5 - 1520*yscale;
-    
+          xCorner[ic] = xCor*cos(0.149488369/1.33) - yCor*sin(0.149488369/1.33) /*+ 0.5*/;
+          yCorner[ic] = yCor*cos(0.149488369/1.33) + xCor*sin(0.149488369/1.33) /*+ 0.5*/ - 1520*yscale;
         }
         if (iFem==3) {
-          double xCor = x[ipad][ic] * xscale ;
-          double yCor = ( y[ipad][ic] + 1520 )* yscale ;
-          xCorner[ic] = xCor*cos(0.003055244/1.33) - yCor*sin(0.003055244/1.33) + 0.5;
-          yCorner[ic] = yCor*cos(0.003055244/1.33) + xCor*sin(0.003055244/1.33) + 0.5 - 1520*yscale;
+          xCorner[ic] = xCor*cos(0.003055244/1.33) - yCor*sin(0.003055244/1.33) /*+ 0.5*/;
+          yCorner[ic] = yCor*cos(0.003055244/1.33) + xCor*sin(0.003055244/1.33) /*+ 0.5*/ - 1520*yscale;
         }
         if (iFem==4) {
-          double xCor = x[ipad][ic] * xscale ;
-          double yCor = ( y[ipad][ic] + 1520 )* yscale ;
-          xCorner[ic] = xCor*cos(-0.143203347/1.33) - yCor*sin(-0.143203347/1.33) + 0.5;
-          yCorner[ic] = yCor*cos(-0.143203347/1.33) + xCor*sin(-0.143203347/1.33) + 0.5 - 1520*yscale;
+          xCorner[ic] = xCor*cos(-0.143203347/1.33) - yCor*sin(-0.143203347/1.33) /*+ 0.5*/;
+          yCorner[ic] = yCor*cos(-0.143203347/1.33) + xCor*sin(-0.143203347/1.33) /*+ 0.5*/ - 1520*yscale;
         }
         if (iFem==0) {
-          double xCor = x[ipad][ic] * xscale ;
-          double yCor = ( y[ipad][ic] + 1520 )* yscale ;
-          xCorner[ic] = xCor*cos(0.088401845/1.33) - yCor*sin(0.088401845/1.33) + 0.5;
-          yCorner[ic] = yCor*cos(0.088401845/1.33) + xCor*sin(0.088401845/1.33) + 0.5 - 1520*yscale+175*yscale;
+          xCorner[ic] = xCor*cos(0.088401845/1.33) - yCor*sin(0.088401845/1.33) /*+ 0.5*/;
+          yCorner[ic] = yCor*cos(0.088401845/1.33) + xCor*sin(0.088401845/1.33) /*+ 0.5*/ - 1520*yscale+175*yscale;
         }
         if (iFem==1) {
-          double xCor = x[ipad][ic] * xscale ;
-          double yCor = ( y[ipad][ic] + 1520 )* yscale ;
-          xCorner[ic] = xCor*cos(-0.05803128/1.33) - yCor*sin(-0.05803128/1.33) + 0.5;
-          yCorner[ic] = yCor*cos(-0.05803128/1.33) + xCor*sin(-0.05803128/1.33) + 0.5 - 1520*yscale+175*yscale;
+          xCorner[ic] = xCor*cos(-0.05803128/1.33) - yCor*sin(-0.05803128/1.33) /*+ 0.5*/;
+          yCorner[ic] = yCor*cos(-0.05803128/1.33) + xCor*sin(-0.05803128/1.33) /*+ 0.5*/ - 1520*yscale+175*yscale;
         }
 
         if (iFem==5) {
-          double xCor = x[ipad][ic] * xscale ;
-          double yCor = ( y[ipad][ic] + 1520 )* yscale ;
-          xCorner[ic] = xCor*cos(0.05349526/1.33) - yCor*sin(0.05349526/1.33) + 0.5;
-          yCorner[ic] = yCor*cos(0.05349526/1.33) + xCor*sin(0.05349526/1.33) + 0.5 - 1520*yscale - 175*yscale;
+          xCorner[ic] = xCor*cos(0.05349526/1.33) - yCor*sin(0.05349526/1.33) /*+ 0.5*/;
+          yCorner[ic] = yCor*cos(0.05349526/1.33) + xCor*sin(0.05349526/1.33) /*+ 0.5*/ - 1520*yscale - 175*yscale;
         }  
         if (iFem==6) {
-          double xCor = x[ipad][ic] * xscale ;
-          double yCor = ( y[ipad][ic] + 1520 )* yscale ;
-          xCorner[ic] = xCor*cos(-0.092937865/1.33) - yCor*sin(-0.092937865/1.33) + 0.5;
-          yCorner[ic] = yCor*cos(-0.092937865/1.33) + xCor*sin(-0.092937865/1.33) + 0.5 - 1520*yscale - 175*yscale;
-        }    
+          xCorner[ic] = xCor*cos(-0.092937865/1.33) - yCor*sin(-0.092937865/1.33) /*+ 0.5*/;
+          yCorner[ic] = yCor*cos(-0.092937865/1.33) + xCor*sin(-0.092937865/1.33) /*+ 0.5*/ - 1520*yscale - 175*yscale;
+        } 
+
+        xCorner[ic] *= tpcPanelWidth;
+        yCorner[ic] *= tpcPanelHeight;   
       }
+      graph->SetPoint(point, xCorner[0], yCorner[0]);
+      ++point;
     }
-    // print data
+    // print data 
+    cout << "FEM = " <<  iFem << "   x0[0][0] = " << xCorner[0] << "   y0[0][0] =  " << yCorner[0] << endl;
+    
   }
-  return 0;
+  graph->SetMarkerColor(4);
+  graph->SetMarkerSize(0.2);
+  graph->SetMarkerStyle(21);
+  graph->Draw("ap");
 }
