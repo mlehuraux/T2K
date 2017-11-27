@@ -106,13 +106,15 @@ void  pad_charge(){
   //vector<TH1F*> 
   ChargePerRow.resize(24, NULL);
   for (int i = 0; i < 24; ++i) {
-    ChargePerRow[i] = new TH1F(Form("charge%i", i),"Charge per row", 100, 0. , 10000);
+    ChargePerRow[i] = new TH1F(Form("charge%i", i),"Charge per row", 250, 0. , 10000);
   }
 
   TH1F* MaximumSepEvent = new TH1F("maxSep","Maximum X separation between pads", 73, 0. , 73);
 
   Float_t alpha = 0.7;
-  
+
+  TGraphErrors* DriftScanResol = new TGraphErrors();  
+  TH1F* ClusterNormChargeFile = new TH1F("cluster_norm_charge_file","Truncated mean energy deposit",150,0,4000);
 
   //************************************************************
   //************************************************************
@@ -134,6 +136,11 @@ void  pad_charge(){
       cout << " WARNING problem in opening file " << file << endl;
       return;
     }
+
+    TTree* tconfig= (TTree*) f->Get("beam_config");
+    Float_t driftZ;
+    tconfig->SetBranchAddress("DriftZ", &driftZ);
+    tconfig->GetEntry(0);
 
     vector<int> *iPad(0);
     vector<int> *jPad(0);
@@ -270,7 +277,6 @@ void  pad_charge(){
         adc_sum += adcmax;
           
         PadDisplay[(*jPad)[chan]][(*iPad)[chan]] += adcmax;
-        //PadDisplay1->Fill((*jPad)[chan], (*iPad)[chan], adcmax);
       } //loop over channels
 
       int Nrow = 0;
@@ -345,6 +351,7 @@ void  pad_charge(){
       ++events_long;
 
       ClusterNormCharge->Fill(norm_cluster);
+      ClusterNormChargeFile->Fill(norm_cluster);
 
       for (UInt_t i = 0; i < cluster_charge.size(); ++i) {
         ChargePerRow[cluster_charge[i].second]->Fill(cluster_charge[i].first);
@@ -352,6 +359,23 @@ void  pad_charge(){
       }
 
     } // end of loops over events
+
+    // Fill scan over files
+    ClusterNormChargeFile->Fit("gaus");
+    TF1 *fit = ClusterNormChargeFile->GetFunction("gaus");
+    Float_t mean      = fit->GetParameter(1);
+    Float_t sigma     = fit->GetParameter(2);
+
+    Float_t mean_e     = fit->GetParError(1);
+    Float_t sigma_e    = fit->GetParError(2);
+    Float_t resol = sigma / mean;
+
+    Float_t resol_e   = resol * sqrt(mean_e*mean_e/(mean*mean) + sigma_e*sigma_e/(sigma*sigma));
+
+    DriftScanResol->SetPoint(ifile, driftZ, resol);
+    DriftScanResol->SetPointError(ifile, 0, resol_e);
+
+    ClusterNormChargeFile->Reset();
   } // end of loops over files
 
   cout << "Total events number     : " << events_raw << endl;
@@ -383,7 +407,14 @@ void  pad_charge(){
   ClusterNormCharge->Draw();
   c1->Print("figure/TruncEnergy.png");
 
-  TGraph* graph = new TGraph();
+  int bin1 = ClusterNormCharge->FindFirstBinAbove(ClusterNormCharge->GetMaximum()/2);
+  int bin2 = ClusterNormCharge->FindLastBinAbove(ClusterNormCharge->GetMaximum()/2);
+  double fwhm = ClusterNormCharge->GetBinCenter(bin2) - ClusterNormCharge->GetBinCenter(bin1);
+  cout << "max = " << ClusterNormCharge->GetMaximum() << "   FWHM = " << fwhm << std::endl;
+  cout << "resol = " << fwhm / ClusterNormCharge->GetMaximum() << endl;
+
+  TGraphErrors* graphMax = new TGraphErrors();
+  TGraphErrors* graphLandau = new TGraphErrors();
   for (Int_t i = 0; i < 24; ++i) {
     gStyle->SetOptStat("RMne");
     gStyle->SetOptFit(0111);
@@ -391,16 +422,35 @@ void  pad_charge(){
     TF1 *fit = ChargePerRow[i]->GetFunction("landau");
     Float_t mean = fit->GetParameter(1);
     cout << i << "    " << mean << endl;
-    graph->SetPoint(i, i, mean);
+    graphLandau->SetPoint(i, i, mean);
+    graphLandau->SetPointError(i, 0, sqrt(mean));
+    Float_t max = ChargePerRow[i]->GetBinCenter(ChargePerRow[i]->GetMaximumBin());
+    graphMax->SetPoint(i, i, max);
+    graphMax->SetPointError(i, 0, sqrt(max));
+
     ChargePerRow[i]->Draw();
     c1->Print(Form("figure/row/ChargePerRow%i.png", i));
   }
-  graph->SetMarkerColor(4);
-  graph->SetMarkerSize(1.5);
-  graph->SetMarkerStyle(21);
+  graphMax->SetMarkerColor(4);
+  graphMax->SetMarkerSize(0.5);
+  graphMax->SetMarkerStyle(21);
   c1->SetGrid(1);
-  graph->Draw("ap");
-  c1->Print("figure/ChargeCluster.png");
+  graphMax->Draw("ap");
+  c1->Print("figure/ChargeClusterMax.png");
+
+  graphLandau->SetMarkerColor(4);
+  graphLandau->SetMarkerSize(0.5);
+  graphLandau->SetMarkerStyle(21);
+  c1->SetGrid(1);
+  graphLandau->Draw("ap");
+  c1->Print("figure/ChargeClusterLandau.png");
+
+  DriftScanResol->SetMarkerColor(4);
+  DriftScanResol->SetMarkerSize(0.5);
+  DriftScanResol->SetMarkerStyle(21);
+  c1->SetGrid(1);
+  DriftScanResol->Draw("ap");
+  c1->Print("figure/Resolution_Drift.png");
 
   cout << "END" << endl;
 }
