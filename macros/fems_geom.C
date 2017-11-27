@@ -20,7 +20,7 @@
   char   varName[20];
   double width;
   double ymin, ymax;
-  
+
   padGeomFile >> varName >> width;  // half width of the pad panel
   padGeomFile >> varName >> ymin;
   padGeomFile >> varName >> ymax;
@@ -31,7 +31,7 @@
   tpcPanelWidth  = 2. * width;         // total width  of the pad array
   tpcPanelHeight = ymax - ymin;        // total height of the pad array
 
-  cout << "Pad Panel: w,ymin,ymax = " 
+  cout << "Pad Panel: w,ymin,ymax = "
        << width << ", " << ymin << ", " << ymax << endl;
   TGraph* graph = new TGraph();
   int point = 0;
@@ -39,8 +39,8 @@
   for (int i=0; i<kPhysChannelMax; i++) {
     int id, row, col;
     double x0, y0, x1, y1, x2, y2, x3, y3;
-    //padGeomFile >> id >> row >> col 
-    padGeomFile >> row >> col 
+    //padGeomFile >> id >> row >> col
+    padGeomFile >> row >> col
                 >> x0 >> y0 >> x1 >> y1 >> x2 >> y2 >> x3 >> y3;
     id = i;
     x[id][0] = x0;    y[id][0] = y0;
@@ -59,7 +59,7 @@
    for (int ipad=0; ipad<kPhysChannelMax; ipad++) {
     double xCorner[kNPoints];
     double yCorner[kNPoints];
-    
+
      for (int ic=0; ic<kNPoints; ic++) {
         double xCor = x[ipad][ic] * xscale ;
         double yCor = ( y[ipad][ic] + 1520 )* yscale ;
@@ -87,21 +87,22 @@
         if (iFem==5) {
           xCorner[ic] = xCor*cos(0.05349526/1.33) - yCor*sin(0.05349526/1.33) /*+ 0.5*/;
           yCorner[ic] = yCor*cos(0.05349526/1.33) + xCor*sin(0.05349526/1.33) /*+ 0.5*/ - 1520*yscale - 175*yscale;
-        }  
+        }
         if (iFem==6) {
           xCorner[ic] = xCor*cos(-0.092937865/1.33) - yCor*sin(-0.092937865/1.33) /*+ 0.5*/;
           yCorner[ic] = yCor*cos(-0.092937865/1.33) + xCor*sin(-0.092937865/1.33) /*+ 0.5*/ - 1520*yscale - 175*yscale;
-        } 
+        }
 
         xCorner[ic] *= tpcPanelWidth;
-        yCorner[ic] *= tpcPanelHeight;   
+        yCorner[ic] *= tpcPanelHeight;
       }
       graph->SetPoint(point, xCorner[0], yCorner[0]);
       ++point;
     }
-    // print data 
+    // print data
     cout << "FEM = " <<  iFem << "   x0[0][0] = " << xCorner[0] << "   y0[0][0] =  " << yCorner[0] << endl;
-    
+    cout << "wifth = " << tpcPanelWidth << "   Height = " << tpcPanelHeight << endl;
+
   }
   graph->SetMarkerColor(4);
   graph->SetMarkerSize(0.2);
