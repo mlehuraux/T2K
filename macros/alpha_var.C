@@ -248,7 +248,7 @@ void  alpha_var(){
 
       // Loop over pads i j
       int MaxSepEvent = 0;
-      for (int i = 0; i <= Imax; ++i) {
+      for (int i = 1; i <= Imax-1; ++i) {
         int prev = 1E6;
         int MaxSepRow = -1;
         int ChargeCl = 0;
@@ -270,6 +270,9 @@ void  alpha_var(){
         if (ChargeCl>0) 
           cluster_charge.push_back(ChargeCl);
       }  // end of PAD scan
+
+      if (cluster_charge.size() < 2)
+        continue;
 
       sort(cluster_charge.begin(), cluster_charge.begin()+cluster_charge.size()-1);
 
@@ -296,9 +299,9 @@ void  alpha_var(){
   // loop over alpha
   Float_t min   = 0.3;
   Float_t max   = 0.9;
-  Int_t   Nstep = 6;
+  Int_t   Nstep = 24;
 
-   TGraphAsymmErrors* gr = new  TGraphAsymmErrors();
+   TGraphErrors* gr = new  TGraphErrors();
 
   Float_t step = (max- min) / Nstep;
 
@@ -330,15 +333,25 @@ void  alpha_var(){
     Float_t mean      = fit->GetParameter(1);
     Float_t sigma     = fit->GetParameter(2);
 
+    Float_t mean_e     = fit->GetParError(1);
+    Float_t sigma_e    = fit->GetParError(2);
+    Float_t resol = sigma / mean;
+
+    Float_t resol_e   = resol * sqrt(mean_e*mean_e/(mean*mean) + sigma_e*sigma_e/(sigma*sigma));
+
     cout << "****************************************************" << endl;
     cout << "alpha = " << alpha << endl;
     cout << "constant = " << constant << endl;
     cout << "mean     = " << mean << endl;
     cout << "sigma    = " << sigma << endl;
+    cout << "resol    = " << resol << endl;
+    cout << "resol_e  = " << resol_e << endl;
 
-    Float_t resol = sigma / mean;
+    
 
     gr->SetPoint(z, alpha, resol);
+
+    gr->SetPointError(z, 0, resol_e);
 
     if (resol < best_resolution) {
       BestResol       = (TH1F*)ClusterNormCharge->Clone();
@@ -353,7 +366,11 @@ void  alpha_var(){
   BestResol->Fit("gaus");  
   BestResol->Draw();
   c1->Print("figure/TruncEnergyBest.png");
-  gr->Draw("aplm");
+  gr->SetMarkerColor(4);
+  gr->SetMarkerSize(0.5);
+  gr->SetMarkerStyle(21);
+  c1->SetGrid(1);
+  gr->Draw("ap");
   c1->Print("figure/Resolution_alpha.png");
 
 
