@@ -15,7 +15,8 @@ do
   f_root=${f_acq%.*}".root"
   echo "Processing file: $path"
   cp $path ~/INSTALLFCC/DataWriter_devel/temp/$f_acq
-  
+  source setup.sh
+
   # loop over fems
   for ((j=0; j<7; j++));
   do
@@ -29,7 +30,6 @@ do
       k=2
     fi
     ./bin/acqToRootConverterExe -t $j -m $k -f  "temp/$f_acq" --noxml
-    ls -l temp/
     mv temp/$f_root ~/suvorov/data_root/$f_root_new
   done
 
