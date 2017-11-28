@@ -8,7 +8,7 @@
   double x[kPhysChannelMax][kNPoints];
   double y[kPhysChannelMax][kNPoints];
 
-  char filename[] = "/local/home/ssuvorov/T2K/ILC_TPC/DataWriter_devel/etc/geom/keystonePadGeom.txt";
+  char filename[] = "etc/geom/keystonePadGeom.txt";
 
   ifstream padGeomFile;
   padGeomFile.open(filename, std::ios::binary);
