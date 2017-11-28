@@ -6,7 +6,9 @@
 
 const Float_t tpcPanelWidth   = 233.94;
 const Float_t tpcPanelHeight  = 172.83;
-const Float_t alpha                   = 0.7;
+const Float_t alpha           = 0.7;
+
+vector< pair<Int_t, Int_t> > ScanPad(const vector<vector<short> >, Int_t , Int_t , Int_t , Int_t& , Int_t& );
 
 void join_fem_ana() {
 
@@ -68,9 +70,6 @@ void join_fem_ana() {
     for (Int_t it = 0; it < 7; ++it)
       pad_charge[it] = new vector<vector<short> >(0);
 
-    cout << pad_charge[0] << endl;
-    cout << pad_charge[0]->size() << endl;
-
     t->SetBranchAddress("pad0",     &pad_charge[0]);
     t->SetBranchAddress("pad1",     &pad_charge[1]);
     t->SetBranchAddress("pad2",     &pad_charge[2]);
@@ -84,66 +83,58 @@ void join_fem_ana() {
     //****************** LOOP OVER EVENTS ************************
     //************************************************************
     //************************************************************
-    vector<int> listofRow;
-    listofRow.resize(24, 0);
 
     int Nevents=t->GetEntries();
-    //cout << "[          ] Nev="<<Nevents<<"\r[";
+    cout << "[          ] Nev="<<Nevents<<"\r[";
     for (int ievt=0; ievt < Nevents ; ievt++){
-      //if (ievt%(Nevents/10)==0)
-        //cout <<"."<<flush;
-      cout << pad_charge[0] << endl;
+      if (ievt%(Nevents/10)==0)
+        cout <<"."<<flush;
       t->GetEntry(ievt);
-      cout << pad_charge[0]->size() << endl;
 
-      vector< pair<Float_t, Int_t> > cluster_charge;
+      vector< pair<Int_t, Int_t> > cluster_charge;
       cluster_charge.clear();
-      vector<Float_t> pads_per_cluster;
-      pads_per_cluster.clear();
 
-      for (int i = 0; i < 24; i++)
-        listofRow[i]=0;
+      Int_t TotalLength = 0;
 
-      // Loop over pads i j
-      int MaxSepEvent = 0;
-      for (int i = 0; i <= pad_charge[0]->size(); ++i) {
-        int prev = 1E6;
-        int MaxSepRow = -1;
-        int PadPerCl = 0;
-        int ChargeCl = 0;
-        for (int j = 0; j <= (*pad_charge[0])[i].size(); ++j) {
+      Int_t Nrow = 0;
+      Int_t MaxSep = 0;
 
-          cout << j << "   " << i << endl;
-          cout << pad_charge[0] << endl;
-          int adcmax = (*pad_charge[0])[i][j];
+      // Scan over pads  FEM 5
+      vector< pair<Int_t, Int_t> > temp = ScanPad(*pad_charge[5], 5, Imax, Jmax, Nrow, MaxSep);
+      cluster_charge.insert(cluster_charge.end(), temp.begin(), temp.end());
+      //cout << cluster_charge.size() << endl;
 
-          ChargeCl += adcmax;
-          if (adcmax > 0) {
-            if (j - prev - 1 > MaxSepRow)
-              MaxSepRow = j - prev - 1;
-            prev = j;
-            ++PadPerCl;
-          }
-        }
-        if (MaxSepRow > MaxSepEvent)
-          MaxSepEvent = MaxSepRow;
-
-        if (ChargeCl>0) {
-          cluster_charge.push_back(make_pair(ChargeCl, i));
-          pads_per_cluster.push_back(PadPerCl);
-          listofRow[i] = 1;
-        }
-      }  // end of PAD scan
-
-      int Nrow = 0;
-      for (int i = 0; i < 24; i++)
-        Nrow+=listofRow[i];
-
+      // cuts on FEM 5
       if (Nrow < 20)
         continue;
 
-      if (MaxSepEvent > 2)
+      if (MaxSep > 2)
         continue;
+
+      // Scan over pads  FEM 3
+      temp = ScanPad(*pad_charge[3], 3, Imax, Jmax, Nrow, MaxSep);
+      cluster_charge.insert(cluster_charge.end(), temp.begin(), temp.end());
+
+      // cuts on FEM 3
+      if (Nrow < 20)
+        continue;
+
+
+      if (MaxSep > 2)
+        continue;
+
+      // Scan over pads  FEM 3
+      vector< pair<Int_t, Int_t> > temp2 = ScanPad(*pad_charge[0], 0, Imax, Jmax, Nrow, MaxSep);
+      cluster_charge.insert(cluster_charge.end(), temp2.begin(), temp2.end());
+
+      // cuts on FEM 3
+      if (Nrow < 20)
+        continue;
+
+
+      if (MaxSep > 2)
+        continue;
+
 
       sort(cluster_charge.begin(), cluster_charge.end());
       Float_t norm_cluster = 0.;
@@ -164,6 +155,57 @@ void join_fem_ana() {
   ClusterNormCharge->Fit("gaus");
   ClusterNormCharge->Draw();
   c1->Print("figure/TruncEnergy_multi.png");
+}
+
+vector< pair<Int_t, Int_t> > ScanPad(const vector<vector<short> > pad, Int_t FEM, Int_t Imax, Int_t Jmax, Int_t& Nrow, Int_t& MaxSeparation) {
+
+  MaxSeparation = 0;
+  Nrow = 0;
+
+  vector< pair<Int_t, Int_t> > cluster_charge;
+  vector<int> listofRow;
+  listofRow.resize(24, 0);
+
+  for (int i = 0; i < pad.size(); ++i) {
+    int prev = 1E6;
+    int MaxSepRow = -1;
+    int PadPerCl = 0;
+    int ChargeCl = 0;
+    for (int j = 0; j < pad[i].size(); ++j) {
+
+      int adcmax = pad[i][j];
+      //cout << i << "    " << j << "    " << adcmax << endl;
+      if (adcmax < 0) {
+        cout << "ALARM!" << endl;
+        exit(1);
+      }
+
+      ChargeCl += adcmax;
+
+      if (adcmax > 0) {
+        if (j - prev - 1 > MaxSepRow)
+          MaxSepRow = j - prev - 1;
+        prev = j;
+        ++PadPerCl;
+      }
+    }
+    if (MaxSepRow > MaxSeparation)
+      MaxSeparation = MaxSepRow;
+    if (ChargeCl>0) {
+
+      Int_t row_shift = 0;
+      if (FEM < 5) row_shift += 24;
+      if (FEM < 2) row_shift += 24;
+
+      cluster_charge.push_back(make_pair(ChargeCl, i));
+      listofRow[i] = 1;
+    }
+  }  // end of PAD scan
+
+  for (int i = 0; i <= Imax; i++)
+    Nrow+=listofRow[i];
+
+  return cluster_charge;
 }
 
 void GetCoordinates(Double_t x[4], Double_t y[4], Int_t iFem, Double_t xOut[4], Double_t yOut[4]) {
