@@ -1,6 +1,6 @@
 int add_beam_info(int RUN) {
 
-  for (Int_t i = 5148; i < 5162; ++i) {
+  for (Int_t i = 5148; i < 5161; ++i) {
     std::stringstream stream;
     stream << i;
     std::string strRUN = stream.str();
@@ -10,10 +10,10 @@ int add_beam_info(int RUN) {
     std::cout << file_name << std::endl;
 
     TTree* config_tree = new TTree("beam_config", "beam");
-  
+
     Float_t driftZ = GetDriftZ(i);
     config_tree->Branch("DriftZ", &driftZ);
-  
+
     config_tree->Fill();
     config_tree->Write();
     file->Close();
