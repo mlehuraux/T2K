@@ -1,117 +1,178 @@
 #define THIS_NAME join_fem
 #define NOINTERACTIVE_OUTPUT
 #define OVERRIDE_OPTIONS
-
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <stdio.h>
+#include <stdlib.h>
 #include "common_header.h"
 
-const Float_t tpcPanelWidth   = 233.94;
-const Float_t tpcPanelHeight  = 172.83;
+const int thr = 100;
+const int NFem = 1;
 
 void join_fem() {
 
+  //************************************************************
+  //************************************************************
+  //****************** LOOP OVER FILES  ************************
+  //************************************************************
+  //************************************************************
+  int events_raw        = 0;
+  int events_not_empty  = 0;
+  int events_long       = 0;
+  int events_one_track  = 0;
+
   // LOOP OVER FILES
-  for (Int_t fileID = 5148; fileID < 5162; ++fileID) {
+  for (Int_t fileID = 5149; fileID < 5161; ++fileID) {
     std::stringstream stream;
     stream << fileID;
     std::string strRUN = stream.str();
 
-    TFile* outFile  = new TFile("data_root/multifem.root", "RECREATE");
+    // initialise files/trees/vars for all FEMs
+    /*TFile* inFile[7];
+    TTree* t[7];
+*/
 
-    TTree* geom     = new TTree("geom", "geom");
+
+    std::string file_name0  = "data_root/RUN_0" + strRUN + "_fem0.root";
+    TFile* f  = new TFile(file_name0.c_str(), "READ");
+    if (!f->IsOpen())
+      cout << " WARNING problem in opening file " << file_name0 << endl;
+
+    cout << endl;
+    cout << "Run over: " << file_name0 << endl;
+
+    TTree* config;
+    //config = (TTree*)f->Get("beam_config");
+    TTree * tgeom= (TTree*) f->Get("femGeomTree");
+
+
+
+    int Nevents1=2;
+    TTree *t = (TTree*)f->Get("padData");
+
+
+    vector<short>          *listOfChannels;
+    //vector<vector<short> > *listOfSamples[7];
+
+    t->SetBranchAddress("PadphysChannels", &listOfChannels );
+    //t[0]->SetBranchAddress("PadADCvsTime"   , &listOfSamples[0] );
+
+    vector<vector<short> >  pad_charge[7];
+
+/*    std::string out_file_name = "data_root/RUN_0" + strRUN + "_multi.root";
+    TFile* outFile  = new TFile(out_file_name.c_str(), "RECREATE");
+
+    TTree* config   = tconfig->CloneTree();
+    TTree* geom     = tgeom->CloneTree();
+    config->Write();
+    geom->Write();
+    cout << endl;
+    cout << "Creating file: " << out_file_name << endl;
+
+
     TTree* pad      = new TTree("pad", "pad");
 
-    std::vector<std::vector<short> > *pad_charge;
-    pad->Branch("PadCharge",    &pad_charge);
+    vector<vector<short> >  pad_charge[7];
+    pad->Branch("pad0",     &pad_charge[0]);
+    pad->Branch("pad1",     &pad_charge[1]);
+    pad->Branch("pad2",     &pad_charge[2]);
+    pad->Branch("pad3",     &pad_charge[3]);
+    pad->Branch("pad4",     &pad_charge[4]);
+    pad->Branch("pad5",     &pad_charge[5]);
+    pad->Branch("pad6",     &pad_charge[6]);
+
+
+    inFile[0]->cd();
+
+    vector<int> *iPad(0);
+    vector<int> *jPad(0);
+    int Jmin, Imin, Jmax, Imax;
+    tgeom->SetBranchAddress("jPad", &jPad );
+    tgeom->SetBranchAddress("iPad", &iPad );
+    tgeom->SetBranchAddress("jPadMin", &Jmin );
+    tgeom->SetBranchAddress("iPadMin", &Imin );
+    tgeom->SetBranchAddress("jPadMax", &Jmax );
+    tgeom->SetBranchAddress("iPadMax", &Imax );
+    tgeom->GetEntry(0); // put into memory geometry info
 
     // LOOP OVER FEMs
-    for (Int_t femID = 0; femID < 7; ++femID) {
+    /*for (Int_t femID = 1; femID < 7; ++femID) {
       stream.str("");
       stream << femID;
       std::string strFEM = stream.str();
-
       std::string file_name = "data_root/RUN_0" + strRUN + "_fem" + strFEM + ".root";
-      TFile* inFile  = new TFile(file_name.c_str(), "READ");
-
-      // READ BEAM CONFIG
-      TTree* tconfig= (TTree*) inFile->Get("beam_config");
-      Float_t driftZ;
-      tconfig->SetBranchAddress("DriftZ", &driftZ);
-      tconfig->GetEntry(0);
-
-      // READ GEOMETRY
-      vector<int> *iPad(0);
-      vector<int> *jPad(0);
-      TTree * tgeom= (TTree*) inFile->Get("femGeomTree");
-      int Jmin, Imin, Jmax, Imax;
-      vector<vector<double> > *x0Pad(0), *x1Pad(0), *x2Pad(0), *x3Pad(0);
-      vector<vector<double> > *y0Pad(0), *y1Pad(0), *y2Pad(0), *y3Pad(0);
-      tgeom->SetBranchAddress("jPad", &jPad );
-      tgeom->SetBranchAddress("iPad", &iPad );
-      tgeom->SetBranchAddress("jPadMin", &Jmin );
-      tgeom->SetBranchAddress("iPadMin", &Imin );
-      tgeom->SetBranchAddress("jPadMax", &Jmax );
-      tgeom->SetBranchAddress("iPadMax", &Imax );
-      tgeom->SetBranchAddress("x0Pad", &x0Pad );
-      tgeom->SetBranchAddress("y0Pad", &y0Pad );
-      tgeom->SetBranchAddress("x1Pad", &x0Pad );
-      tgeom->SetBranchAddress("y1Pad", &y0Pad );
-      tgeom->SetBranchAddress("x2Pad", &x0Pad );
-      tgeom->SetBranchAddress("y2Pad", &y0Pad );
-      tgeom->SetBranchAddress("x3Pad", &x0Pad );
-      tgeom->SetBranchAddress("y3Pad", &y0Pad );
-
-      tgeom->GetEntry(0); // put into memory geometry info
+      inFile[femID]  = new TFile(file_name.c_str(), "READ");
+      //inFile[femID]->ls();
 
       // READ PAD DATA
-      TTree *t = (TTree*) f->Get("padData");
-      cout <<t->GetEntries() << " evts in file " << endl;
+      t[femID] = (TTree*) inFile[femID]->Get("padData");
+      //t[femID]->Print();
 
-      vector<short>          *listOfChannels(0);
-      vector<vector<short> > *listOfSamples(0);
+      //t[femID]->SetBranchAddress("PadphysChannels", &listOfChannels[femID] );
+      //t[femID]->SetBranchAddress("PadADCvsTime"   , &listOfSamples[femID] );
+    }*/
 
-      t->SetBranchAddress("PadphysChannels", &listOfChannels );
-      t->SetBranchAddress("PadADCvsTime"   , &listOfSamples );
 
-    }
+    //************************************************************
+    //************************************************************
+    //****************** LOOP OVER EVENTS ************************
+    //************************************************************
+    //************************************************************
+    int Nevents=t->GetEntries();
+    cout << "[          ] Nev="<<Nevents<<"\r[";
+    cout << Nevents << endl;
+    for (int ievt=0; ievt < Nevents ; ievt++) {
+      if (ievt%(Nevents/10)==0)
+        cout <<"."<<flush;
+
+      // LOOP OVER FEMs
+      //for (Int_t femID = 0; femID < 7; ++femID) {
+        //cout << "ev = " << ievt << "   FEM = " << femID << endl;
+        //inFile[femID]->cd();
+        t->GetEntry(ievt);
+        cout << "OK" << endl;
+
+        /*pad_charge[femID].clear();
+        pad_charge[femID].resize(Jmax+1);
+        for (int z=0; z <= Jmax; ++z)
+          pad_charge[femID][z].resize(Imax+1, 0);
+
+
+        //************************************************************
+        //************************************************************
+        //*****************LOOP OVER CHANNELS ************************
+        //************************************************************
+        //************************************************************
+
+        for (uint ic=0; ic< listOfChannels->size(); ic++){
+          int chan= (*listOfChannels)[ic];
+          // find out the maximum
+          float adcmax=-1;
+
+          // one maximum per channel
+          for (uint it = 0; it < (*listOfSamples[femID])[ic].size(); it++){
+            int adc= (*listOfSamples[femID])[ic][it];
+            if (adc>thr)
+              if (adc>adcmax) {
+                adcmax=adc;
+              }
+          }
+
+          if (adcmax<0) continue; // remove noise
+
+          pad_charge[femID][(*jPad)[chan]][(*iPad)[chan]] += adcmax;
+        } //loop over channels*/
+      //} // loop over FEMs
+      //pad->Fill();
+    } // loop over events
+
+    //outFile->cd();
+    //pad->Write();
+    //outFile->Close();
   }
-}
-
-void GetCoordinates(Float_t** x, Float_t** y, Int_t iFem, Float_t** xOut, Float_t** yOut) {
-  const double scale  = 1.;
-  const double xscale = scale * 1./tpcPanelWidth;
-  const double yscale = scale * 1./tpcPanelHeight;
-
-  for (Int_t ic = 0; ic < 4; ++ic) {
-    if (iFem==2) {
-      xOut[ic] = x*cos(0.149488369/1.33) - y*sin(0.149488369/1.33) /*+ 0.5*/;
-      yOut[ic] = y*cos(0.149488369/1.33) + x*sin(0.149488369/1.33) /*+ 0.5*/ - 1520*yscale;
-    }
-    if (iFem==3) {
-      xOut[ic] = x*cos(0.003055244/1.33) - y*sin(0.003055244/1.33) /*+ 0.5*/;
-      yOut[ic] = y*cos(0.003055244/1.33) + x*sin(0.003055244/1.33) /*+ 0.5*/ - 1520*yscale;
-    }
-    if (iFem==4) {
-      xOut[ic] = x*cos(-0.143203347/1.33) - y*sin(-0.143203347/1.33) /*+ 0.5*/;
-      yOut[ic] = y*cos(-0.143203347/1.33) + x*sin(-0.143203347/1.33) /*+ 0.5*/ - 1520*yscale;
-    }
-    if (iFem==0) {
-      xOut[ic] = x*cos(0.088401845/1.33) - y*sin(0.088401845/1.33) /*+ 0.5*/;
-      yOut[ic] = y*cos(0.088401845/1.33) + x*sin(0.088401845/1.33) /*+ 0.5*/ - 1520*yscale+175*yscale;
-    }
-    if (iFem==1) {
-      xOut[ic] = x*cos(-0.05803128/1.33) - y*sin(-0.05803128/1.33) /*+ 0.5*/;
-      yOut[ic] = y*cos(-0.05803128/1.33) + x*sin(-0.05803128/1.33) /*+ 0.5*/ - 1520*yscale+175*yscale;
-    }
-    if (iFem==5) {
-      xOut[ic] = x*cos(0.05349526/1.33) - y*sin(0.05349526/1.33) /*+ 0.5*/;
-      yOut[ic] = y*cos(0.05349526/1.33) + x*sin(0.05349526/1.33) /*+ 0.5*/ - 1520*yscale - 175*yscale;
-    }
-    if (iFem==6) {
-      xOut[ic] = x*cos(-0.092937865/1.33) - y*sin(-0.092937865/1.33) /*+ 0.5*/;
-      yOut[ic] = y*cos(-0.092937865/1.33) + x*sin(-0.092937865/1.33) /*+ 0.5*/ - 1520*yscale - 175*yscale;
-    }
-
-    xOut[ic] *= tpcPanelWidth;
-    yOut[ic] *= tpcPanelHeight;
-  }
+  cout << endl;
+  cout << "END" << endl;
+  exit(1);
 }
