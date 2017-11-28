@@ -21,7 +21,7 @@ What we need to study:
 1) maximum separation in the row. for 2 tracks substraction. How often?
 2) Number of pads per cluster
 3) Qmax (sum over cluster) vs row
-4) Qmax destribution 
+4) Qmax destribution
 */
 
 void  pad_charge(){
@@ -41,7 +41,7 @@ void  pad_charge(){
       iarg++;
       file=gApplication->Argv(iarg);
       if (file.Contains(".root")) {
-        
+
         cout << "adding filename" <<" " << file << endl;
         listOfFiles.push_back(file);
       } else {
@@ -58,20 +58,20 @@ void  pad_charge(){
     }
     else if (string( gApplication->Argv(iarg))=="-d"){
       DEBUG=true;
-    } 
+    }
  else if (string( gApplication->Argv(iarg))=="-b"){
       gROOT->SetBatch(1);
- 
-    }
-    
-  else if (string( gApplication->Argv(iarg))=="-t"||string( gApplication->Argv(iarg))=="--threshold"){ 
-    iarg++;
-    thr = strtol(gApplication->Argv(iarg), NULL, 0);   
-  } 
 
-    else if (string( gApplication->Argv(iarg))=="-n"||string( gApplication->Argv(iarg))=="-nEvents"){ 
+    }
+
+  else if (string( gApplication->Argv(iarg))=="-t"||string( gApplication->Argv(iarg))=="--threshold"){
+    iarg++;
+    thr = strtol(gApplication->Argv(iarg), NULL, 0);
+  }
+
+    else if (string( gApplication->Argv(iarg))=="-n"||string( gApplication->Argv(iarg))=="-nEvents"){
       iarg++;
-    Ndefaultevents = strtol(gApplication->Argv(iarg), NULL, 0);  
+    Ndefaultevents = strtol(gApplication->Argv(iarg), NULL, 0);
     }
     else if (string( gApplication->Argv(iarg))=="--nbins"){
       iarg++;
@@ -86,7 +86,7 @@ void  pad_charge(){
       printf("\n-t/--threshold [threshold in ADC] (default = %d)", thr);
       printf("\n--nbins [nbins for time histo] (default = %d)", nbins);
       printf("\n");
-      return;  
+      return;
     }
   } //Argument parsing
 
@@ -96,14 +96,14 @@ void  pad_charge(){
 
   TH1F* ClusterCharge     = new TH1F("cluster_charge","Cluster charge",100,0,10000);
   TH1F* ClusterNormCharge = new TH1F("cluster_norm_charge","Truncated mean energy deposit",150,0,4000);
-  
+
   TH1F* PadPerCluster     = new TH1F("pads_per_cluster","Pads per cluster",10,0,10);
 
   TH1F* NrowHist          = new TH1F("n_row", "number of rows per event", 26, 0, 26);
   TH1F* NcolHist          = new TH1F("n_row", "number of columns per event", 73, 0, 73);
 
   vector<TH1F*> ChargePerRow;
-  //vector<TH1F*> 
+  //vector<TH1F*>
   ChargePerRow.resize(24, NULL);
   for (int i = 0; i < 24; ++i) {
     ChargePerRow[i] = new TH1F(Form("charge%i", i),"Charge per row", 250, 0. , 10000);
@@ -113,7 +113,7 @@ void  pad_charge(){
 
   Float_t alpha = 0.7;
 
-  TGraphErrors* DriftScanResol = new TGraphErrors();  
+  TGraphErrors* DriftScanResol = new TGraphErrors();
   TH1F* ClusterNormChargeFile = new TH1F("cluster_norm_charge_file","Truncated mean energy deposit",150,0,4000);
 
   //************************************************************
@@ -183,13 +183,13 @@ void  pad_charge(){
 
     t->SetBranchAddress("PadphysChannels", &listOfChannels );
     t->SetBranchAddress("PadADCvsTime"   , &listOfSamples );
- 
+
     if (Nevents<=0) Nevents=t->GetEntries();
     if (Nevents>t->GetEntries()) Nevents=t->GetEntries();
 
     cout << "[          ] Nev="<<Nevents<<"\r[";
-                                              
-    // to win time, disable MG data                                               
+
+    // to win time, disable MG data
     t->SetBranchStatus("MGADCvsTime",0);
     t->SetBranchStatus("MGphysChannels",0);
 
@@ -205,7 +205,7 @@ void  pad_charge(){
     //************************************************************
 
     for (int ievt=0; ievt < Nevents ; ievt++){
-      if (ievt%(Nevents/10)==0) 
+      if (ievt%(Nevents/10)==0)
         cout <<"."<<flush;
 
       if (DEBUG)
@@ -220,14 +220,14 @@ void  pad_charge(){
       for (int z=0; z <= Jmax; ++z)
         PadDisplay[z].resize(Imax+1, 0);
       //TH2F* PadDisplay1=new TH2F("PadDisplay","I vs J of hits",72,-0.5,71+0.5,24,0-0.5,23+0.5);
-    
+
       int adc_sum = 0;
-  
+
       for (int i = 0; i < 24; i++)
-        listofRow[i]=0; 
+        listofRow[i]=0;
 
       for (int i = 0; i < 72; i++)
-        listofCol[i]=0; 
+        listofCol[i]=0;
 
       listofT.clear();
 
@@ -242,24 +242,24 @@ void  pad_charge(){
       for (uint ic=0; ic< listOfChannels->size(); ic++){
         int chan= (*listOfChannels)[ic];
         // find out the maximum
-        float adcmax=-1; 
+        float adcmax=-1;
         int itmax=-1;
 
         // one maximum per channel
         for (uint it = 0; it < (*listOfSamples)[ic].size(); it++){
           int adc= (*listOfSamples)[ic][it];
           // cout << " ADC channel " << ic << " time " << it << " adc " << adc << endl ;}
-          if (adc>thr) 
-            if (adc>adcmax) { 
-              adcmax=adc; 
+          if (adc>thr)
+            if (adc>adcmax) {
+              adcmax=adc;
               itmax=it;
             }
         }
         if (DEBUG) {
-          
+
           int i = (*iPad)[chan];
           int j = (*jPad)[chan];
-          
+
           if (i == 10 && j == 10) {
             cout << "channel " << chan << endl;
             cout << "i  = " << (*iPad)[chan]  << "   j  = " << (*jPad)[chan]  << "    adc_max = " << adcmax << endl;
@@ -267,15 +267,15 @@ void  pad_charge(){
             exit(0);
           }
         }
-        
+
         if (adcmax<0) continue; // remove noise
 
         listofT.push_back(itmax);
-        listofRow[(*iPad)[chan]]=1; //the row has been hit 
-        listofCol[(*jPad)[chan]]=1; //the column has been hit 
-    
+        listofRow[(*iPad)[chan]]=1; //the row has been hit
+        listofCol[(*jPad)[chan]]=1; //the column has been hit
+
         adc_sum += adcmax;
-          
+
         PadDisplay[(*jPad)[chan]][(*iPad)[chan]] += adcmax;
       } //loop over channels
 
@@ -328,7 +328,7 @@ void  pad_charge(){
       sort(cluster_charge.begin(), cluster_charge.end());
       Float_t norm_cluster = 0.;
       Int_t i_max = round(alpha * cluster_charge.size());
-      for (int i = 0; i < std::min(i_max, int(cluster_charge.size())); ++i) 
+      for (int i = 0; i < std::min(i_max, int(cluster_charge.size())); ++i)
         norm_cluster += cluster_charge[i].first;
 
       norm_cluster *= 1 / (alpha * cluster_charge.size());
@@ -403,7 +403,7 @@ void  pad_charge(){
 
   gStyle->SetOptStat("RMne");
   gStyle->SetOptFit(0111);
-  ClusterNormCharge->Fit("gaus");  
+  ClusterNormCharge->Fit("gaus");
   ClusterNormCharge->Draw();
   c1->Print("figure/TruncEnergy.png");
 
