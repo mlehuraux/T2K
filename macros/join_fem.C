@@ -20,7 +20,7 @@ void join_fem() {
   //************************************************************
 
   // LOOP OVER FILES
-  for (Int_t fileID = 5149; fileID < 5161; ++fileID) {
+  for (Int_t fileID = 5148; fileID < 5161; ++fileID) {
     std::stringstream stream;
     stream << fileID;
     std::string strRUN = stream.str();
@@ -119,13 +119,10 @@ void join_fem() {
       // LOOP OVER FEMs
       for (Int_t femID = 0; femID < 7; ++femID) {
         //inFile[femID]->cd();
-        t[0]->GetEntry(ievt);
+        t[femID]->GetEntry(ievt);
         //cout << "OK" << endl;
 
         pad_charge[femID].clear();
-        pad_charge[femID].resize(Imax+1);
-        for (int z=0; z <= Imax; ++z)
-          pad_charge[femID][z].resize(Jmax+1, 0);
 
         pad_charge[7].clear();
         pad_charge[7].resize(Imax+1);
@@ -164,18 +161,16 @@ void join_fem() {
           pad_charge[7][i][j] += adcmax;
 
         } //loop over channels
-
-        for (Int_t i = 0; i < 24; ++i) {\
+        // 23 71
+        for (Int_t i = 0; i <= Imax; ++i) {
           vector<short> line;
-          for (Int_t j = 0; j < 72; ++j) {
-            //cout << pad_charge[7][i][j] << " ";
+          for (Int_t j = 0; j <= Jmax; ++j) {
             line.push_back(pad_charge[7][i][j]);
+            //if (femID == 5)
+              //cout << i << "    " << j << "    " << pad_charge[7][i][j] << endl;
           }
-          //cout << endl;
           pad_charge[femID].push_back(line);
         }
-
-
       } // loop over FEMs
       pad->Fill();
     } // loop over events
