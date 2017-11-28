@@ -1,4 +1,4 @@
-#define THIS_NAME join_fem
+#define THIS_NAME join_fem_ana
 #define NOINTERACTIVE_OUTPUT
 #define OVERRIDE_OPTIONS
 
@@ -6,27 +6,54 @@
 
 const Float_t tpcPanelWidth   = 233.94;
 const Float_t tpcPanelHeight  = 172.83;
+const Float_t alpha                   = 0.7;
 
-void join_fem() {
+void join_fem_ana() {
+
+  // define output
+  TGraph* graph = new TGraph();
+  int point = 0;
+  TH1F* ClusterNormCharge = new TH1F("cluster_norm_charge","Truncated mean energy deposit",150,0,4000);
+
+  // Initialize the geometry
+  // Similar for all the files actuallн
+  std::string file_name0 = "data_root/RUN_05148_multi.root";
+  TFile* inFile0  = new TFile(file_name0.c_str(), "READ");
+
+  vector<int> *iPad(0);
+  vector<int> *jPad(0);
+  TTree * tgeom= (TTree*) inFile0->Get("femGeomTree");
+  int Jmin, Imin, Jmax, Imax;
+  // vectors are filled as x0_v[row][col] = x0
+  // so calling of the vectors should be x0_v[i][j]
+  vector<vector<double> > *x0Pad(0), *x1Pad(0), *x2Pad(0), *x3Pad(0);
+  vector<vector<double> > *y0Pad(0), *y1Pad(0), *y2Pad(0), *y3Pad(0);
+  tgeom->SetBranchAddress("jPad", &jPad );
+  tgeom->SetBranchAddress("iPad", &iPad );
+  tgeom->SetBranchAddress("jPadMin", &Jmin );
+  tgeom->SetBranchAddress("iPadMin", &Imin );
+  tgeom->SetBranchAddress("jPadMax", &Jmax );
+  tgeom->SetBranchAddress("iPadMax", &Imax );
+  tgeom->SetBranchAddress("x0Pad", &x0Pad );
+  tgeom->SetBranchAddress("y0Pad", &y0Pad );
+  tgeom->SetBranchAddress("x1Pad", &x0Pad );
+  tgeom->SetBranchAddress("y1Pad", &y0Pad );
+  tgeom->SetBranchAddress("x2Pad", &x0Pad );
+  tgeom->SetBranchAddress("y2Pad", &y0Pad );
+  tgeom->SetBranchAddress("x3Pad", &x0Pad );
+  tgeom->SetBranchAddress("y3Pad", &y0Pad );
+
+  tgeom->GetEntry(0); // put into memory geometry info
 
   // LOOP OVER FILES
-  for (Int_t fileID = 5148; fileID < 5162; ++fileID) {
+  for (Int_t fileID = 5148; fileID < 5161; ++fileID) {
     std::stringstream stream;
     stream << fileID;
     std::string strRUN = stream.str();
 
-    std::vector<std::vector<short> > *pad_charge;
-    pad->Branch("PadCharge",    &pad_charge);
-
-    TGraph* graph = new TGraph();
-    int point = 0;
-
-
-    stream.str("");
-    stream << femID;
-    std::string strFEM = stream.str();
-
-    std::string file_name = "data_root/RUN_0" + strRUN + "_fem" + strFEM + ".root";
+    std::string file_name = "data_root/RUN_0" + strRUN + "_multi.root";
+    cout << endl;
+    cout << "Rinnung analysis over " << file_name << endl;
     TFile* inFile  = new TFile(file_name.c_str(), "READ");
 
     // READ BEAM CONFIG
@@ -35,76 +62,143 @@ void join_fem() {
     tconfig->SetBranchAddress("DriftZ", &driftZ);
     tconfig->GetEntry(0);
 
-    // READ GEOMETRY
-    vector<int> *iPad(0);
-    vector<int> *jPad(0);
-    TTree * tgeom= (TTree*) inFile->Get("femGeomTree");
-    int Jmin, Imin, Jmax, Imax;
-    vector<vector<double> > *x0Pad(0), *x1Pad(0), *x2Pad(0), *x3Pad(0);
-    vector<vector<double> > *y0Pad(0), *y1Pad(0), *y2Pad(0), *y3Pad(0);
-    tgeom->SetBranchAddress("jPad", &jPad );
-    tgeom->SetBranchAddress("iPad", &iPad );
-    tgeom->SetBranchAddress("jPadMin", &Jmin );
-    tgeom->SetBranchAddress("iPadMin", &Imin );
-    tgeom->SetBranchAddress("jPadMax", &Jmax );
-    tgeom->SetBranchAddress("iPadMax", &Imax );
-    tgeom->SetBranchAddress("x0Pad", &x0Pad );
-    tgeom->SetBranchAddress("y0Pad", &y0Pad );
-    tgeom->SetBranchAddress("x1Pad", &x0Pad );
-    tgeom->SetBranchAddress("y1Pad", &y0Pad );
-    tgeom->SetBranchAddress("x2Pad", &x0Pad );
-    tgeom->SetBranchAddress("y2Pad", &y0Pad );
-    tgeom->SetBranchAddress("x3Pad", &x0Pad );
-    tgeom->SetBranchAddress("y3Pad", &y0Pad );
-
-    tgeom->GetEntry(0); // put into memory geometry info
-
     // READ PAD DATA
-    TTree *t = (TTree*) inFile->Get("padData");
-    cout <<t->GetEntries() << " evts in file " << endl;
+    TTree *t = (TTree*) inFile->Get("pad");
+    vector<vector<short> >  *pad_charge[7];
+    for (Int_t it = 0; it < 7; ++it)
+      pad_charge[it] = new vector<vector<short> >(0);
 
-    vector<short>          *listOfChannels(0);
-    vector<vector<short> > *listOfSamples(0);
+    cout << pad_charge[0] << endl;
+    cout << pad_charge[0]->size() << endl;
 
-    t->SetBranchAddress("PadphysChannels", &listOfChannels );
-    t->SetBranchAddress("PadADCvsTime"   , &listOfSamples );
+    t->SetBranchAddress("pad0",     &pad_charge[0]);
+    t->SetBranchAddress("pad1",     &pad_charge[1]);
+    t->SetBranchAddress("pad2",     &pad_charge[2]);
+    t->SetBranchAddress("pad3",     &pad_charge[3]);
+    t->SetBranchAddress("pad4",     &pad_charge[4]);
+    t->SetBranchAddress("pad5",     &pad_charge[5]);
+    t->SetBranchAddress("pad6",     &pad_charge[6]);
 
-  }
+    //************************************************************
+    //************************************************************
+    //****************** LOOP OVER EVENTS ************************
+    //************************************************************
+    //************************************************************
+    vector<int> listofRow;
+    listofRow.resize(24, 0);
+
+    int Nevents=t->GetEntries();
+    //cout << "[          ] Nev="<<Nevents<<"\r[";
+    for (int ievt=0; ievt < Nevents ; ievt++){
+      //if (ievt%(Nevents/10)==0)
+        //cout <<"."<<flush;
+      cout << pad_charge[0] << endl;
+      t->GetEntry(ievt);
+      cout << pad_charge[0]->size() << endl;
+
+      vector< pair<Float_t, Int_t> > cluster_charge;
+      cluster_charge.clear();
+      vector<Float_t> pads_per_cluster;
+      pads_per_cluster.clear();
+
+      for (int i = 0; i < 24; i++)
+        listofRow[i]=0;
+
+      // Loop over pads i j
+      int MaxSepEvent = 0;
+      for (int i = 0; i <= pad_charge[0]->size(); ++i) {
+        int prev = 1E6;
+        int MaxSepRow = -1;
+        int PadPerCl = 0;
+        int ChargeCl = 0;
+        for (int j = 0; j <= (*pad_charge[0])[i].size(); ++j) {
+
+          cout << j << "   " << i << endl;
+          cout << pad_charge[0] << endl;
+          int adcmax = (*pad_charge[0])[i][j];
+
+          ChargeCl += adcmax;
+          if (adcmax > 0) {
+            if (j - prev - 1 > MaxSepRow)
+              MaxSepRow = j - prev - 1;
+            prev = j;
+            ++PadPerCl;
+          }
+        }
+        if (MaxSepRow > MaxSepEvent)
+          MaxSepEvent = MaxSepRow;
+
+        if (ChargeCl>0) {
+          cluster_charge.push_back(make_pair(ChargeCl, i));
+          pads_per_cluster.push_back(PadPerCl);
+          listofRow[i] = 1;
+        }
+      }  // end of PAD scan
+
+      int Nrow = 0;
+      for (int i = 0; i < 24; i++)
+        Nrow+=listofRow[i];
+
+      if (Nrow < 20)
+        continue;
+
+      if (MaxSepEvent > 2)
+        continue;
+
+      sort(cluster_charge.begin(), cluster_charge.end());
+      Float_t norm_cluster = 0.;
+      Int_t i_max = round(alpha * cluster_charge.size());
+      for (int i = 0; i < std::min(i_max, int(cluster_charge.size())); ++i)
+        norm_cluster += cluster_charge[i].first;
+
+      norm_cluster *= 1 / (alpha * cluster_charge.size());
+
+      ClusterNormCharge->Fill(norm_cluster);
+    } // end event loop
+  } // end file loop
+
+  TCanvas *c1 = new TCanvas("c1","evadc",900,700);
+
+  gStyle->SetOptStat("RMne");
+  gStyle->SetOptFit(0111);
+  ClusterNormCharge->Fit("gaus");
+  ClusterNormCharge->Draw();
+  c1->Print("figure/TruncEnergy_multi.png");
 }
 
-void GetCoordinates(Float_t** x, Float_t** y, Int_t iFem, Float_t** xOut, Float_t** yOut) {
+void GetCoordinates(Double_t x[4], Double_t y[4], Int_t iFem, Double_t xOut[4], Double_t yOut[4]) {
   const double scale  = 1.;
   const double xscale = scale * 1./tpcPanelWidth;
   const double yscale = scale * 1./tpcPanelHeight;
 
   for (Int_t ic = 0; ic < 4; ++ic) {
     if (iFem==2) {
-      xOut[ic] = x*cos(0.149488369/1.33) - y*sin(0.149488369/1.33) /*+ 0.5*/;
-      yOut[ic] = y*cos(0.149488369/1.33) + x*sin(0.149488369/1.33) /*+ 0.5*/ - 1520*yscale;
+      xOut[ic] = x[ic]*cos(0.149488369/1.33) - y[ic]*sin(0.149488369/1.33);
+      yOut[ic] = y[ic]*cos(0.149488369/1.33) + x[ic]*sin(0.149488369/1.33) - 1520*yscale;
     }
     if (iFem==3) {
-      xOut[ic] = x*cos(0.003055244/1.33) - y*sin(0.003055244/1.33) /*+ 0.5*/;
-      yOut[ic] = y*cos(0.003055244/1.33) + x*sin(0.003055244/1.33) /*+ 0.5*/ - 1520*yscale;
+      xOut[ic] = x[ic]*cos(0.003055244/1.33) - y[ic]*sin(0.003055244/1.33);
+      yOut[ic] = y[ic]*cos(0.003055244/1.33) + x[ic]*sin(0.003055244/1.33) - 1520*yscale;
     }
     if (iFem==4) {
-      xOut[ic] = x*cos(-0.143203347/1.33) - y*sin(-0.143203347/1.33) /*+ 0.5*/;
-      yOut[ic] = y*cos(-0.143203347/1.33) + x*sin(-0.143203347/1.33) /*+ 0.5*/ - 1520*yscale;
+      xOut[ic] = x[ic]*cos(-0.143203347/1.33) - y[ic]*sin(-0.143203347/1.33);
+      yOut[ic] = y[ic]*cos(-0.143203347/1.33) + x[ic]*sin(-0.143203347/1.33) - 1520*yscale;
     }
     if (iFem==0) {
-      xOut[ic] = x*cos(0.088401845/1.33) - y*sin(0.088401845/1.33) /*+ 0.5*/;
-      yOut[ic] = y*cos(0.088401845/1.33) + x*sin(0.088401845/1.33) /*+ 0.5*/ - 1520*yscale+175*yscale;
+      xOut[ic] = x[ic]*cos(0.088401845/1.33) - y[ic]*sin(0.088401845/1.33);
+      yOut[ic] = y[ic]*cos(0.088401845/1.33) + x[ic]*sin(0.088401845/1.33) - 1520*yscale+175*yscale;
     }
     if (iFem==1) {
-      xOut[ic] = x*cos(-0.05803128/1.33) - y*sin(-0.05803128/1.33) /*+ 0.5*/;
-      yOut[ic] = y*cos(-0.05803128/1.33) + x*sin(-0.05803128/1.33) /*+ 0.5*/ - 1520*yscale+175*yscale;
+      xOut[ic] = x[ic]*cos(-0.05803128/1.33) - y[ic]*sin(-0.05803128/1.33);
+      yOut[ic] = y[ic]*cos(-0.05803128/1.33) + x[ic]*sin(-0.05803128/1.33) - 1520*yscale+175*yscale;
     }
     if (iFem==5) {
-      xOut[ic] = x*cos(0.05349526/1.33) - y*sin(0.05349526/1.33) /*+ 0.5*/;
-      yOut[ic] = y*cos(0.05349526/1.33) + x*sin(0.05349526/1.33) /*+ 0.5*/ - 1520*yscale - 175*yscale;
+      xOut[ic] = x[ic]*cos(0.05349526/1.33) - y[ic]*sin(0.05349526/1.33);
+      yOut[ic] = y[ic]*cos(0.05349526/1.33) + x[ic]*sin(0.05349526/1.33) - 1520*yscale - 175*yscale;
     }
     if (iFem==6) {
-      xOut[ic] = x*cos(-0.092937865/1.33) - y*sin(-0.092937865/1.33) /*+ 0.5*/;
-      yOut[ic] = y*cos(-0.092937865/1.33) + x*sin(-0.092937865/1.33) /*+ 0.5*/ - 1520*yscale - 175*yscale;
+      xOut[ic] = x[ic]*cos(-0.092937865/1.33) - y[ic]*sin(-0.092937865/1.33);
+      yOut[ic] = y[ic]*cos(-0.092937865/1.33) + x[ic]*sin(-0.092937865/1.33) - 1520*yscale - 175*yscale;
     }
 
     xOut[ic] *= tpcPanelWidth;
