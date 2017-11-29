@@ -8,14 +8,27 @@ const Float_t tpcPanelWidth   = 233.94;
 const Float_t tpcPanelHeight  = 172.83;
 const Float_t alpha           = 0.7;
 
-vector< pair<Int_t, Int_t> > ScanPad(const vector<vector<short> >, Int_t , Int_t , Int_t , Int_t& , Int_t& );
+vector< pair<Int_t, Int_t> > ScanPad(const vector<vector<short> >, Int_t , Int_t , Int_t , Int_t& , Int_t&, bool& );
+void GetCoordinates(Double_t* , Double_t* , Int_t , Double_t* , Double_t* );
 
 void join_fem_ana() {
+  bool energy = false;
+  bool drift  = false;
 
   // define output
-  TGraph* graph = new TGraph();
-  int point = 0;
-  TH1F* ClusterNormCharge = new TH1F("cluster_norm_charge","Truncated mean energy deposit",150,0,4000);
+  //TGraph* graph = new TGraph();
+  //int point = 0;
+  TH1F* ClusterNormCharge = new TH1F("cluster_norm_charge","Truncated mean energy deposit",250,0,2000);
+  vector< vector<pair<Int_t, Int_t> > > EventClusters;
+  TGraphErrors* DriftScanResol  = new TGraphErrors();
+  TGraphErrors* EnergyScanResol = new TGraphErrors();
+
+  Int_t N_events_raw = 0;
+  Int_t N_events_fem5 = 0;
+  Int_t N_events_Middle = 0;
+  Int_t N_events_top = 0;
+  Int_t N_events_border = 0;
+  Int_t N_events_matched = 0;
 
   // Initialize the geometry
   // Similar for all the files actuallн
@@ -28,8 +41,8 @@ void join_fem_ana() {
   int Jmin, Imin, Jmax, Imax;
   // vectors are filled as x0_v[row][col] = x0
   // so calling of the vectors should be x0_v[i][j]
-  vector<vector<double> > *x0Pad(0), *x1Pad(0), *x2Pad(0), *x3Pad(0);
-  vector<vector<double> > *y0Pad(0), *y1Pad(0), *y2Pad(0), *y3Pad(0);
+  vector<vector<double> > *x0Pad(0);//, *x1Pad(0), *x2Pad(0), *x3Pad(0);
+  vector<vector<double> > *y0Pad(0);//, *y1Pad(0), *y2Pad(0), *y3Pad(0);
   tgeom->SetBranchAddress("jPad", &jPad );
   tgeom->SetBranchAddress("iPad", &iPad );
   tgeom->SetBranchAddress("jPadMin", &Jmin );
@@ -38,16 +51,21 @@ void join_fem_ana() {
   tgeom->SetBranchAddress("iPadMax", &Imax );
   tgeom->SetBranchAddress("x0Pad", &x0Pad );
   tgeom->SetBranchAddress("y0Pad", &y0Pad );
-  tgeom->SetBranchAddress("x1Pad", &x0Pad );
+  /*tgeom->SetBranchAddress("x1Pad", &x0Pad );
   tgeom->SetBranchAddress("y1Pad", &y0Pad );
   tgeom->SetBranchAddress("x2Pad", &x0Pad );
   tgeom->SetBranchAddress("y2Pad", &y0Pad );
   tgeom->SetBranchAddress("x3Pad", &x0Pad );
-  tgeom->SetBranchAddress("y3Pad", &y0Pad );
+  tgeom->SetBranchAddress("y3Pad", &y0Pad );*/
 
   tgeom->GetEntry(0); // put into memory geometry info
 
-  // LOOP OVER FILES
+  //************************************************************
+  //************************************************************
+  //****************** LOOP OVER FILEWS ************************
+  //************************************************************
+  //************************************************************
+  string postfix = "";
   for (Int_t fileID = 5148; fileID < 5161; ++fileID) {
     std::stringstream stream;
     stream << fileID;
@@ -60,8 +78,11 @@ void join_fem_ana() {
 
     // READ BEAM CONFIG
     TTree* tconfig= (TTree*) inFile->Get("beam_config");
-    Float_t driftZ;
+    Float_t driftZ, peacking, energy, Efield;
     tconfig->SetBranchAddress("DriftZ", &driftZ);
+    tconfig->SetBranchAddress("peacking", &peacking);
+    tconfig->SetBranchAddress("energy", &energy);
+    tconfig->SetBranchAddress("Efield", &Efield);
     tconfig->GetEntry(0);
 
     // READ PAD DATA
@@ -96,44 +117,167 @@ void join_fem_ana() {
 
       Int_t TotalLength = 0;
 
-      Int_t Nrow = 0;
-      Int_t MaxSep = 0;
+      Int_t Nrow[7];
+      Int_t MaxSep[7];
+      bool touchBorder[7];
+
 
       // Scan over pads  FEM 5
-      vector< pair<Int_t, Int_t> > temp = ScanPad(*pad_charge[5], 5, Imax, Jmax, Nrow, MaxSep);
-      cluster_charge.insert(cluster_charge.end(), temp.begin(), temp.end());
-      //cout << cluster_charge.size() << endl;
+      vector< pair<Int_t, Int_t > > temp5 = ScanPad(*pad_charge[5], 5, Imax, Jmax, Nrow[5], MaxSep[5], touchBorder[5]);
+      // Scan over pads  FEM 2
+      vector< pair<Int_t, Int_t > > temp2 = ScanPad(*pad_charge[2], 2, Imax, Jmax, Nrow[2], MaxSep[2], touchBorder[2]);
+      // Scan over pads  FEM 3
+      vector< pair<Int_t, Int_t > > temp3 = ScanPad(*pad_charge[3], 3, Imax, Jmax, Nrow[3], MaxSep[3], touchBorder[3]);
+      // Scan over pads  FEM 4
+      vector< pair<Int_t, Int_t > > temp4 = ScanPad(*pad_charge[4], 4, Imax, Jmax, Nrow[4], MaxSep[4], touchBorder[4]);
+      // Scan over pads  FEM 0
+      vector< pair<Int_t, Int_t > > temp0 = ScanPad(*pad_charge[0], 0, Imax, Jmax, Nrow[0], MaxSep[0], touchBorder[0]);
+      // Scan over pads  FEM 1
+      vector< pair<Int_t, Int_t > > temp1 = ScanPad(*pad_charge[1], 1, Imax, Jmax, Nrow[1], MaxSep[1], touchBorder[1]);
+
+      // Start the selection
+      N_events_raw++;
 
       // cuts on FEM 5
-      if (Nrow < 20)
+      if (Nrow[5] < 20)
         continue;
-
-      if (MaxSep > 2)
+      if (MaxSep[5] > 2)
         continue;
-
-      // Scan over pads  FEM 3
-      temp = ScanPad(*pad_charge[3], 3, Imax, Jmax, Nrow, MaxSep);
-      cluster_charge.insert(cluster_charge.end(), temp.begin(), temp.end());
+      N_events_fem5++;
 
       // cuts on FEM 3
-      if (Nrow < 20)
+      if (Nrow[3] < 20)
+        continue;
+      if (MaxSep[3] > 2)
+        continue;
+      if (Nrow[2] > 5 || Nrow[4] > 5)
+        continue;
+      N_events_Middle++;
+
+      // cuts on FEM 0-1
+      bool use_fem0 = Nrow[0] > 20 && Nrow[1] < 5;
+      bool use_fem1 = Nrow[1] > 20 && Nrow[0] < 5;
+      if (!use_fem0 && !use_fem1)
+        continue;
+      if ((use_fem0 && MaxSep[0] > 2) || (use_fem1 && MaxSep[1] > 2))
         continue;
 
+      N_events_top++;
 
-      if (MaxSep > 2)
+      if (touchBorder[5] || touchBorder[3] || (use_fem0 && touchBorder[0]) || (use_fem1 &&  touchBorder[1]))
+        continue;
+      N_events_border++;
+
+      Float_t X_end, X_start;
+
+      Double_t x[4], x_global[4];
+      Double_t y[4], y_global[4];
+
+      Int_t i_int = (*(temp5.end()-1)).second;
+      Int_t j_int;
+      for (Int_t j = 0; j < Jmax; ++j) {
+        if ((*pad_charge[5])[i_int][j] != 0)
+          j_int = j;
+      }
+
+      x[0] = (*x0Pad)[i_int][j_int];
+      y[0] = (*y0Pad)[i_int][j_int];
+
+      GetCoordinates(x, y, 5, x_global, y_global);
+      X_end = x_global[0];
+
+      i_int = (*temp3.begin()).second;
+
+      for (Int_t j = 0; j < Jmax; ++j) {
+        if ((*pad_charge[3])[i_int][j] != 0)
+          j_int = j;
+      }
+
+      x[0] = (*x0Pad)[i_int][j_int];
+      y[0] = (*y0Pad)[i_int][j_int];
+
+      GetCoordinates(x, y, 3, x_global, y_global);
+      X_start = x_global[0];
+
+      if (abs(X_start-X_end) > 5)
         continue;
 
-      // Scan over pads  FEM 3
-      vector< pair<Int_t, Int_t> > temp2 = ScanPad(*pad_charge[0], 0, Imax, Jmax, Nrow, MaxSep);
-      cluster_charge.insert(cluster_charge.end(), temp2.begin(), temp2.end());
+      i_int = (*(temp3.end()-1)).second;
 
-      // cuts on FEM 3
-      if (Nrow < 20)
+      for (Int_t j = 0; j < Jmax; ++j) {
+        if ((*pad_charge[3])[i_int][j] != 0)
+          j_int = j;
+      }
+
+      x[0] = (*x0Pad)[i_int][j_int];
+      y[0] = (*y0Pad)[i_int][j_int];
+
+      GetCoordinates(x, y, 3, x_global, y_global);
+      X_end = x_global[0];
+
+      i_int = use_fem1 ? (*temp1.begin()).second : (*temp0.begin()).second;
+
+      for (Int_t j = 0; j < Jmax; ++j) {
+        bool var = use_fem1 ? (*pad_charge[1])[i_int][j] != 0 : (*pad_charge[0])[i_int][j] != 0;
+        if (var)
+          j_int = j;
+      }
+
+      x[0] = (*x0Pad)[i_int][j_int];
+      y[0] = (*y0Pad)[i_int][j_int];
+
+      if (use_fem1)
+        GetCoordinates(x, y, 1, x_global, y_global);
+      else
+        GetCoordinates(x, y, 0, x_global, y_global);
+
+      X_start = x_global[0];
+
+      if (abs(X_start-X_end) > 5)
         continue;
 
+      N_events_matched++;
 
-      if (MaxSep > 2)
-        continue;
+      // make a vector of charges per track
+      // don't use 1st and last values
+      if (temp5.size()){
+        if (temp5[0].second == 0)
+          temp5.erase(temp5.begin());
+        if (temp5[temp5.size()-1].second == Imax)
+          temp5.erase(temp5.end()-1);
+      }
+      if (temp3.size()){
+        if (temp3[0].second == 0)
+          temp3.erase(temp3.begin());
+        if (temp3[temp3.size()-1].second == Imax)
+          temp3.erase(temp3.end()-1);
+      }
+      if (temp0.size()){
+        if (temp0[0].second == 0)
+          temp0.erase(temp0.begin());
+        if (temp0[temp0.size()-1].second == Imax)
+          temp0.erase(temp0.end()-1);
+      }
+      if (temp1.size()){
+        if (temp1[0].second == 0)
+          temp1.erase(temp1.begin());
+        if (temp1[temp1.size()-1].second == Imax)
+          temp1.erase(temp1.end()-1);
+      }
+
+      cluster_charge.insert(cluster_charge.end(), temp5.begin(), temp5.end());
+      cluster_charge.insert(cluster_charge.end(), temp3.begin(), temp3.end());
+      TotalLength += Nrow[5] + Nrow[3];
+
+      if (use_fem1){
+        cluster_charge.insert(cluster_charge.end(), temp1.begin(), temp1.end());
+        TotalLength += Nrow[1];
+      }
+
+      if (use_fem0) {
+        cluster_charge.insert(cluster_charge.end(), temp0.begin(), temp0.end());
+        TotalLength += Nrow[0];
+      }
 
 
       sort(cluster_charge.begin(), cluster_charge.end());
@@ -145,36 +289,148 @@ void join_fem_ana() {
       norm_cluster *= 1 / (alpha * cluster_charge.size());
 
       ClusterNormCharge->Fill(norm_cluster);
+      EventClusters.push_back(cluster_charge);
     } // end event loop
+    // fill the file vars
+    // distance / energy
   } // end file loop
 
   TCanvas *c1 = new TCanvas("c1","evadc",900,700);
 
+  //************************************************************
+  //************************************************************
+  //************* VARY THE ALPHA VALUE  ************************
+  //************************************************************
+  //************************************************************
+  Float_t best_resolution = 1.;
+  Float_t best_alpha = 1.;
+  // loop over alpha
+  Float_t min   = 0.3;
+  Float_t max   = 0.9;
+  Int_t   Nstep = 24;
+  Float_t step = (max- min) / Nstep;
+
+  TGraphErrors* alpha_gaussian  = new  TGraphErrors();
+  TGraphErrors* alpha_fwhw      = new  TGraphErrors();
+
+  for (Int_t z = 0; z <= Nstep; ++z) {
+    Float_t alpha = min + z * step;
+    TH1F* ClusterNormCharge = new TH1F("cluster_norm_charge","Truncated mean energy deposit",250,0,2000);
+
+    for (UInt_t j = 0; j < EventClusters.size(); ++j) {
+      Float_t norm_cluster = 0.;
+      Int_t i_max = round(alpha * EventClusters[j].size());
+      Int_t v_size = (i_max < int(EventClusters[j].size())) ? i_max : int(EventClusters[j].size());
+      for (int i = 0; i < v_size ; ++i)
+        norm_cluster += EventClusters[j][i].first;
+
+      norm_cluster *= 1 / (alpha * EventClusters[j].size());
+
+      ClusterNormCharge->Fill(norm_cluster);
+    }
+
+    gStyle->SetOptStat("RMne");
+    gStyle->SetOptFit(0111);
+    ClusterNormCharge->Fit("gaus");
+    TF1 *fit = ClusterNormCharge->GetFunction("gaus");
+    Float_t mean      = fit->GetParameter(1);
+    Float_t sigma     = fit->GetParameter(2);
+
+    Float_t mean_e     = fit->GetParError(1);
+    Float_t sigma_e    = fit->GetParError(2);
+    Float_t resol = sigma / mean;
+
+    Float_t resol_e   = resol * sqrt(mean_e*mean_e/(mean*mean) + sigma_e*sigma_e/(sigma*sigma));
+
+    int bin1 = ClusterNormCharge->FindFirstBinAbove(ClusterNormCharge->GetMaximum()/2);
+    int bin2 = ClusterNormCharge->FindLastBinAbove(ClusterNormCharge->GetMaximum()/2);
+    double fwhm = ClusterNormCharge->GetBinCenter(bin2) - ClusterNormCharge->GetBinCenter(bin1);
+    Float_t resol_fwhm = 0.5 * fwhm / ClusterNormCharge->GetBinCenter(ClusterNormCharge->GetMaximumBin());
+
+    ClusterNormCharge->Draw();
+    c1->Print(Form("figure/alpha/%i.png", z));
+    alpha_gaussian->SetPoint(z, alpha, resol);
+    alpha_fwhw->SetPoint(z, alpha, resol_fwhm);
+
+    alpha_gaussian->SetPointError(z, 0, resol_e);
+
+    if (resol < best_resolution) {
+      best_alpha      = alpha;
+      best_resolution = resol;
+    }
+  }
+
+
+  gStyle->SetOptStat("RMne");
+  gStyle->SetOptFit(0111);
+  alpha_gaussian->SetMarkerColor(4);
+  alpha_gaussian->SetMarkerSize(0.5);
+  alpha_gaussian->SetMarkerStyle(21);
+  c1->SetGrid(1);
+  alpha_gaussian->Draw("ap");
+  c1->Print("figure/Resolution_alpha_gaus.png");
+
+  alpha_fwhw->SetMarkerColor(4);
+  alpha_fwhw->SetMarkerSize(0.5);
+  alpha_fwhw->SetMarkerStyle(21);
+  alpha_fwhw->Draw("ap");
+  c1->Print("figure/Resolution_alpha_fwhm.png");
+  //************************************************************
+  //************************************************************
+  //****************** PLOT THE OUTPUT  ************************
+  //************************************************************
+  //************************************************************
+
   gStyle->SetOptStat("RMne");
   gStyle->SetOptFit(0111);
   ClusterNormCharge->Fit("gaus");
+  TF1 *fit = ClusterNormCharge->GetFunction("gaus");
+  Float_t mean      = fit->GetParameter(1);
+  Float_t sigma     = fit->GetParameter(2);
   ClusterNormCharge->Draw();
-  c1->Print("figure/TruncEnergy_multi.png");
+  c1->Print(("figure/TruncEnergy_multi" + postfix + ".png").c_str());
+  int bin1 = ClusterNormCharge->FindFirstBinAbove(ClusterNormCharge->GetMaximum()/2);
+  int bin2 = ClusterNormCharge->FindLastBinAbove(ClusterNormCharge->GetMaximum()/2);
+  double fwhm = ClusterNormCharge->GetBinCenter(bin2) - ClusterNormCharge->GetBinCenter(bin1);
+  cout << "****************************************************" << endl;
+  cout << "Present resolution" << endl;
+  cout << "resol FWHM = " << 0.5 * fwhm / ClusterNormCharge->GetBinCenter(ClusterNormCharge->GetMaximumBin()) << endl;
+  cout << "resol GAUS = " << sigma / mean << endl;
+
+  cout << "****************************************************" << endl;
+  cout << "Initial N events   : " << N_events_raw << endl;
+  cout << "Events in fem5     : " << N_events_fem5 << endl;
+  cout << "Events with middle : " << N_events_Middle << endl;
+  cout << "Events with top    : " << N_events_top << endl;
+  cout << "Events w/o borders : " << N_events_border << endl;
+  cout << "Events matched     : " << N_events_matched << endl;
+
+  cout << "****************************************************" << endl;
+  cout << "Results of scannning over alpha. Gaussian method of resolution calculating" << endl;
+  cout << "alpha    = " << best_alpha << endl;
+  cout << "resol    = " << best_resolution << endl;
+  cout << "****************************************************" << endl;
 }
 
-vector< pair<Int_t, Int_t> > ScanPad(const vector<vector<short> > pad, Int_t FEM, Int_t Imax, Int_t Jmax, Int_t& Nrow, Int_t& MaxSeparation) {
+vector< pair<Int_t, Int_t> > ScanPad(const vector<vector<short> > pad, Int_t FEM, Int_t Imax, Int_t Jmax, Int_t& Nrow, Int_t& MaxSeparation, bool& touchBorder) {
 
   MaxSeparation = 0;
   Nrow = 0;
+  touchBorder = false;
 
   vector< pair<Int_t, Int_t> > cluster_charge;
   vector<int> listofRow;
   listofRow.resize(24, 0);
 
-  for (int i = 0; i < pad.size(); ++i) {
+  for (UInt_t i = 0; i < pad.size(); ++i) {
     int prev = 1E6;
     int MaxSepRow = -1;
-    int PadPerCl = 0;
     int ChargeCl = 0;
-    for (int j = 0; j < pad[i].size(); ++j) {
+    for (Int_t j = 0; j < (int)pad[i].size(); ++j) {
 
       int adcmax = pad[i][j];
-      //cout << i << "    " << j << "    " << adcmax << endl;
+      //if (FEM == 0)
+      //  cout << i << "    " << j << "    " << adcmax << endl;
       if (adcmax < 0) {
         cout << "ALARM!" << endl;
         exit(1);
@@ -186,7 +442,8 @@ vector< pair<Int_t, Int_t> > ScanPad(const vector<vector<short> > pad, Int_t FEM
         if (j - prev - 1 > MaxSepRow)
           MaxSepRow = j - prev - 1;
         prev = j;
-        ++PadPerCl;
+        if (j == 0 || j == (int)pad[i].size() - 1)
+          touchBorder = true;
       }
     }
     if (MaxSepRow > MaxSeparation)
@@ -214,6 +471,9 @@ void GetCoordinates(Double_t x[4], Double_t y[4], Int_t iFem, Double_t xOut[4], 
   const double yscale = scale * 1./tpcPanelHeight;
 
   for (Int_t ic = 0; ic < 4; ++ic) {
+    x[ic] *= xscale;
+    y[ic]  = (y[ic] + 1520) * yscale;
+
     if (iFem==2) {
       xOut[ic] = x[ic]*cos(0.149488369/1.33) - y[ic]*sin(0.149488369/1.33);
       yOut[ic] = y[ic]*cos(0.149488369/1.33) + x[ic]*sin(0.149488369/1.33) - 1520*yscale;
