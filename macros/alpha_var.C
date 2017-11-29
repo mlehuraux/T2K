@@ -21,7 +21,7 @@ What we need to study:
 1) maximum separation in the row. for 2 tracks substraction. How often?
 2) Number of pads per cluster
 3) Qmax (sum over cluster) vs row
-4) Qmax destribution 
+4) Qmax destribution
 */
 
 void  alpha_var(){
@@ -44,7 +44,7 @@ void  alpha_var(){
       iarg++;
       file=gApplication->Argv(iarg);
       if (file.Contains(".root")) {
-        
+
         cout << "adding filename" <<" " << file << endl;
         listOfFiles.push_back(file);
       } else {
@@ -71,17 +71,17 @@ void  alpha_var(){
     }
  else if (string( gApplication->Argv(iarg))=="-b"){
       gROOT->SetBatch(1);
- 
-    }
-    
-  else if (string( gApplication->Argv(iarg))=="-t"||string( gApplication->Argv(iarg))=="--threshold"){ 
-    iarg++;
-    thr = strtol(gApplication->Argv(iarg), NULL, 0);   
-  } 
 
-    else if (string( gApplication->Argv(iarg))=="-n"||string( gApplication->Argv(iarg))=="-nEvents"){ 
+    }
+
+  else if (string( gApplication->Argv(iarg))=="-t"||string( gApplication->Argv(iarg))=="--threshold"){
+    iarg++;
+    thr = strtol(gApplication->Argv(iarg), NULL, 0);
+  }
+
+    else if (string( gApplication->Argv(iarg))=="-n"||string( gApplication->Argv(iarg))=="-nEvents"){
       iarg++;
-    Ndefaultevents = strtol(gApplication->Argv(iarg), NULL, 0);  
+    Ndefaultevents = strtol(gApplication->Argv(iarg), NULL, 0);
     }
     else if (string( gApplication->Argv(iarg))=="--nbins"){
       iarg++;
@@ -98,7 +98,7 @@ void  alpha_var(){
       printf("\n-t/--threshold [threshold in ADC] (default = %d)", thr);
       printf("\n--nbins [nbins for time histo] (default = %d)", nbins);
       printf("\n");
-      return;  
+      return;
     }
   } //Argument parsing
 
@@ -148,7 +148,7 @@ void  alpha_var(){
         Jmin = (*jPad)[i];
     }
 
-    if (DEBUG)  
+    if (DEBUG)
       cout << "Imax = " << Imax << " Imin = " << Imin << " Jmax = " << Jmax << " Jmin = " << Jmin << endl;
 
     gStyle->SetPalette(1);
@@ -162,13 +162,13 @@ void  alpha_var(){
 
     t->SetBranchAddress("PadphysChannels", &listOfChannels );
     t->SetBranchAddress("PadADCvsTime"   , &listOfSamples );
- 
+
     if (Nevents<=0) Nevents=t->GetEntries();
     if (Nevents>t->GetEntries()) Nevents=t->GetEntries();
 
     cout << "[          ] Nev="<<Nevents<<"\r[";
-                                              
-    // to win time, disable MG data                                               
+
+    // to win time, disable MG data
     t->SetBranchStatus("MGADCvsTime",0);
     t->SetBranchStatus("MGphysChannels",0);
 
@@ -181,7 +181,7 @@ void  alpha_var(){
     //************************************************************
 
     for (int ievt=0; ievt < Nevents ; ievt++){
-      if (ievt%(Nevents/10)==0) 
+      if (ievt%(Nevents/10)==0)
         cout <<"."<<flush;
 
       if (DEBUG)
@@ -195,7 +195,7 @@ void  alpha_var(){
         PadDisplay[z].resize(Imax+1, 0);
 
       for (int i = 0; i < 24; i++)
-        listofRow[i]=0; 
+        listofRow[i]=0;
 
       //************************************************************
       //************************************************************
@@ -208,16 +208,16 @@ void  alpha_var(){
       for (uint ic=0; ic< listOfChannels->size(); ic++){
         int chan= (*listOfChannels)[ic];
         // find out the maximum
-        float adcmax=-1; 
+        float adcmax=-1;
         int itmax=-1;
 
         // one maximum per channel
         for (uint it = 0; it < (*listOfSamples)[ic].size(); it++){
           int adc= (*listOfSamples)[ic][it];
           // cout << " ADC channel " << ic << " time " << it << " adc " << adc << endl ;}
-          if (adc>thr) 
-            if (adc>adcmax) { 
-              adcmax=adc; 
+          if (adc>thr)
+            if (adc>adcmax) {
+              adcmax=adc;
               itmax=it;
             }
         }
@@ -228,11 +228,11 @@ void  alpha_var(){
           cout << "i = " << (*iPad)[chan] << "   j = " << (*jPad)[chan]  << "    adc_max = " << adcmax << endl;
         }
 
-        listofRow[(*iPad)[chan]]=1; //the row has been hit 
-       
+        listofRow[(*iPad)[chan]]=1; //the row has been hit
+
         float weight=1;
         if (Eweight) weight=adcmax;
-          
+
         PadDisplay[(*jPad)[chan]][(*iPad)[chan]] = adcmax;
       } //loop over channels
 
@@ -267,7 +267,7 @@ void  alpha_var(){
         if (MaxSepRow > MaxSepEvent)
           MaxSepEvent = MaxSepRow;
 
-        if (ChargeCl>0) 
+        if (ChargeCl>0)
           cluster_charge.push_back(ChargeCl);
       }  // end of PAD scan
 
@@ -312,13 +312,13 @@ void  alpha_var(){
   //************************************************************
   for (Int_t z = 0; z <= Nstep; ++z) {
     Float_t alpha = min + z * step;
-    TH1F* ClusterNormCharge = new TH1F("cluster_norm_charge","Truncated mean energy deposit",100,0,2000);
+    TH1F* ClusterNormCharge = new TH1F("cluster_norm_charge","Truncated mean energy deposit",2500,0,2500);
 
     for (Int_t j = 0; j < EventClusters.size(); ++j) {
       Float_t norm_cluster = 0.;
       Int_t i_max = round(alpha * EventClusters[j].size());
       Int_t v_size = (i_max < int(EventClusters[j].size())) ? i_max : int(EventClusters[j].size());
-      for (int i = 0; i < v_size ; ++i) 
+      for (int i = 0; i < v_size ; ++i)
         norm_cluster += EventClusters[j][i];
 
       norm_cluster *= 1 / (alpha * EventClusters[j].size());
@@ -338,6 +338,12 @@ void  alpha_var(){
     Float_t resol = sigma / mean;
 
     Float_t resol_e   = resol * sqrt(mean_e*mean_e/(mean*mean) + sigma_e*sigma_e/(sigma*sigma));
+    //****************************************************************************
+    int bin1 = ClusterNormCharge->FindFirstBinAbove(ClusterNormCharge->GetMaximum()/2);
+    int bin2 = ClusterNormCharge->FindLastBinAbove(ClusterNormCharge->GetMaximum()/2);
+    double fwhm = ClusterNormCharge->GetBinCenter(bin2) - ClusterNormCharge->GetBinCenter(bin1);
+    //resol = 0.5 * fwhm / ClusterNormCharge->GetBinCenter(ClusterNormCharge->GetMaximumBin());
+
 
     cout << "****************************************************" << endl;
     cout << "alpha = " << alpha << endl;
@@ -347,7 +353,7 @@ void  alpha_var(){
     cout << "resol    = " << resol << endl;
     cout << "resol_e  = " << resol_e << endl;
 
-    
+
 
     gr->SetPoint(z, alpha, resol);
 
@@ -360,10 +366,10 @@ void  alpha_var(){
     }
   }
 
-  
+
   gStyle->SetOptStat("RMne");
   gStyle->SetOptFit(0111);
-  BestResol->Fit("gaus");  
+  BestResol->Fit("gaus");
   BestResol->Draw();
   c1->Print("figure/TruncEnergyBest.png");
   gr->SetMarkerColor(4);
