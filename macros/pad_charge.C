@@ -361,6 +361,8 @@ void  pad_charge(){
     } // end of loops over events
 
     // Fill scan over files
+    gStyle->SetOptStat("RMne");
+    gStyle->SetOptFit(0111);
     ClusterNormChargeFile->Fit("gaus");
     TF1 *fit = ClusterNormChargeFile->GetFunction("gaus");
     Float_t mean      = fit->GetParameter(1);
@@ -374,6 +376,8 @@ void  pad_charge(){
 
     DriftScanResol->SetPoint(ifile, driftZ, resol);
     DriftScanResol->SetPointError(ifile, 0, resol_e);
+    c1->Print(Form("figure/file/TruncEnergy%i.png", ifile));
+    cout << "drift = " << driftZ << "    " << mean << "    " << sigma << endl;
 
     ClusterNormChargeFile->Reset();
   } // end of loops over files
@@ -400,18 +404,6 @@ void  pad_charge(){
 
   NcolHist->Draw();
   c1->Print("figure/TrackNcol.png");
-
-  gStyle->SetOptStat("RMne");
-  gStyle->SetOptFit(0111);
-  ClusterNormCharge->Fit("gaus");
-  ClusterNormCharge->Draw();
-  c1->Print("figure/TruncEnergy.png");
-
-  int bin1 = ClusterNormCharge->FindFirstBinAbove(ClusterNormCharge->GetMaximum()/2);
-  int bin2 = ClusterNormCharge->FindLastBinAbove(ClusterNormCharge->GetMaximum()/2);
-  double fwhm = ClusterNormCharge->GetBinCenter(bin2) - ClusterNormCharge->GetBinCenter(bin1);
-  cout << "max = " << ClusterNormCharge->GetMaximum() << "   FWHM = " << fwhm << std::endl;
-  cout << "resol = " << fwhm / ClusterNormCharge->GetMaximum() << endl;
 
   TGraphErrors* graphMax = new TGraphErrors();
   TGraphErrors* graphLandau = new TGraphErrors();
@@ -451,6 +443,22 @@ void  pad_charge(){
   c1->SetGrid(1);
   DriftScanResol->Draw("ap");
   c1->Print("figure/Resolution_Drift.png");
+
+  gStyle->SetOptStat("RMne");
+  gStyle->SetOptFit(0111);
+  ClusterNormCharge->Fit("gaus");
+  TF1 *fit = ClusterNormCharge->GetFunction("gaus");
+  Float_t mean      = fit->GetParameter(1);
+  Float_t sigma     = fit->GetParameter(2);
+  ClusterNormCharge->Draw();
+  c1->Print("figure/TruncEnergy.png");
+
+  int bin1 = ClusterNormCharge->FindFirstBinAbove(ClusterNormCharge->GetMaximum()/2);
+  int bin2 = ClusterNormCharge->FindLastBinAbove(ClusterNormCharge->GetMaximum()/2);
+  double fwhm = ClusterNormCharge->GetBinCenter(bin2) - ClusterNormCharge->GetBinCenter(bin1);
+  cout << "max = " << ClusterNormCharge->GetBinCenter(ClusterNormCharge->GetMaximumBin()) << "   FWHM = " << fwhm << std::endl;
+  cout << "resol FWHM = " << fwhm / ClusterNormCharge->GetBinCenter(ClusterNormCharge->GetMaximumBin()) << endl;
+  cout << "resol GAUS = " << sigma / mean << endl;
 
   cout << "END" << endl;
 }
