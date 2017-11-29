@@ -20,7 +20,7 @@ void join_fem() {
   //************************************************************
 
   // LOOP OVER FILES
-  for (Int_t fileID = 5148; fileID < 5161; ++fileID) {
+  for (Int_t fileID = 5109; fileID < 5168; ++fileID) {
     std::stringstream stream;
     stream << fileID;
     std::string strRUN = stream.str();
@@ -129,10 +129,6 @@ void join_fem() {
         for (int z=0; z <= Imax; ++z)
           pad_charge[7][z].resize(Jmax+1, 0);
 
-        //cout << pad_charge[0][0][0] << endl;
-        //cout << pad_charge[0][5][31] << endl;
-
-
         //************************************************************
         //************************************************************
         //*****************LOOP OVER CHANNELS ************************
@@ -166,8 +162,6 @@ void join_fem() {
           vector<short> line;
           for (Int_t j = 0; j <= Jmax; ++j) {
             line.push_back(pad_charge[7][i][j]);
-            //if (femID == 5)
-              //cout << i << "    " << j << "    " << pad_charge[7][i][j] << endl;
           }
           pad_charge[femID].push_back(line);
         }
