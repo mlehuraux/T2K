@@ -30,6 +30,7 @@ do
       k=2
     fi
     ./bin/acqToRootConverterExe -t $j -m $k -f  "temp/$f_acq" --noxml
+    ls -l temp/
     mv temp/$f_root ~/suvorov/data_root/$f_root_new
   done
 
@@ -42,9 +43,11 @@ cd ~/suvorov/
 if  $merge
 then
   echo "Merging the subruns"
+
   # loop over fems
   for ((j=0; j<7; j++));
   do
+    rm data_root/${f_acq%.*.*}_fem$j.root
     hadd "data_root/${f_acq%.*.*}_fem$j.root" "data_root/${f_acq%.*.*}."*"_fem$j.root"
   done
   rm "data_root/RUN"*"."*"_fem"*".root"
