@@ -26,6 +26,7 @@ int add_beam_info() {
       config_tree->Branch("DriftZ",   &driftZ);
       config_tree->Branch("peacking", &peacking);
       config_tree->Branch("Efield",   &Efield);
+      config_tree->Branch("energy",   &energy);
 
       config_tree->Fill();
       config_tree->Write("", TObject::kOverwrite);
