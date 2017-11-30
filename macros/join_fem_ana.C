@@ -12,13 +12,21 @@ vector< pair<Int_t, Int_t> > ScanPad(const vector<vector<short> >, Int_t , Int_t
 void GetCoordinates(Double_t* , Double_t* , Int_t , Double_t* , Double_t* );
 
 void join_fem_ana() {
-  bool energy = false;
-  bool drift  = false;
+  bool DrawEnergy = false;
+  bool DrawDrift  = false;
+  Int_t run_start = 5123;
+  Int_t run_end   = 5134;
+
+  if ((run_start < 5162 && DrawEnergy) || (run_start > 5161 && DrawDrift)) {
+    cout << "WRONG RUN!" << endl;
+    exit(1);
+  }
 
   // define output
   //TGraph* graph = new TGraph();
   //int point = 0;
-  TH1F* ClusterNormCharge = new TH1F("cluster_norm_charge","Truncated mean energy deposit",250,0,2000);
+  TH1F* ClusterNormCharge       = new TH1F("cluster_norm_charge","Truncated mean energy deposit",250,0,2000);
+  TH1F* ClusterNormChargeFile   = new TH1F("cluster_norm_charge","Truncated mean energy deposit",250,0,2000);
   vector< vector<pair<Int_t, Int_t> > > EventClusters;
   TGraphErrors* DriftScanResol  = new TGraphErrors();
   TGraphErrors* EnergyScanResol = new TGraphErrors();
@@ -59,6 +67,7 @@ void join_fem_ana() {
   tgeom->SetBranchAddress("y3Pad", &y0Pad );*/
 
   tgeom->GetEntry(0); // put into memory geometry info
+  TCanvas *c1 = new TCanvas("c1","evadc",900,700);
 
   //************************************************************
   //************************************************************
@@ -66,7 +75,7 @@ void join_fem_ana() {
   //************************************************************
   //************************************************************
   string postfix = "";
-  for (Int_t fileID = 5148; fileID < 5161; ++fileID) {
+  for (Int_t fileID = run_start; fileID <= run_end; ++fileID) {
     std::stringstream stream;
     stream << fileID;
     std::string strRUN = stream.str();
@@ -288,14 +297,39 @@ void join_fem_ana() {
 
       norm_cluster *= 1 / (alpha * cluster_charge.size());
 
+      // general resolution
       ClusterNormCharge->Fill(norm_cluster);
+      // for scan over vars
+      ClusterNormChargeFile->Fill(norm_cluster);
+      // for alpha variation
       EventClusters.push_back(cluster_charge);
     } // end event loop
     // fill the file vars
     // distance / energy
-  } // end file loop
+    gStyle->SetOptStat("RMne");
+    gStyle->SetOptFit(0111);
+    ClusterNormChargeFile->Fit("gaus");
+    TF1 *fit = ClusterNormChargeFile->GetFunction("gaus");
+    Float_t mean      = fit->GetParameter(1);
+    Float_t sigma     = fit->GetParameter(2);
 
-  TCanvas *c1 = new TCanvas("c1","evadc",900,700);
+    Float_t mean_e     = fit->GetParError(1);
+    Float_t sigma_e    = fit->GetParError(2);
+    Float_t resol = sigma / mean;
+
+    Float_t resol_e   = resol * sqrt(mean_e*mean_e/(mean*mean) + sigma_e*sigma_e/(sigma*sigma));
+
+    DriftScanResol->SetPoint(fileID - run_start, driftZ, resol);
+    DriftScanResol->SetPointError(fileID - run_start, 0, resol_e);
+
+    EnergyScanResol->SetPoint(fileID - run_start, energy, resol);
+    EnergyScanResol->SetPointError(fileID - run_start, 0, resol_e);
+    c1->Print(Form("figure/file/TruncEnergy%i.png", fileID));
+
+    cout << "File Scan. N = " << fileID - run_start << " Drift = " << driftZ << "   Energy = " << energy << "  Resol = " << resol << endl;
+
+    ClusterNormChargeFile->Reset();
+  } // end file loop
 
   //************************************************************
   //************************************************************
@@ -380,6 +414,25 @@ void join_fem_ana() {
   //****************** PLOT THE OUTPUT  ************************
   //************************************************************
   //************************************************************
+
+  DriftScanResol->SetMarkerColor(4);
+  DriftScanResol->SetMarkerSize(0.5);
+  DriftScanResol->SetMarkerStyle(21);
+  DriftScanResol->GetYaxis()->SetRangeUser(0., 0.11);
+  c1->SetGrid(1);
+  DriftScanResol->Draw("ap");
+  if (DrawDrift)
+    c1->Print("figure/Resolution_Drift_multi.png");
+
+  EnergyScanResol->SetMarkerColor(4);
+  EnergyScanResol->SetMarkerSize(0.5);
+  EnergyScanResol->SetMarkerStyle(21);
+  EnergyScanResol->GetYaxis()->SetRangeUser(0., 0.11);
+  c1->SetGrid(1);
+  EnergyScanResol->Draw("ap");
+  if (DrawEnergy)
+    c1->Print("figure/Resolution_Energy_multi.png");
+
 
   gStyle->SetOptStat("RMne");
   gStyle->SetOptFit(0111);
