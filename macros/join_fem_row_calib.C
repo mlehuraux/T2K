@@ -21,7 +21,7 @@ void join_fem_ana() {
   for (Int_t j = 0; j < 7; ++j) {
     ChargePerRow[j].resize(24, NULL);
     for (Int_t i = 0; i < 24; ++i)
-      ChargePerRow[j][i] = new TH1F(Form("charge%i%i", i, j),"Charge per row", 200, 0. , 10000);
+      ChargePerRow[j][i] = new TH1F(Form("charge%i%i", i, j),"Charge per row", 150, 0. , 10000);
   }
 
   // Initialize the geometry
@@ -143,30 +143,58 @@ void join_fem_ana() {
 
       gStyle->SetOptStat("RMne");
       gStyle->SetOptFit(0111);
-      ChargePerRow[femId][row]->Fit("landau");
-      TF1 *fit = ChargePerRow[femId][row]->GetFunction("landau");
-      Float_t mean = fit->GetParameter(1);
-      cout << "FEM = " << femId << "   Row = " << row << "    " << mean << endl;
+      TF1* f1 = new TF1("f1", "( (x < [1] ) ? [0] * TMath::Gaus(x, [1], [2]) : [0] * TMath::Gaus(x, [1], [3]))", 0, 10000);
+      f1->SetParameters(2000, 600, 200, 700);
+      Double_t fit_min = ChargePerRow[femId][row]->GetBinCenter(ChargePerRow[femId][row]->FindFirstBinAbove(ChargePerRow[femId][row]->GetMaximum()*0.3));
+      Double_t fit_max = ChargePerRow[femId][row]->GetBinCenter(ChargePerRow[femId][row]->FindLastBinAbove(ChargePerRow[femId][row]->GetMaximum()*0.3));
+      ChargePerRow[femId][row]->Fit("f1", "", "", fit_min, fit_max);
+      TF1 *fit = ChargePerRow[femId][row]->GetFunction("f1");
+      Float_t mean    = fit->GetParameter(1);
+      Float_t mean_e  = fit->GetParError(1);
+      if (mean < 0) {
+        mean = 0;
+        mean_e = 0;
+      }
+
+      //cout << "FEM = " << femId << "   Row = " << row << "    " << mean << endl;
 
       int bin1 = ChargePerRow[femId][row]->FindFirstBinAbove(ChargePerRow[femId][row]->GetMaximum()*0.9);
       int bin2 = ChargePerRow[femId][row]->FindLastBinAbove(ChargePerRow[femId][row]->GetMaximum()*0.9);
-      mean = 0.5 * (ChargePerRow[femId][row]->GetBinCenter(bin1) + ChargePerRow[femId][row]->GetBinCenter(bin2));
-      float mean_e = 0.5 * ChargePerRow[femId][row]->GetNbinsX() * (bin2-bin1+1);
+      float mean_f = 0.5 * (ChargePerRow[femId][row]->GetBinCenter(bin1) + ChargePerRow[femId][row]->GetBinCenter(bin2));
+      //float mean_e = 0.5 * ChargePerRow[femId][row]->GetNbinsX() * (bin2-bin1+1);
 
       Float_t ymax = 1.05 * ChargePerRow[femId][row]->GetMaximum();
-      TLine *line1 = new TLine(mean, 0 ,mean,ymax);
+      TLine *line1 = new TLine(mean, 0 ,mean_f,ymax);
       line1->SetLineColor(kRed);
 
 
       graphLandau[femId]->SetPoint(row, row, mean);
-      //graphLandau[femId]->SetPointError(row, 0, mean_e);
+      graphLandau[femId]->SetPointError(row, 0, mean_e);
       //Float_t max = ChargePerRow[femId][row]->GetBinCenter(ChargePerRow[femId][row]->GetMaximumBin());
       //graphMax->SetPoint(i, i, max);
       //graphMax->SetPointError(i, 0, sqrt(max));
 
       ChargePerRow[femId][row]->Draw();
-      line1->Draw();
+      //line1->Draw();
       c1->Print(Form("figure/row/ChargePerFem%iRow%i.png", femId, row));
+    }
+
+    Float_t avrg = 0;
+    Int_t start = 1;
+    if (femId == 5)
+      start = 2;
+
+    for (Int_t i = start; i < 23; ++i) {\
+      Double_t x, y;
+      graphLandau[femId]->GetPoint(i, x, y);
+      avrg += y / (23 - start);
+    }
+    cout << "*************** FEM = " << femId << "*******************" << endl;
+    cout << " row    MPV      MPV_av     MPV_av/MPV" << endl;
+    for (Int_t i = start; i < 23; ++i) {\
+      Double_t x, y;
+      graphLandau[femId]->GetPoint(i, x, y);
+      cout << i << "    " << y << "    " << avrg << "     " << avrg / y << endl;
     }
 
     graphLandau[femId]->SetMarkerColor(4);
@@ -175,6 +203,8 @@ void join_fem_ana() {
     c1->SetGrid(1);
     graphLandau[femId]->GetXaxis()->SetRangeUser(-5, 25);
     graphLandau[femId]->Draw("ap");
+    TLine *line1 = new TLine(0, avrg ,23,avrg);
+    line1->Draw();
     c1->Print(Form("figure/FEM_calib/ChargeClusterLandauFem%i.png", femId));
   }
 }
