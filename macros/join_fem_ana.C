@@ -14,8 +14,8 @@ void GetCoordinates(Double_t* , Double_t* , Int_t , Double_t* , Double_t* );
 void join_fem_ana() {
   bool DrawEnergy = false;
   bool DrawDrift  = false;
-  Int_t run_start = 5123;
-  Int_t run_end   = 5134;
+  Int_t run_start = 5149;
+  Int_t run_end   = 5161;
 
   if ((run_start < 5162 && DrawEnergy) || (run_start > 5161 && DrawDrift)) {
     cout << "WRONG RUN!" << endl;
@@ -165,7 +165,7 @@ void join_fem_ana() {
 
       // cuts on FEM 0-1
       bool use_fem0 = Nrow[0] > 20 && Nrow[1] < 5;
-      bool use_fem1 = Nrow[1] > 20 && Nrow[0] < 5;
+      bool use_fem1 = false;//Nrow[1] > 24 && Nrow[0] < 5;
       if (!use_fem0 && !use_fem1)
         continue;
       if ((use_fem0 && MaxSep[0] > 2) || (use_fem1 && MaxSep[1] > 2))
@@ -379,7 +379,8 @@ void join_fem_ana() {
     int bin1 = ClusterNormCharge->FindFirstBinAbove(ClusterNormCharge->GetMaximum()/2);
     int bin2 = ClusterNormCharge->FindLastBinAbove(ClusterNormCharge->GetMaximum()/2);
     double fwhm = ClusterNormCharge->GetBinCenter(bin2) - ClusterNormCharge->GetBinCenter(bin1);
-    Float_t resol_fwhm = 0.5 * fwhm / ClusterNormCharge->GetBinCenter(ClusterNormCharge->GetMaximumBin());
+    double mean_f = 0.5 * (ClusterNormCharge->GetBinCenter(bin2) + ClusterNormCharge->GetBinCenter(bin1));
+    Float_t resol_fwhm = 0.5 * fwhm / mean_f;
 
     ClusterNormCharge->Draw();
     c1->Print(Form("figure/alpha/%i.png", z));
@@ -441,13 +442,26 @@ void join_fem_ana() {
   Float_t mean      = fit->GetParameter(1);
   Float_t sigma     = fit->GetParameter(2);
   ClusterNormCharge->Draw();
-  c1->Print(("figure/TruncEnergy_multi" + postfix + ".png").c_str());
+
   int bin1 = ClusterNormCharge->FindFirstBinAbove(ClusterNormCharge->GetMaximum()/2);
   int bin2 = ClusterNormCharge->FindLastBinAbove(ClusterNormCharge->GetMaximum()/2);
   double fwhm = ClusterNormCharge->GetBinCenter(bin2) - ClusterNormCharge->GetBinCenter(bin1);
+  double mean_f = 0.5 * (ClusterNormCharge->GetBinCenter(bin2) + ClusterNormCharge->GetBinCenter(bin1));
+
+  Float_t ymax = 1.05 * ClusterNormCharge->GetMaximum();
+  //Float_t ymax = gPad->GetUymax();
+  cout << "max = " << gPad->GetUymax()<< endl;
+  TLine *line1 = new TLine(mean_f, 0 ,mean_f,ymax);
+  TLine *line2 = new TLine(0, ClusterNormCharge->GetMaximum()/2 ,2000,ClusterNormCharge->GetMaximum()/2);
+  line1->SetLineColor(kRed);
+  line1->Draw();
+  line2->SetLineColor(kRed);
+  line2->Draw();
+
+  c1->Print(("figure/TruncEnergy_multi" + postfix + ".png").c_str());
   cout << "****************************************************" << endl;
   cout << "Present resolution" << endl;
-  cout << "resol FWHM = " << 0.5 * fwhm / ClusterNormCharge->GetBinCenter(ClusterNormCharge->GetMaximumBin()) << endl;
+  cout << "resol FWHM = " << 0.5 * fwhm / mean_f << endl;
   cout << "resol GAUS = " << sigma / mean << endl;
 
   cout << "****************************************************" << endl;
