@@ -1,0 +1,91 @@
+
+
+132.166.10.174
+ilctpc  ilctpctest
+
+################
+##### event display
+##############"
+/home/ilctpc/Wenxin_spcl/LPMon/LPMon_7modules_wwx/LPDisplay -f /media/ILC-7M_DATA_04/data/RUN_05206.00000.acq
+#### event display of  test beam data
+
+
+cd  /home/ilctpc/Wenxin_spcl/LPMon/LPMon_7modules_wwx
+./LPDisplay -f  /media/ILC-7M_DATA_04/data/RUN_05206.00000.acq
+Then l
+
+
+#################
+#######File location
+############
+/media/ILC-7M_DATA_04  -> excel file with data description
+/media/ILC-7M_DATA_04/data  -> all acq files
+
+acq file raw data  DAQ system
+acq -> lcio    ILC software     ilc tpc software.
+
+################################
+###########Plan   ######
+########################
+1. Run a test example without modification
+2. Modify the acq to root file converter to have all 7 modules
+3. modify the test command to analyze the root files.
+
+
+Details
+1. Working test
+###
+link the file to the directory ~/INSTALLFCC/DataWriter_devel ;
+cd ~//INSTALLFCC/DataWriter_devel ;   bin/acqToRootConverterExe -t 0 -m 1 -f  RUN_05206.00000.acq -n 10  --noxml
+
+
+## An example which is working on 25/10/2017
+
+cd ~/INSTALLFCC/macros
+./script_convert_one_acq.tcsh /media/ILC-7M_DATA_04/data/RUN_05206.00000.acq
+#This create a local root files.. (note that the script only converts the first events of the acq
+
+##the root files can be analyzed with a local test exectuable
+##compile executable
+cd ~/INSTALLFCC/macros
+rootcint -f  mydict.C -c LinkDef.h
+make SRC="mydict.C tpc_gain_study.C"  EXE=test.exe
+./test.exe -f RUN_05206.00000.root
+
+
+
+2. 
+##############
+Make acq to root converter running
+convert  acq file -> root file
+Install root 6 .... Cannot be done on this computer. Too old, not right version of gcc!!!
+Hopefully everything will work anyway...
+
+to store all the 7 FEM  from the beam test data femid 0 to 1 2 3 4 5 6 modify
+~/INSTALLFCC/DataWriter_devel/src/acqToRootConverterExe.cc
+~/INSTALLFCC/DataWriter_devel/src/dataDecoder.cc
+
+## right now Boris is using this piece of code with the option -t 0 -m 1  --noxml
+## to say that   FEM 0 has to be decoded as a  TPC-Pad
+## while FEM 1 is attached to the  Multigen detector
+## noxml option:  do not look for CFG_XXXX.xml where some information about run is stored.
+### in particular the information about the sampling frequency=the width of a time bin and the peaking time
+###  divideScaClockBy>0x4  (in xml file)  ->    100 MhZ/4 = 25 MhZ    in other word 10 ns * 4=40 ns
+### if --noxml is removed  then you need a CFG_xxxx.xml in the directory to be present
+
+
+3. Analyze the root files
+##################
+cd ~/INSTALLFCC/macros
+There is the working examples based on the source code   tpc_gain_study.C
+cd ~/INSTALLFCC/macros
+rootcint -f  mydict.C -c LinkDef.h
+make SRC="mydict.C tpc_gain_study.C"  EXE=test.exe
+./test.exe -f RUN_05206.00000.root
+
+
+So you can just create your own executable using same kind of instruction
+
+
+
+
