@@ -17,15 +17,15 @@ void join_fem_ana() {
   Int_t run_start = 5149;
   Int_t run_end   = 5161;
 
+  bool calibration = true;
+
   if ((run_start < 5162 && DrawEnergy) || (run_start > 5161 && DrawDrift)) {
     cout << "WRONG RUN!" << endl;
     exit(1);
   }
 
   // define output
-  //TGraph* graph = new TGraph();
-  //int point = 0;
-  TH1F* ClusterNormCharge       = new TH1F("cluster_norm_charge","Truncated mean energy deposit",250,0,2000);
+  TH1F* ClusterNormCharge       = new TH1F("cluster_norm_charge","Truncated mean energy deposit",250,0,3000);
   TH1F* ClusterNormChargeFile   = new TH1F("cluster_norm_charge","Truncated mean energy deposit",250,0,2000);
   vector< vector<pair<Int_t, Int_t> > > EventClusters;
   TGraphErrors* DriftScanResol  = new TGraphErrors();
@@ -67,6 +67,37 @@ void join_fem_ana() {
   tgeom->SetBranchAddress("y3Pad", &y0Pad );*/
 
   tgeom->GetEntry(0); // put into memory geometry info
+
+  // Initialize row by row and FEM by FEM callibration
+  vector<float> row_calib[3];
+  Int_t femId_ar[3] = {0, 3, 5};
+  Int_t fem_ar_it = 0;
+  while (true) {
+    TString file = Form("data/fem%i.dat", femId_ar[fem_ar_it]);
+    ifstream CalibFile(file);
+    if ( !CalibFile ) {
+      cerr << "ERROR: Can't open file for row calibration: " << file << endl;
+      exit(1);
+    }
+
+    // Global FEM norm
+    char   varName[20];
+    double FEMnorm;
+    CalibFile >> varName >> FEMnorm;
+
+    while ( CalibFile.good() && !CalibFile.eof() ) {
+      int row;
+      float charge, avg, norm;
+      CalibFile >> row >> charge >> avg >> norm;
+      row_calib[fem_ar_it].push_back(norm * FEMnorm);
+    }
+
+    // end of FEMs of interest
+    if (fem_ar_it == 2)
+      break;
+    ++fem_ar_it;
+  }
+
   TCanvas *c1 = new TCanvas("c1","evadc",900,700);
 
   //************************************************************
@@ -249,29 +280,49 @@ void join_fem_ana() {
 
       // make a vector of charges per track
       // don't use 1st and last values
-      if (temp5.size()){
-        if (temp5[0].second == 0)
+      /*if (temp5.size()){
+        if (temp5[0].second == 0 )
           temp5.erase(temp5.begin());
         if (temp5[temp5.size()-1].second == Imax)
           temp5.erase(temp5.end()-1);
+      }*/
+      for (vector< pair<Int_t, Int_t > >::iterator it = temp5.begin(); it != temp5.end(); ++it){
+        Int_t row = (*it).second;
+        if (row == 0 || row == 1 || row == Imax) {
+          temp5.erase(it);
+          if ( row == Imax)
+            break;
+          continue;
+        }
+        // norm
+        if (calibration)
+          (*it).first *= row_calib[2][row];
       }
-      if (temp3.size()){
-        if (temp3[0].second == 0)
-          temp3.erase(temp3.begin());
-        if (temp3[temp3.size()-1].second == Imax)
-          temp3.erase(temp3.end()-1);
+
+      for (vector< pair<Int_t, Int_t > >::iterator it = temp3.begin(); it != temp3.end(); ++it){
+        Int_t row = (*it).second;
+        if (row == 0 || row == Imax) {
+          temp3.erase(it);
+          if ( row == Imax)
+            break;
+          continue;
+        }
+        // norm
+        if (calibration)
+          (*it).first *= row_calib[1][row];
       }
-      if (temp0.size()){
-        if (temp0[0].second == 0)
-          temp0.erase(temp0.begin());
-        if (temp0[temp0.size()-1].second == Imax)
-          temp0.erase(temp0.end()-1);
-      }
-      if (temp1.size()){
-        if (temp1[0].second == 0)
-          temp1.erase(temp1.begin());
-        if (temp1[temp1.size()-1].second == Imax)
-          temp1.erase(temp1.end()-1);
+
+      for (vector< pair<Int_t, Int_t > >::iterator it = temp0.begin(); it != temp0.end(); ++it){
+        Int_t row = (*it).second;
+        if (row == 0 || row == Imax) {
+          temp0.erase(it);
+          if ( row == Imax)
+            break;
+          continue;
+        }
+        // norm
+        if (calibration)
+          (*it).first *= row_calib[0][row];
       }
 
       cluster_charge.insert(cluster_charge.end(), temp5.begin(), temp5.end());
@@ -289,6 +340,7 @@ void join_fem_ana() {
       }
 
 
+      // SORT THE VECTOR OF CLUSTERS
       sort(cluster_charge.begin(), cluster_charge.end());
       Float_t norm_cluster = 0.;
       Int_t i_max = round(alpha * cluster_charge.size());
@@ -349,7 +401,7 @@ void join_fem_ana() {
 
   for (Int_t z = 0; z <= Nstep; ++z) {
     Float_t alpha = min + z * step;
-    TH1F* ClusterNormCharge = new TH1F("cluster_norm_charge","Truncated mean energy deposit",250,0,2000);
+    TH1F* ClusterNormChargeAlpha = new TH1F("cluster_norm_charge_alpha","Truncated mean energy deposit",250,0,3000);
 
     for (UInt_t j = 0; j < EventClusters.size(); ++j) {
       Float_t norm_cluster = 0.;
@@ -360,13 +412,15 @@ void join_fem_ana() {
 
       norm_cluster *= 1 / (alpha * EventClusters[j].size());
 
-      ClusterNormCharge->Fill(norm_cluster);
+      ClusterNormChargeAlpha->Fill(norm_cluster);
     }
 
     gStyle->SetOptStat("RMne");
     gStyle->SetOptFit(0111);
-    ClusterNormCharge->Fit("gaus");
-    TF1 *fit = ClusterNormCharge->GetFunction("gaus");
+    Double_t fit_min = ClusterNormChargeAlpha->GetBinCenter(ClusterNormChargeAlpha->FindFirstBinAbove(ClusterNormChargeAlpha->GetMaximum()*0.3));
+    Double_t fit_max = ClusterNormChargeAlpha->GetBinCenter(ClusterNormChargeAlpha->FindLastBinAbove(ClusterNormChargeAlpha->GetMaximum()*0.3));
+    ClusterNormChargeAlpha->Fit("gaus", "", "", fit_min, fit_max);
+    TF1 *fit = ClusterNormChargeAlpha->GetFunction("gaus");
     Float_t mean      = fit->GetParameter(1);
     Float_t sigma     = fit->GetParameter(2);
 
@@ -376,13 +430,13 @@ void join_fem_ana() {
 
     Float_t resol_e   = resol * sqrt(mean_e*mean_e/(mean*mean) + sigma_e*sigma_e/(sigma*sigma));
 
-    int bin1 = ClusterNormCharge->FindFirstBinAbove(ClusterNormCharge->GetMaximum()/2);
-    int bin2 = ClusterNormCharge->FindLastBinAbove(ClusterNormCharge->GetMaximum()/2);
-    double fwhm = ClusterNormCharge->GetBinCenter(bin2) - ClusterNormCharge->GetBinCenter(bin1);
-    double mean_f = 0.5 * (ClusterNormCharge->GetBinCenter(bin2) + ClusterNormCharge->GetBinCenter(bin1));
+    int bin1 = ClusterNormChargeAlpha->FindFirstBinAbove(ClusterNormChargeAlpha->GetMaximum()/2);
+    int bin2 = ClusterNormChargeAlpha->FindLastBinAbove(ClusterNormChargeAlpha->GetMaximum()/2);
+    double fwhm = ClusterNormChargeAlpha->GetBinCenter(bin2) - ClusterNormChargeAlpha->GetBinCenter(bin1);
+    double mean_f = 0.5 * (ClusterNormChargeAlpha->GetBinCenter(bin2) + ClusterNormChargeAlpha->GetBinCenter(bin1));
     Float_t resol_fwhm = 0.5 * fwhm / mean_f;
 
-    ClusterNormCharge->Draw();
+    ClusterNormChargeAlpha->Draw();
     c1->Print(Form("figure/alpha/%i.png", z));
     alpha_gaussian->SetPoint(z, alpha, resol);
     alpha_fwhw->SetPoint(z, alpha, resol_fwhm);
@@ -437,7 +491,9 @@ void join_fem_ana() {
 
   gStyle->SetOptStat("RMne");
   gStyle->SetOptFit(0111);
-  ClusterNormCharge->Fit("gaus");
+  Double_t fit_min = ClusterNormCharge->GetBinCenter(ClusterNormCharge->FindFirstBinAbove(ClusterNormCharge->GetMaximum()*0.3));
+  Double_t fit_max = ClusterNormCharge->GetBinCenter(ClusterNormCharge->FindLastBinAbove(ClusterNormCharge->GetMaximum()*0.3));
+  ClusterNormCharge->Fit("gaus", "", "", fit_min, fit_max);
   TF1 *fit = ClusterNormCharge->GetFunction("gaus");
   Float_t mean      = fit->GetParameter(1);
   Float_t sigma     = fit->GetParameter(2);
@@ -448,15 +504,14 @@ void join_fem_ana() {
   double fwhm = ClusterNormCharge->GetBinCenter(bin2) - ClusterNormCharge->GetBinCenter(bin1);
   double mean_f = 0.5 * (ClusterNormCharge->GetBinCenter(bin2) + ClusterNormCharge->GetBinCenter(bin1));
 
-  Float_t ymax = 1.05 * ClusterNormCharge->GetMaximum();
   //Float_t ymax = gPad->GetUymax();
   cout << "max = " << gPad->GetUymax()<< endl;
-  TLine *line1 = new TLine(mean_f, 0 ,mean_f,ymax);
+  /*TLine *line1 = new TLine(mean_f, 0 ,mean_f,ymax);
   TLine *line2 = new TLine(0, ClusterNormCharge->GetMaximum()/2 ,2000,ClusterNormCharge->GetMaximum()/2);
   line1->SetLineColor(kRed);
   line1->Draw();
   line2->SetLineColor(kRed);
-  line2->Draw();
+  line2->Draw();*/
 
   c1->Print(("figure/TruncEnergy_multi" + postfix + ".png").c_str());
   cout << "****************************************************" << endl;
@@ -517,9 +572,9 @@ vector< pair<Int_t, Int_t> > ScanPad(const vector<vector<short> > pad, Int_t FEM
       MaxSeparation = MaxSepRow;
     if (ChargeCl>0) {
 
-      Int_t row_shift = 0;
-      if (FEM < 5) row_shift += 24;
-      if (FEM < 2) row_shift += 24;
+      //Int_t row_shift = 0;
+      //if (FEM < 5) row_shift += 24;
+      //if (FEM < 2) row_shift += 24;
 
       cluster_charge.push_back(make_pair(ChargeCl, i));
       listofRow[i] = 1;

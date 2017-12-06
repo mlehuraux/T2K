@@ -12,6 +12,8 @@ void join_fem_ana() {
   Int_t run_start = 5149;
   Int_t run_end   = 5161;
 
+  bool calibration = false;
+
   if ((run_start < 5162 && DrawEnergy) || (run_start > 5161 && DrawDrift)) {
     cout << "WRONG RUN!" << endl;
     exit(1);
@@ -53,6 +55,37 @@ void join_fem_ana() {
   tgeom->SetBranchAddress("y3Pad", &y0Pad );*/
 
   tgeom->GetEntry(0); // put into memory geometry info
+
+  // Initialize row by row and FEM by FEM callibration
+  vector<float> row_calib[3];
+  Int_t femId_ar[3] = {0, 3, 5};
+  Int_t fem_ar_it = 0;
+  while (true) {
+    TString file = Form("data/fem%i.dat", femId_ar[fem_ar_it]);
+    ifstream CalibFile(file);
+    if ( !CalibFile ) {
+      cerr << "ERROR: Can't open file for row calibration: " << file << endl;
+      exit(1);
+    }
+
+    // Global FEM norm
+    char   varName[20];
+    double FEMnorm;
+    CalibFile >> varName >> FEMnorm;
+
+    while ( CalibFile.good() && !CalibFile.eof() ) {
+      int row;
+      float charge, avg, norm;
+      CalibFile >> row >> charge >> avg >> norm;
+      row_calib[fem_ar_it].push_back(norm);
+    }
+
+    // end of FEMs of interest
+    if (fem_ar_it == 2)
+      break;
+    ++fem_ar_it;
+  }
+
   TCanvas *c1 = new TCanvas("c1","evadc",900,700);
 
   //************************************************************
@@ -124,6 +157,31 @@ void join_fem_ana() {
         if (MaxSep[femId] > 2)
           continue;
 
+        // test calibration
+        Int_t n = -1;
+        if (femId == 0)
+          n = 0;
+        else if (femId == 3)
+          n = 1;
+        else if (femId == 5)
+          n = 2;
+
+        if (n != -1) {
+          for (UInt_t i = 0; i < temp[femId].size(); ++i) {
+            Int_t row = temp[femId][i].second;
+
+            // norm
+            //if (femId == 0 && row == 1)
+            //cout << "NORM row " << row << "  with " << row_calib[n][row] << " from " <<  temp[femId][i].first << endl;
+            if (calibration)
+              temp[femId][i].first *= row_calib[n][row];
+            /*if (row == 0 || (row == 1 && femId == 5) || row == Imax) {
+              temp[femId].erase(temp[femId].begin() + i);
+            }*/
+
+          }
+        }
+        // end of calibration
         for (UInt_t i = 0; i < temp[femId].size(); ++i)
           ChargePerRow[femId][temp[femId][i].second]->Fill(temp[femId][i].first);
       } // end of loop over FEMs
@@ -153,8 +211,9 @@ void join_fem_ana() {
       Float_t mean_e  = fit->GetParError(1);
       if (mean < 0) {
         mean = 0;
-        mean_e = 0;
       }
+      if (mean < 200)
+        mean_e  =0.;
 
       //cout << "FEM = " << femId << "   Row = " << row << "    " << mean << endl;
 
@@ -184,7 +243,7 @@ void join_fem_ana() {
     if (femId == 5)
       start = 2;
 
-    for (Int_t i = start; i < 23; ++i) {\
+    for (Int_t i = start; i < 23; ++i) {
       Double_t x, y;
       graphLandau[femId]->GetPoint(i, x, y);
       avrg += y / (23 - start);
