@@ -26,7 +26,7 @@ void join_fem_ana() {
 
   // define output
   TH1F* ClusterNormCharge       = new TH1F("cluster_norm_charge","Truncated mean energy deposit",250,0,3000);
-  TH1F* ClusterNormChargeFile   = new TH1F("cluster_norm_charge","Truncated mean energy deposit",250,0,2000);
+  TH1F* ClusterNormChargeFile   = new TH1F("cluster_norm_charge","Truncated mean energy deposit",250,0,3000);
   vector< vector<pair<Int_t, Int_t> > > EventClusters;
   TGraphErrors* DriftScanResol  = new TGraphErrors();
   TGraphErrors* EnergyScanResol = new TGraphErrors();
@@ -497,21 +497,31 @@ void join_fem_ana() {
   TF1 *fit = ClusterNormCharge->GetFunction("gaus");
   Float_t mean      = fit->GetParameter(1);
   Float_t sigma     = fit->GetParameter(2);
+  Float_t mean_e     = fit->GetParError(1);
+  Float_t sigma_e    = fit->GetParError(2);
+  Float_t resol = sigma / mean;
+
+  Float_t resol_e   = resol * sqrt(mean_e*mean_e/(mean*mean) + sigma_e*sigma_e/(sigma*sigma));
   ClusterNormCharge->Draw();
+
+  c1->Update();
+
+  TPaveStats *ps = (TPaveStats*)c1->GetPrimitive("stats");
+  ps->SetName("mystats");
+  TList *listOfLines = ps->GetListOfLines();
+  TText *tconst = ps->GetLineWith("RMS");
+  TLatex *myt = new TLatex(0,0,Form("Resol = %f #pm %f %% ", (Float_t)0.01*round(resol*10000), (Float_t)0.01*round(resol_e*10000)));
+  myt ->SetTextFont(tconst->GetTextFont());
+  myt ->SetTextSize(tconst->GetTextSize());
+  listOfLines->Add(myt);
+  ClusterNormCharge->SetStats(0);
+  c1->Modified();
 
   int bin1 = ClusterNormCharge->FindFirstBinAbove(ClusterNormCharge->GetMaximum()/2);
   int bin2 = ClusterNormCharge->FindLastBinAbove(ClusterNormCharge->GetMaximum()/2);
   double fwhm = ClusterNormCharge->GetBinCenter(bin2) - ClusterNormCharge->GetBinCenter(bin1);
   double mean_f = 0.5 * (ClusterNormCharge->GetBinCenter(bin2) + ClusterNormCharge->GetBinCenter(bin1));
 
-  //Float_t ymax = gPad->GetUymax();
-  cout << "max = " << gPad->GetUymax()<< endl;
-  /*TLine *line1 = new TLine(mean_f, 0 ,mean_f,ymax);
-  TLine *line2 = new TLine(0, ClusterNormCharge->GetMaximum()/2 ,2000,ClusterNormCharge->GetMaximum()/2);
-  line1->SetLineColor(kRed);
-  line1->Draw();
-  line2->SetLineColor(kRed);
-  line2->Draw();*/
 
   c1->Print(("figure/TruncEnergy_multi" + postfix + ".png").c_str());
   cout << "****************************************************" << endl;
