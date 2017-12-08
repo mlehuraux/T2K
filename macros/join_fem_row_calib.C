@@ -178,7 +178,7 @@ void join_fem_ana() {
         else if (femId == 3)
           cut_l = 19;
         else if (femId == 5)
-          cut_l = 21;
+          cut_l = 20;
 
         if ((Int_t)temp.size() < cut_l)
             continue;
@@ -249,10 +249,10 @@ void join_fem_ana() {
     else if (femId == 3)
       N_avg = 19;
     else if (femId == 5)
-      N_avg = 21;
+      N_avg = 20;
 
     for (Int_t row = 0; row < 24; ++row) {
-      if (row == 0 ||  row == Imax || (row == 12 && femId == 0) || (row == 1 && femId == 5) || (femId == 3 && (row == 3 || row == 9 || row == 11)))
+      if (row == 0 ||  row == Imax || (row == 12 && femId == 0) || ((row == 1 || row == 22) && femId == 5) || (femId == 3 && (row == 3 || row == 9 || row == 11)))
         continue;
       Double_t x, y;
       graphLandau[femId]->GetPoint(row, x, y);
@@ -271,6 +271,7 @@ void join_fem_ana() {
     graphLandau[femId]->SetMarkerStyle(21);
     c1->SetGrid(1);
     graphLandau[femId]->GetXaxis()->SetRangeUser(-5, 25);
+    graphLandau[femId]->GetYaxis()->SetRangeUser(0, 1300);
     graphLandau[femId]->Draw("ap");
     TLine *line1 = new TLine(0, avrg ,23,avrg);
     line1->Draw();

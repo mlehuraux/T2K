@@ -17,7 +17,7 @@ void join_fem_ana() {
   Int_t run_start = 5149;
   Int_t run_end   = 5161;
 
-  bool calibration = true;
+  bool calibration = false;
 
   if ((run_start < 5162 && DrawEnergy) || (run_start > 5161 && DrawDrift)) {
     cout << "WRONG RUN!" << endl;
@@ -89,7 +89,7 @@ void join_fem_ana() {
       int row;
       float charge, avg, norm;
       CalibFile >> row >> charge >> avg >> norm;
-      row_calib[fem_ar_it].push_back(norm * FEMnorm);
+      row_calib[fem_ar_it].push_back(norm);
     }
 
     // end of FEMs of interest
@@ -172,7 +172,7 @@ void join_fem_ana() {
 
         for (vector< pair<Int_t, Int_t > >::iterator it = temp[femId].begin(); it != temp[femId].end(); ++it){
           Int_t row = (*it).second;
-          if (row == 0 ||  row == Imax || (row == 12 && femId == 0) || (row == 1 && femId == 5) || (femId == 3 && (row == 3 || row ==   9 || row == 11))) {
+          if (row == 0 ||  row == Imax || (row == 12 && femId == 0) || ((row == 1 || row == 22) && femId == 5) || (femId == 3 && (row == 3 || row ==   9 || row == 11))) {
             temp[femId].erase(it);
             // VERY IMPORTANT!!!!
             --it;
@@ -193,7 +193,7 @@ void join_fem_ana() {
       }
 
       // cuts on FEM 5
-      if (Nrow[5] < 21)
+      if (Nrow[5] < 20)
         continue;
       if (MaxSep[5] > 2)
         continue;

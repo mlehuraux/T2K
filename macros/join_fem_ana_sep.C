@@ -14,10 +14,10 @@ void GetCoordinates(Double_t* , Double_t* , Int_t , Double_t* , Double_t* );
 void join_fem_ana() {
   bool DrawEnergy = false;
   bool DrawDrift  = false;
-  Int_t run_start = 5149;
-  Int_t run_end   = 5161;
+  Int_t run_start = 5073;
+  Int_t run_end   = 5081;
 
-  bool calibration = true;
+  bool calibration = false;
 
   if ((run_start < 5162 && DrawEnergy) || (run_start > 5161 && DrawDrift)) {
     cout << "WRONG RUN!" << endl;
@@ -110,6 +110,11 @@ void join_fem_ana() {
   //************************************************************
   string postfix = "";
   for (Int_t fileID = run_start; fileID <= run_end; ++fileID) {
+
+    if (fileID == 5082) {
+      cout << "skipping empty run 5082" << endl;
+      continue;
+    }
     std::stringstream stream;
     stream << fileID;
     std::string strRUN = stream.str();
@@ -170,7 +175,7 @@ void join_fem_ana() {
 
         for (vector< pair<Int_t, Int_t > >::iterator it = temp.begin(); it != temp.end(); ++it){
           Int_t row = (*it).second;
-          if (row == 0 ||  row == Imax || (row == 12 && femId == 0) || (row == 1 && femId == 5) || (femId == 3 && (row == 3 || row == 9 || row == 11))) {
+          if (row == 0 ||  row == Imax || (row == 12 && femId == 0) || ((row == 1 || row == 22) && femId == 5) || (femId == 3 && (row == 3 || row == 9 || row == 11))) {
             temp.erase(it);
             // VERY IMPORTANT!!!!
             --it;
@@ -196,7 +201,7 @@ void join_fem_ana() {
         else if (femId == 3)
           cut_l = 19;
         else if (femId == 5)
-          cut_l = 21;
+          cut_l = 20;
 
         if ((Int_t)temp.size() < cut_l)
             continue;
@@ -222,6 +227,7 @@ void join_fem_ana() {
   } // end file loop
 
   for (Int_t femId = 0; femId < 7; ++femId) {
+    gStyle->SetFillColor(1);
     gStyle->SetPalette(1);
     gStyle->SetOptStat(0);
     PadDisplay[femId]->Draw("colz");
@@ -297,6 +303,9 @@ vector< pair<Int_t, Int_t> > ScanPad(const vector<vector<short> > pad, Int_t FEM
         cout << "ALARM!" << endl;
         exit(1);
       }
+
+      //if (FEM == 5 && i < 9 && adcmax > 300)
+        //cout << "J = " << j << endl;
 
       PadDisplay.Fill(j, i, adcmax);
 
