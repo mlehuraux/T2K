@@ -161,32 +161,46 @@ void join_fem_ana() {
       Int_t MaxSep[7];
       bool touchBorder[7];
 
-
-      // Scan over pads  FEM 5
-      vector< pair<Int_t, Int_t > > temp5 = ScanPad(*pad_charge[5], 5, Imax, Jmax, Nrow[5], MaxSep[5], touchBorder[5]);
-      // Scan over pads  FEM 2
-      vector< pair<Int_t, Int_t > > temp2 = ScanPad(*pad_charge[2], 2, Imax, Jmax, Nrow[2], MaxSep[2], touchBorder[2]);
-      // Scan over pads  FEM 3
-      vector< pair<Int_t, Int_t > > temp3 = ScanPad(*pad_charge[3], 3, Imax, Jmax, Nrow[3], MaxSep[3], touchBorder[3]);
-      // Scan over pads  FEM 4
-      vector< pair<Int_t, Int_t > > temp4 = ScanPad(*pad_charge[4], 4, Imax, Jmax, Nrow[4], MaxSep[4], touchBorder[4]);
-      // Scan over pads  FEM 0
-      vector< pair<Int_t, Int_t > > temp0 = ScanPad(*pad_charge[0], 0, Imax, Jmax, Nrow[0], MaxSep[0], touchBorder[0]);
-      // Scan over pads  FEM 1
-      vector< pair<Int_t, Int_t > > temp1 = ScanPad(*pad_charge[1], 1, Imax, Jmax, Nrow[1], MaxSep[1], touchBorder[1]);
+      vector< pair<Int_t, Int_t > > temp[7];
 
       // Start the selection
       N_events_raw++;
 
+      for (Int_t femId = 0; femId < 7; ++femId) {
+
+        temp[femId] = ScanPad(*pad_charge[femId], femId, Imax, Jmax, Nrow[femId], MaxSep[femId], touchBorder[femId]);
+
+        for (vector< pair<Int_t, Int_t > >::iterator it = temp[femId].begin(); it != temp[femId].end(); ++it){
+          Int_t row = (*it).second;
+          if (row == 0 ||  row == Imax || (row == 12 && femId == 0) || (row == 1 && femId == 5) || (femId == 3 && (row == 3 || row ==   9 || row == 11))) {
+            temp[femId].erase(it);
+            // VERY IMPORTANT!!!!
+            --it;
+            continue;
+          }
+          // norm
+          Int_t fem_cal = -1;
+          if (femId == 0)
+            fem_cal = 0;
+          else if (femId == 3)
+            fem_cal = 1;
+          else if (femId == 5)
+            fem_cal = 2;
+          if (calibration && fem_cal > -1) {
+            (*it).first *= row_calib[fem_cal][row];
+          }
+        }
+      }
+
       // cuts on FEM 5
-      if (Nrow[5] < 20)
+      if (Nrow[5] < 21)
         continue;
       if (MaxSep[5] > 2)
         continue;
       N_events_fem5++;
 
       // cuts on FEM 3
-      if (Nrow[3] < 20)
+      if (Nrow[3] < 19)
         continue;
       if (MaxSep[3] > 2)
         continue;
@@ -194,17 +208,16 @@ void join_fem_ana() {
         continue;
       N_events_Middle++;
 
-      // cuts on FEM 0-1
-      bool use_fem0 = Nrow[0] > 20 && Nrow[1] < 5;
-      bool use_fem1 = false;//Nrow[1] > 24 && Nrow[0] < 5;
-      if (!use_fem0 && !use_fem1)
+      // cuts on FEM 0
+       if (Nrow[0] < 21)
         continue;
-      if ((use_fem0 && MaxSep[0] > 2) || (use_fem1 && MaxSep[1] > 2))
+      if (MaxSep[0] > 2)
         continue;
-
+      if (Nrow[1] > 5)
+        continue;
       N_events_top++;
 
-      if (touchBorder[5] || touchBorder[3] || (use_fem0 && touchBorder[0]) || (use_fem1 &&  touchBorder[1]))
+      if (touchBorder[5] || touchBorder[3] || touchBorder[0])
         continue;
       N_events_border++;
 
@@ -213,7 +226,7 @@ void join_fem_ana() {
       Double_t x[4], x_global[4];
       Double_t y[4], y_global[4];
 
-      Int_t i_int = (*(temp5.end()-1)).second;
+      Int_t i_int = (*(temp[5].end()-1)).second;
       Int_t j_int;
       for (Int_t j = 0; j < Jmax; ++j) {
         if ((*pad_charge[5])[i_int][j] != 0)
@@ -226,7 +239,7 @@ void join_fem_ana() {
       GetCoordinates(x, y, 5, x_global, y_global);
       X_end = x_global[0];
 
-      i_int = (*temp3.begin()).second;
+      i_int = (*temp[3].begin()).second;
 
       for (Int_t j = 0; j < Jmax; ++j) {
         if ((*pad_charge[3])[i_int][j] != 0)
@@ -242,7 +255,7 @@ void join_fem_ana() {
       if (abs(X_start-X_end) > 5)
         continue;
 
-      i_int = (*(temp3.end()-1)).second;
+      i_int = (*(temp[3].end()-1)).second;
 
       for (Int_t j = 0; j < Jmax; ++j) {
         if ((*pad_charge[3])[i_int][j] != 0)
@@ -255,10 +268,10 @@ void join_fem_ana() {
       GetCoordinates(x, y, 3, x_global, y_global);
       X_end = x_global[0];
 
-      i_int = use_fem1 ? (*temp1.begin()).second : (*temp0.begin()).second;
+      i_int = (*temp[0].begin()).second;
 
       for (Int_t j = 0; j < Jmax; ++j) {
-        bool var = use_fem1 ? (*pad_charge[1])[i_int][j] != 0 : (*pad_charge[0])[i_int][j] != 0;
+        bool var = (*pad_charge[0])[i_int][j] != 0;
         if (var)
           j_int = j;
       }
@@ -266,10 +279,7 @@ void join_fem_ana() {
       x[0] = (*x0Pad)[i_int][j_int];
       y[0] = (*y0Pad)[i_int][j_int];
 
-      if (use_fem1)
-        GetCoordinates(x, y, 1, x_global, y_global);
-      else
-        GetCoordinates(x, y, 0, x_global, y_global);
+      GetCoordinates(x, y, 0, x_global, y_global);
 
       X_start = x_global[0];
 
@@ -278,67 +288,11 @@ void join_fem_ana() {
 
       N_events_matched++;
 
-      // make a vector of charges per track
-      // don't use 1st and last values
-      /*if (temp5.size()){
-        if (temp5[0].second == 0 )
-          temp5.erase(temp5.begin());
-        if (temp5[temp5.size()-1].second == Imax)
-          temp5.erase(temp5.end()-1);
-      }*/
-      for (vector< pair<Int_t, Int_t > >::iterator it = temp5.begin(); it != temp5.end(); ++it){
-        Int_t row = (*it).second;
-        if (row == 0 || row == 1 || row == Imax) {
-          temp5.erase(it);
-          if ( row == Imax)
-            break;
-          continue;
-        }
-        // norm
-        if (calibration)
-          (*it).first *= row_calib[2][row];
-      }
 
-      for (vector< pair<Int_t, Int_t > >::iterator it = temp3.begin(); it != temp3.end(); ++it){
-        Int_t row = (*it).second;
-        if (row == 0 || row == Imax) {
-          temp3.erase(it);
-          if ( row == Imax)
-            break;
-          continue;
-        }
-        // norm
-        if (calibration)
-          (*it).first *= row_calib[1][row];
-      }
-
-      for (vector< pair<Int_t, Int_t > >::iterator it = temp0.begin(); it != temp0.end(); ++it){
-        Int_t row = (*it).second;
-        if (row == 0 || row == Imax) {
-          temp0.erase(it);
-          if ( row == Imax)
-            break;
-          continue;
-        }
-        // norm
-        if (calibration)
-          (*it).first *= row_calib[0][row];
-      }
-
-      cluster_charge.insert(cluster_charge.end(), temp5.begin(), temp5.end());
-      cluster_charge.insert(cluster_charge.end(), temp3.begin(), temp3.end());
-      TotalLength += Nrow[5] + Nrow[3];
-
-      if (use_fem1){
-        cluster_charge.insert(cluster_charge.end(), temp1.begin(), temp1.end());
-        TotalLength += Nrow[1];
-      }
-
-      if (use_fem0) {
-        cluster_charge.insert(cluster_charge.end(), temp0.begin(), temp0.end());
-        TotalLength += Nrow[0];
-      }
-
+      cluster_charge.insert(cluster_charge.end(), temp[5].begin(), temp[5].end());
+      cluster_charge.insert(cluster_charge.end(), temp[3].begin(), temp[3].end());
+      cluster_charge.insert(cluster_charge.end(), temp[0].begin(), temp[0].end());
+      TotalLength += Nrow[5] + Nrow[3] + Nrow[0];
 
       // SORT THE VECTOR OF CLUSTERS
       sort(cluster_charge.begin(), cluster_charge.end());
@@ -358,9 +312,14 @@ void join_fem_ana() {
     } // end event loop
     // fill the file vars
     // distance / energy
+    if (!ClusterNormChargeFile->Integral())
+      continue;
+
     gStyle->SetOptStat("RMne");
     gStyle->SetOptFit(0111);
-    ClusterNormChargeFile->Fit("gaus");
+    Double_t fit_min = ClusterNormChargeFile->GetBinCenter(ClusterNormChargeFile->FindFirstBinAbove(ClusterNormChargeFile->GetMaximum()*0.3));
+    Double_t fit_max = ClusterNormChargeFile->GetBinCenter(ClusterNormChargeFile->FindLastBinAbove(ClusterNormChargeFile->GetMaximum()*0.3));
+    ClusterNormChargeFile->Fit("gaus", "", "", fit_min, fit_max);
     TF1 *fit = ClusterNormChargeFile->GetFunction("gaus");
     Float_t mean      = fit->GetParameter(1);
     Float_t sigma     = fit->GetParameter(2);

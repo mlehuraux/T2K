@@ -147,43 +147,47 @@ void join_fem_ana() {
       Int_t MaxSep[7];
       bool touchBorder[7];
 
-      vector< pair<Int_t, Int_t > > temp[7];
       for (Int_t femId = 0; femId < 7; ++femId) {
-        temp[femId] = ScanPad(*pad_charge[femId], femId, Imax, Jmax, Nrow[femId], MaxSep[femId], touchBorder[femId]);
+        vector< pair<Int_t, Int_t > > temp = ScanPad(*pad_charge[femId], femId, Imax, Jmax, Nrow[femId], MaxSep[femId], touchBorder[femId]);
 
-        // cuts on FEM
-        if (Nrow[femId] < 24)
-          continue;
+        for (vector< pair<Int_t, Int_t > >::iterator it = temp.begin(); it != temp.end(); ++it){
+          Int_t row = (*it).second;
+          /*if (row == 0 ||  row == Imax || (row == 12 && femId == 0) || (row == 1 && femId == 5) || (femId == 3 && (row == 3 || row == 9 || row == 11))) {
+          /temp.erase(it);
+            // VERY IMPORTANT!!!!
+            --it;
+            continue;
+          }*/
+          // norm
+          Int_t fem_cal = -1;
+          if (femId == 0)
+            fem_cal = 0;
+          else if (femId == 3)
+            fem_cal = 1;
+          else if (femId == 5)
+            fem_cal = 2;
+          if (calibration && fem_cal > -1) {
+            (*it).first *= row_calib[fem_cal][row];
+          }
+        }
+
+        // Simple selection
+        Int_t cut_l = 22;
+        if (femId == 0)
+          cut_l = 21;
+        else if (femId == 3)
+          cut_l = 19;
+        else if (femId == 5)
+          cut_l = 21;
+
+        if ((Int_t)temp.size() < cut_l)
+            continue;
+
         if (MaxSep[femId] > 2)
           continue;
 
-        // test calibration
-        Int_t n = -1;
-        if (femId == 0)
-          n = 0;
-        else if (femId == 3)
-          n = 1;
-        else if (femId == 5)
-          n = 2;
-
-        if (n != -1) {
-          for (UInt_t i = 0; i < temp[femId].size(); ++i) {
-            Int_t row = temp[femId][i].second;
-
-            // norm
-            //if (femId == 0 && row == 1)
-            //cout << "NORM row " << row << "  with " << row_calib[n][row] << " from " <<  temp[femId][i].first << endl;
-            if (calibration)
-              temp[femId][i].first *= row_calib[n][row];
-            /*if (row == 0 || (row == 1 && femId == 5) || row == Imax) {
-              temp[femId].erase(temp[femId].begin() + i);
-            }*/
-
-          }
-        }
-        // end of calibration
-        for (UInt_t i = 0; i < temp[femId].size(); ++i)
-          ChargePerRow[femId][temp[femId][i].second]->Fill(temp[femId][i].first);
+        for (UInt_t i = 0; i < temp.size(); ++i)
+          ChargePerRow[femId][temp[i].second]->Fill(temp[i].first);
       } // end of loop over FEMs
     } // end event loop
   } // end file loop
@@ -239,18 +243,24 @@ void join_fem_ana() {
     }
 
     Float_t avrg = 0;
-    Int_t start = 1;
-    if (femId == 5)
-      start = 2;
+    Int_t N_avg = 22;
+    if (femId == 0)
+      N_avg = 21;
+    else if (femId == 3)
+      N_avg = 19;
+    else if (femId == 5)
+      N_avg = 21;
 
-    for (Int_t i = start; i < 23; ++i) {
+    for (Int_t row = 0; row < 24; ++row) {
+      if (row == 0 ||  row == Imax || (row == 12 && femId == 0) || (row == 1 && femId == 5) || (femId == 3 && (row == 3 || row == 9 || row == 11)))
+        continue;
       Double_t x, y;
-      graphLandau[femId]->GetPoint(i, x, y);
-      avrg += y / (23 - start);
+      graphLandau[femId]->GetPoint(row, x, y);
+      avrg += y / N_avg;
     }
     cout << "*************** FEM = " << femId << "*******************" << endl;
     cout << " row    MPV      MPV_av     MPV_av/MPV" << endl;
-    for (Int_t i = start; i < 23; ++i) {\
+    for (Int_t i = 0; i < 24; ++i) {
       Double_t x, y;
       graphLandau[femId]->GetPoint(i, x, y);
       cout << i << "    " << y << "    " << avrg << "     " << avrg / y << endl;
