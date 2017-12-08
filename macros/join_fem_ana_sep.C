@@ -40,7 +40,6 @@ void join_fem_ana() {
   Int_t N_events_raw[7]       = {0, 0, 0, 0, 0, 0, 0};
   Int_t N_events_long[7]      = {0, 0, 0, 0, 0, 0, 0};
   Int_t N_events_one_track[7] = {0, 0, 0, 0, 0, 0, 0};
-  Int_t N_events_add_long[7]  = {0, 0, 0, 0, 0, 0, 0};
 
   // Initialize the geometry
   // Similar for all the files actuallн
@@ -169,23 +168,12 @@ void join_fem_ana() {
         temp = ScanPad(*pad_charge[femId], femId, Imax, Jmax, Nrow[femId], MaxSep[femId], touchBorder[femId], *PadDisplay[femId]);
         ++N_events_raw[femId];
 
-        // cuts on FEM
-        if (Nrow[femId] < 20)
-          continue;
-        ++N_events_long[femId];
-
-        if (MaxSep[femId] > 2)
-          continue;
-        ++N_events_one_track[femId];
-
         for (vector< pair<Int_t, Int_t > >::iterator it = temp.begin(); it != temp.end(); ++it){
           Int_t row = (*it).second;
-          if (row == 0 || (row == 1 && femId == 5) || row == Imax || (femId == 3 && (row == 3 || row == 9 || row == 11))) {
+          if (row == 0 ||  row == Imax || (row == 12 && femId == 0) || (row == 1 && femId == 5) || (femId == 3 && (row == 3 || row == 9 || row == 11))) {
             temp.erase(it);
             // VERY IMPORTANT!!!!
             --it;
-            if ( row == Imax)
-              break;
             continue;
           }
           // norm
@@ -201,16 +189,22 @@ void join_fem_ana() {
           }
         }
 
+        // Simple selection
         Int_t cut_l = 22;
-        if (femId == 3)
+        if (femId == 0)
+          cut_l = 21;
+        else if (femId == 3)
           cut_l = 19;
         else if (femId == 5)
           cut_l = 21;
 
         if ((Int_t)temp.size() < cut_l)
             continue;
+        ++N_events_long[femId];
 
-        ++N_events_add_long[femId];
+        if (MaxSep[femId] > 2)
+          continue;
+        ++N_events_one_track[femId];
 
         sort(temp.begin(), temp.end());
         Int_t i_max = round(alpha * temp.size());
@@ -277,9 +271,6 @@ void join_fem_ana() {
     cout << "Initial N events   : " << N_events_raw[femId] << endl;
     cout << "Events long        : " << N_events_long[femId] << endl;
     cout << "Events one track   : " << N_events_one_track[femId] << endl;
-    cout << "Events long add    : " << N_events_add_long[femId] << endl;
-
-
   }
 }
 
