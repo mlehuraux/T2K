@@ -17,7 +17,7 @@ void join_fem_ana() {
   Int_t run_start = 5149;
   Int_t run_end   = 5161;
 
-  bool calibration = false;
+  bool calibration = true;
 
   if ((run_start < 5162 && DrawEnergy) || (run_start > 5161 && DrawDrift)) {
     cout << "WRONG RUN!" << endl;
@@ -89,7 +89,7 @@ void join_fem_ana() {
       int row;
       float charge, avg, norm;
       CalibFile >> row >> charge >> avg >> norm;
-      row_calib[fem_ar_it].push_back(norm);
+      row_calib[fem_ar_it].push_back(norm * FEMnorm);
     }
 
     // end of FEMs of interest
