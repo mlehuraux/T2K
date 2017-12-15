@@ -452,6 +452,7 @@ void join_fem_ana() {
   gStyle->SetOptFit(0111);
   Double_t fit_min = ClusterNormCharge->GetBinCenter(ClusterNormCharge->FindFirstBinAbove(ClusterNormCharge->GetMaximum()*0.3));
   Double_t fit_max = ClusterNormCharge->GetBinCenter(ClusterNormCharge->FindLastBinAbove(ClusterNormCharge->GetMaximum()*0.3));
+  TH1F* ClusterNormCharge1 = (TH1F*)ClusterNormCharge->Clone();
   ClusterNormCharge->Fit("gaus", "", "", fit_min, fit_max);
   TF1 *fit = ClusterNormCharge->GetFunction("gaus");
   Float_t mean      = fit->GetParameter(1);
@@ -476,13 +477,52 @@ void join_fem_ana() {
   ClusterNormCharge->SetStats(0);
   c1->Modified();
 
+  c1->Print(("figure/TruncEnergy_multi" + postfix + ".png").c_str());
+
+  TF1* f1 = new TF1("f1", "( (x < [1] ) ? [0] * TMath::Gaus(x, [1], [2]) : [0] * TMath::Gaus(x, [1], [3]))", 0, 10000);
+  f1->SetParameters(1000, 1300, 100, 200);
+  f1->SetParName(0, "Const");
+  f1->SetParName(1, "Mean");
+  f1->SetParName(2, "Left sigma");
+  f1->SetParName(3, "Right sigma");
+  ClusterNormCharge1->Fit("f1");
+  ClusterNormCharge1->Draw();
+  TF1 *fit1 = ClusterNormCharge1->GetFunction("f1");
+  mean      = fit1->GetParameter(1);
+  Float_t sigmaL     = fit1->GetParameter(2);h
+  Float_t sigmaR     = fit1->GetParameter(3);
+
+  Float_t resolL = sigmaL / mean;
+  Float_t resolR = sigmaR / mean;
+
+
+
+  c1->Update();
+
+  TPaveStats *ps1 = (TPaveStats*)c1->GetPrimitive("stats");
+  ps1->SetName("mystats");
+  TList *listOfLines1 = ps1->GetListOfLines();
+  TText *tconst1 = ps1->GetLineWith("RMS");
+  TLatex *myt1 = new TLatex(0,0,Form("resol L = %f %%", (Float_t)0.01*round(resolL*10000)));
+  myt1 ->SetTextFont(tconst1->GetTextFont());
+  myt1 ->SetTextSize(tconst1->GetTextSize());
+  TLatex *myt2 = new TLatex(0,0,Form("resol R = %f %% ", (Float_t)0.01*round(resolR*10000)));
+  myt2 ->SetTextFont(tconst1->GetTextFont());
+  myt2 ->SetTextSize(tconst1->GetTextSize());
+  listOfLines1->Add(myt1);
+  listOfLines1->Add(myt2);
+  ClusterNormCharge1->SetStats(0);
+  c1->Modified();
+
+  c1->Print(Form("figure/TruncEnergy_AssymFit.png"));
+
   int bin1 = ClusterNormCharge->FindFirstBinAbove(ClusterNormCharge->GetMaximum()/2);
   int bin2 = ClusterNormCharge->FindLastBinAbove(ClusterNormCharge->GetMaximum()/2);
   double fwhm = ClusterNormCharge->GetBinCenter(bin2) - ClusterNormCharge->GetBinCenter(bin1);
   double mean_f = 0.5 * (ClusterNormCharge->GetBinCenter(bin2) + ClusterNormCharge->GetBinCenter(bin1));
 
 
-  c1->Print(("figure/TruncEnergy_multi" + postfix + ".png").c_str());
+
   cout << "****************************************************" << endl;
   cout << "Present resolution" << endl;
   cout << "resol FWHM = " << 0.5 * fwhm / mean_f << endl;
