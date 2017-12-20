@@ -489,7 +489,7 @@ void join_fem_ana() {
   ClusterNormCharge1->Draw();
   TF1 *fit1 = ClusterNormCharge1->GetFunction("f1");
   mean      = fit1->GetParameter(1);
-  Float_t sigmaL     = fit1->GetParameter(2);h
+  Float_t sigmaL     = fit1->GetParameter(2);
   Float_t sigmaR     = fit1->GetParameter(3);
 
   Float_t resolL = sigmaL / mean;
