@@ -20,7 +20,10 @@ void join_fem() {
   //************************************************************
 
   // LOOP OVER FILES
-  for (Int_t fileID = 5083; fileID < 5107; ++fileID) {
+  for (Int_t fileID = 4098; fileID <= 4109; ++fileID) {
+    if (fileID == 4051)
+      continue;
+
     std::stringstream stream;
     stream << fileID;
     std::string strRUN = stream.str();
@@ -172,6 +175,11 @@ void join_fem() {
     outFile->cd();
     pad->Write();
     outFile->Close();
+    delete outFile;
+    for (Int_t i = 0; i < 7; ++i) {
+      inFile[i]->Close();
+      delete inFile[i];
+    }
   }
   cout << endl;
   cout << "END" << endl;
