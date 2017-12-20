@@ -1,6 +1,6 @@
 int add_beam_info() {
 
-  for (Int_t i = 5109; i < 5168; ++i) {
+  for (Int_t i = 4098; i <= 4109; ++i) {
     std::stringstream stream;
     stream << i;
     std::string strRUN = stream.str();
@@ -40,7 +40,123 @@ int add_beam_info() {
 
 bool GetRunInfo(Int_t RUN, Float_t& driftZ, Float_t& peacking, Float_t& Efield, Float_t& energy, Float_t& x) {
   driftZ = -1.;
+
   switch (RUN) {
+
+    case 4028:
+      driftZ =  8.18;     peacking = 100.; Efield = 230; energy = 5; x = 23.; break;
+    case 4029:
+      driftZ = 18.18;     peacking = 100.; Efield = 230; energy = 5; x = 23.; break;
+    case 4030:
+      driftZ = 23.18;     peacking = 100.; Efield = 230; energy = 5; x = 23.; break;
+    case 4031:
+      driftZ =  8.18;     peacking = 100.; Efield = 230; energy = 5; x = 23.; break;
+    case 4032:
+      driftZ = 33.18;     peacking = 100.; Efield = 230; energy = 5; x = 23.; break;
+    case 4033:
+      driftZ = 38.18;     peacking = 100.; Efield = 230; energy = 5; x = 23.; break;
+    case 4034:
+      driftZ = 43.18;     peacking = 100.; Efield = 230; energy = 5; x = 23.; break;
+    case 4035:
+      driftZ = 48.18;     peacking = 100.; Efield = 230; energy = 5; x = 23.; break;
+    case 4036:
+      driftZ = 53.18;     peacking = 100.; Efield = 230; energy = 5; x = 23.; break;
+    case 4037:
+      driftZ = 58.18;     peacking = 100.; Efield = 230; energy = 5; x = 23.; break;
+    case 4038:
+      driftZ = 13.18;     peacking = 100.; Efield = 230; energy = 5; x = 23.; break;
+    case 4039:
+      driftZ = 10.68;     peacking = 100.; Efield = 230; energy = 5; x = 23.; break;
+    case 4040:
+      driftZ =  5.68;     peacking = 100.; Efield = 230; energy = 5; x = 23.; break;
+    case 4041:
+      driftZ =  3.18;     peacking = 100.; Efield = 230; energy = 5; x = 23.; break;
+    case 4042:
+      driftZ =  0.68;     peacking = 100.; Efield = 230; energy = 5; x = 23.; break;
+
+      case 4043:
+      driftZ =  0.68;     peacking = 100.; Efield = 140; energy = 5; x = 23.; break;
+    case 4044:
+      driftZ =  3.18;     peacking = 100.; Efield = 140; energy = 5; x = 23.; break;
+    case 4045:
+      driftZ =  5.68;     peacking = 100.; Efield = 140; energy = 5; x = 23.; break;
+    case 4046:
+      driftZ =  8.18;     peacking = 100.; Efield = 140; energy = 5; x = 23.; break;
+    case 4047:
+      driftZ = 10.68;     peacking = 100.; Efield = 140; energy = 5; x = 23.; break;
+    case 4048:
+      driftZ = 13.18;     peacking = 100.; Efield = 140; energy = 5; x = 23.; break;
+    case 4049:
+      driftZ = 18.18;     peacking = 100.; Efield = 140; energy = 5; x = 23.; break;
+    case 4050:
+      driftZ = 23.18;     peacking = 100.; Efield = 140; energy = 5; x = 23.; break;
+    case 4052:
+      driftZ = 28.18;     peacking = 100.; Efield = 140; energy = 5; x = 23.; break;
+    case 4053:
+      driftZ = 33.18;     peacking = 100.; Efield = 140; energy = 5; x = 23.; break;
+    case 4054:
+      driftZ = 38.68;     peacking = 100.; Efield = 140; energy = 5; x = 23.; break;
+    case 4055:
+      driftZ = 43.68;     peacking = 100.; Efield = 140; energy = 5; x = 23.; break;
+    case 4056:
+      driftZ = 48.18;     peacking = 100.; Efield = 140; energy = 5; x = 23.; break;
+    case 4057:
+      driftZ = 53.68;     peacking = 100.; Efield = 140; energy = 5; x = 23.; break;
+    case 4058:
+      driftZ = 55.68;     peacking = 100.; Efield = 140; energy = 5; x = 23.; break;
+
+    case 4059:
+      driftZ = 20.;     peacking = 100.; Efield = 140; energy = 5; x = 23.; break;
+    case 4060:
+      driftZ = 20.;     peacking = 100.; Efield = 140; energy = 5; x = 92.; break;
+    case 4061:
+      driftZ = 20.;     peacking = 100.; Efield = 140; energy = 5; x = 92.; break;
+    case 4062:
+      driftZ = 20.;     peacking = 100.; Efield = 140; energy = 5; x = 162.; break;
+    case 4063:
+      driftZ = 20.;     peacking = 100.; Efield = 140; energy = 5; x = 232.; break;
+    case 4064:
+      driftZ = 20.;     peacking = 100.; Efield = 140; energy = 5; x = 232.; break;
+    case 4065:
+      driftZ = 20.;     peacking = 100.; Efield = 140; energy = 5; x = 232.; break;
+    case 4066:
+      driftZ = 20.;     peacking = 100.; Efield = 140; energy = 5; x = 214.; break;
+    case 4067:
+      driftZ = 20.;     peacking = 100.; Efield = 140; energy = 5; x = 162.; break;
+    case 4068:
+      driftZ = 20.;     peacking = 100.; Efield = 140; energy = 5; x = 162.; break;
+    case 4069:
+      driftZ = 20.;     peacking = 100.; Efield = 140; energy = 5; x = 147.; break;
+    case 4070:
+      driftZ = 20.;     peacking = 100.; Efield = 140; energy = 5; x = 147.; break;
+    case 4071:
+      driftZ = 20.;     peacking = 100.; Efield = 140; energy = 5; x = 147.; break;
+
+    case 4098:
+      driftZ =  57;     peacking = 100.; Efield = 230; energy = 5; x = 147.; break;
+    case 4099:
+      driftZ =  55;     peacking = 100.; Efield = 230; energy = 5; x = 147.; break;
+    case 4100:
+      driftZ =  50;     peacking = 100.; Efield = 230; energy = 5; x = 147.; break;
+    case 4101:
+      driftZ =  45;     peacking = 100.; Efield = 230; energy = 5; x = 147.; break;
+    case 4102:
+      driftZ =  40;     peacking = 100.; Efield = 230; energy = 5; x = 147.; break;
+    case 4103:
+      driftZ =  35;     peacking = 100.; Efield = 230; energy = 5; x = 147.; break;
+    case 4104:
+      driftZ =  30;     peacking = 100.; Efield = 230; energy = 5; x = 147.; break;
+    case 4105:
+      driftZ =  25;     peacking = 100.; Efield = 230; energy = 5; x = 147.; break;
+    case 4106:
+      driftZ =  20;     peacking = 100.; Efield = 230; energy = 5; x = 147.; break;
+    case 4107:
+      driftZ =  15;     peacking = 100.; Efield = 230; energy = 5; x = 147.; break;
+    case 4108:
+      driftZ =  10;     peacking = 100.; Efield = 230; energy = 5; x = 147.; break;
+    case 4109:
+      driftZ =  5;     peacking = 100.; Efield = 230; energy = 5; x = 147.; break;
+
     case 5073:
       driftZ = 5.;    peacking = 100.; Efield = 230; energy = 5; x = 30.; break;
     case 5074:
