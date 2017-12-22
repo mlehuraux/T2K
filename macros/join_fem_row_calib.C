@@ -61,7 +61,8 @@ void join_fem_ana() {
   Int_t femId_ar[3] = {0, 3, 5};
   Int_t fem_ar_it = 0;
   while (true) {
-    TString file = Form("data/fem%i.dat", femId_ar[fem_ar_it]);
+    //TString file = Form("data/fem%i.dat", femId_ar[fem_ar_it]);
+    TString file = "data/fem3_no_field.dat";
     ifstream CalibFile(file);
     if ( !CalibFile ) {
       cerr << "ERROR: Can't open file for row calibration: " << file << endl;
@@ -199,7 +200,7 @@ void join_fem_ana() {
   //************************************************************
   //************************************************************
   TGraphErrors* graphLandau[7];
-  for (Int_t femId = 0; femId < 7; ++femId) {
+  for (Int_t femId = 3; femId < 7; ++femId) {
     graphLandau[femId] = new TGraphErrors();
     for (Int_t row = 0; row <= Imax; ++row) {
 
@@ -247,12 +248,12 @@ void join_fem_ana() {
     if (femId == 0)
       N_avg = 21;
     else if (femId == 3)
-      N_avg = 19;
+      N_avg = 22; //19
     else if (femId == 5)
       N_avg = 20;
 
     for (Int_t row = 0; row < 24; ++row) {
-      if (row == 0 ||  row == Imax || (row == 12 && femId == 0) || ((row == 1 || row == 22) && femId == 5) || (femId == 3 && (row == 3 || row == 9 || row == 11)))
+      if (row == 0 ||  row == Imax)// || (row == 12 && femId == 0) || ((row == 1 || row == 22) && femId == 5) || (femId == 3 && (row == 3 || row == 9 || row == 11)))
         continue;
       Double_t x, y;
       graphLandau[femId]->GetPoint(row, x, y);
