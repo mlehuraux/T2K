@@ -28,10 +28,14 @@ void join_fem_ana() {
   //TGraph* graph = new TGraph();
   //int point = 0;
   TH1F* ClusterNormCharge[7];
-  for (Int_t femId = 0; femId < 7; ++femId)
+  TH1F* ClusterNormChargeFile[7];
+  for (Int_t femId = 0; femId < 7; ++femId) {
     ClusterNormCharge[femId]  = new TH1F(Form("cluster_norm_charge%i", femId) ,"Truncated mean energy deposit",250,0,3000);
+    ClusterNormChargeFile[femId]   = new TH1F(Form("cluster_norm_charge%i", femId),"Truncated mean energy deposit",250,0,3000);
+  }
 
   vector< vector<pair<Int_t, Int_t> > > EventClusters;
+  TGraphErrors* DriftScanResol  = new TGraphErrors();
 
   TH2F* PadDisplay[7];
   for (Int_t femId = 0; femId < 7; ++femId)
@@ -75,7 +79,8 @@ void join_fem_ana() {
   Int_t femId_ar[3] = {0, 3, 5};
   Int_t fem_ar_it = 0;
   while (true) {
-    TString file = Form("data/fem%i.dat", femId_ar[fem_ar_it]);
+    //TString file = Form("data/fem%i.dat", femId_ar[fem_ar_it]);
+    TString file = "data/fem3_no_field.dat";
     ifstream CalibFile(file);
     if ( !CalibFile ) {
       cerr << "ERROR: Can't open file for row calibration: " << file << endl;
@@ -111,7 +116,7 @@ void join_fem_ana() {
   string postfix = "";
   for (Int_t fileID = run_start; fileID <= run_end; ++fileID) {
 
-    if (fileID == 5082) {
+    if (fileID == 5082 || fileID == 4051) {
       cout << "skipping empty run 5082" << endl;
       continue;
     }
@@ -175,7 +180,7 @@ void join_fem_ana() {
 
         for (vector< pair<Int_t, Int_t > >::iterator it = temp.begin(); it != temp.end(); ++it){
           Int_t row = (*it).second;
-          if (row == 0 ||  row == Imax || (row == 12 && femId == 0) || ((row == 1 || row == 22) && femId == 5) || (femId == 3 && (row == 3 || row == 9 || row == 11))) {
+          if (row == 0 ||  row == Imax) {// || (row == 12 && femId == 0) || ((row == 1 || row == 22) && femId == 5) || (femId == 3 && (row == 3 || row == 9 || row == 11))) {
             temp.erase(it);
             // VERY IMPORTANT!!!!
             --it;
@@ -221,10 +226,41 @@ void join_fem_ana() {
 
         // general resolution
         ClusterNormCharge[femId]->Fill(norm_cluster);
+        ClusterNormChargeFile[femId]->Fill(norm_cluster);
 
       } // end of FEM loop
     } // end event loop
+    gStyle->SetOptStat("RMne");
+    gStyle->SetOptFit(0111);
+    Double_t fit_min = ClusterNormChargeFile[3]->GetBinCenter(ClusterNormChargeFile[3]->FindFirstBinAbove(ClusterNormChargeFile[3]->GetMaximum()*0.3));
+    Double_t fit_max = ClusterNormChargeFile[3]->GetBinCenter(ClusterNormChargeFile[3]->FindLastBinAbove(ClusterNormChargeFile[3]->GetMaximum()*0.3));
+    ClusterNormChargeFile[3]->Fit("gaus", "", "", fit_min, fit_max);
+    TF1 *fit = ClusterNormChargeFile[3]->GetFunction("gaus");
+    Float_t mean      = fit->GetParameter(1);
+    Float_t sigma     = fit->GetParameter(2);
+
+    Float_t mean_e     = fit->GetParError(1);
+    Float_t sigma_e    = fit->GetParError(2);
+    Float_t resol = sigma / mean;
+
+    Float_t resol_e   = resol * sqrt(mean_e*mean_e/(mean*mean) + sigma_e*sigma_e/(sigma*sigma));
+
+    DriftScanResol->SetPoint(fileID - run_start, driftZ, resol);
+    DriftScanResol->SetPointError(fileID - run_start, 0, resol_e);
+
+    cout << "File Scan. N = " << fileID - run_start << " Drift = " << driftZ << "   Energy = " << energy << "  Resol = " << resol << endl;
+
+    ClusterNormChargeFile[3]->Reset();
   } // end file loop
+
+  DriftScanResol->SetMarkerColor(4);
+  DriftScanResol->SetMarkerSize(0.5);
+  DriftScanResol->SetMarkerStyle(21);
+  DriftScanResol->GetYaxis()->SetRangeUser(0., 0.2);
+  c1->SetGrid(1);
+  DriftScanResol->Draw("ap");
+  if (DrawDrift)
+    c1->Print("figure/Resolution_Drift_2014.png");
 
   for (Int_t femId = 0; femId < 7; ++femId) {
     gStyle->SetFillColor(1);
