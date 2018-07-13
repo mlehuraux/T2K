@@ -1,0 +1,22 @@
+#!/usr/bin/make -f
+
+all:
+	@echo "Usage: "
+	@echo "list-libs    list libraries"
+	@echo "list-bins    list binaries"
+
+include Makefile
+
+list-bins:
+	@echo Binaries: $(PROG_INSTALL)
+
+list-libs:
+	@echo Libraries: $(SOLIB)
+
+list-extras:
+	@echo Extras: $(EXTRA)
+
+rpm-install-list:
+	@echo $(PREFIX)/lib/$(SOLIBNAME) > $(DEST)
+	@for i in $(notdir $(PROG_INSTALL)); do echo $(PREFIX)/bin/$$i; done >> $(DEST)
+	@for i in $(EXTRA); do echo $(PREFIX)/share/$(PACKAGENAME)/$$i; done >> $(DEST)

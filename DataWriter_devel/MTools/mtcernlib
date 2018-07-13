@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# It turns out that there are various versions of the cernlib script
+# out there. And not all of them support the same options. Sort this
+# out for the MTools makefile
+
+# Author: P.-F. Giraud
+
+ARGS="$*"
+
+ARCH=`uname -m`
+if [ -z "$CERNLIB" ]; then
+    if [ ! -z "$CERN" ] && [ -e "$CERN/$CERN_LEVEL/bin/cernlib" ]; then
+	CERNLIB="$CERN/$CERN_LEVEL/bin/cernlib"
+    else
+	CERNLIB=`which cernlib`
+    fi
+fi
+
+if [ -z "$CERNLIB" ]; then
+    echo "Cannot find the cernlib script" >&2
+    exit 1
+fi
+
+CERNLIB_VERSION="default"
+if grep -q "Kevin McCarty" "$CERNLIB"; then
+    CERNLIB_VERSION="kmc"
+fi
+
+if [ "$ARCH" = "x86_64" ] && [ "$CERNLIB_VERSION" = "kmc" ]; then
+    exec "$CERNLIB" -safe $ARGS
+else
+    exec "$CERNLIB" $ARGS
+fi

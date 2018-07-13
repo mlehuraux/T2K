@@ -2,10 +2,12 @@ path_ini=$(pwd)
 cd ~/suvorov/data_temp/
 run=$1
 array=($(cat ~/suvorov/FileList/acq/run$run.list))
+SOFT="/local/home/ssuvorov/T2K/ILC_TPC/DataWriter_devel"
+#SOFT="~/INSTALLFCC/DataWriter_devel/"
 
 merge=true
 
-cd ~/INSTALLFCC/DataWriter_devel/
+cd $SOFT
 mkdir temp
 # loop over subruns
 for ((i=0; i<${#array[@]}; i++));
@@ -14,7 +16,7 @@ do
   f_acq=${path##*/}
   f_root=${f_acq%.*}".root"
   echo "Processing file: $path"
-  cp $path ~/INSTALLFCC/DataWriter_devel/temp/$f_acq
+  cp $path $SOFT/temp/$f_acq
   source setup.sh
 
   # loop over fems
@@ -31,10 +33,10 @@ do
     fi
     ./bin/acqToRootConverterExe -t $j -m $k -f  "temp/$f_acq" --noxml
     ls -l temp/
-    mv temp/$f_root ~/suvorov/data_root/$f_root_new
+    mv temp/$f_root ~/$f_root_new
   done
 
-  rm ~/INSTALLFCC/DataWriter_devel/temp/$f_acq
+  rm $SOFT/temp/$f_acq
 done
 
 rm -r temp
