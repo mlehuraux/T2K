@@ -109,7 +109,7 @@ int main( int nargc, char **argv ) {
   ///// setup geometry
   femGeomManager geomManager;
   geomManager.setElectronicMap(electronicMap);
-  //geomManager.setGeometryMap(  geometryMap  );
+  geomManager.setGeometryMap(  geometryMap  );
 
 
   ////// opening output file

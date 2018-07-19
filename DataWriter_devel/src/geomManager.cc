@@ -25,8 +25,11 @@ femGeomManager::femGeomManager( const femGeomManager & geo ) {
   _iFec  = geo._iFec;
   _iPadInAsic  = geo._iPadInAsic;
 
-  _x0Pad = geo._x0Pad;   _x1Pad = geo._x1Pad;   _x2Pad = geo._x2Pad;   _x3Pad = geo._x3Pad;
-  _y0Pad = geo._y0Pad;   _y1Pad = geo._y1Pad;   _y2Pad = geo._y2Pad;   _y3Pad = geo._y3Pad;
+  _xPad = geo._xPad;
+  _yPad = geo._yPad;
+
+  _dxPad = geo._dxPad;
+  _dyPad = geo._dyPad;
 
 }
 
@@ -45,8 +48,11 @@ femGeomManager& femGeomManager::operator=( const femGeomManager & geo){
   _iFec  = geo._iFec;
   _iPadInAsic  = geo._iPadInAsic;
 
-  _x0Pad = geo._x0Pad;   _x1Pad = geo._x1Pad;   _x2Pad = geo._x2Pad;   _x3Pad = geo._x3Pad;
-  _y0Pad = geo._y0Pad;   _y1Pad = geo._y1Pad;   _y2Pad = geo._y2Pad;   _y3Pad = geo._y3Pad;
+  _xPad = geo._xPad;
+  _yPad = geo._yPad;
+
+  _dxPad = geo._dxPad;
+  _dyPad = geo._dyPad;
 
   return *this;
 }
@@ -129,7 +135,6 @@ void femGeomManager::readElectronic() {
       //  missingChannelInfo.push_back( iss.str() );
     }*/
 
-    std::cout << row << "   " << column << "  " << ipad <<  std::endl;
 
     if( _iPadMin == -1 ) _iPadMin = row;
     if( _iPadMax == -1 ) _iPadMax = row;
@@ -149,8 +154,6 @@ void femGeomManager::readElectronic() {
     iFec .insert( make_pair(ipad,iFEC)     );
     iPadInAsic.insert( make_pair(ipad,pad) );
 
-    cout << iPad.size() << "   " << jPad.size() << std::endl;
-    std::cout << "_iPadMin " << _iPadMin << "  _iPadMax " << _iPadMax << "   _jPadMin " << _jPadMin << "  _jPadMax " << _jPadMax << std::endl;
     ++ipad;
 
 
@@ -213,12 +216,12 @@ int femGeomManager::padInAsic( int iPhysCh ) const {
 
 ////// Geometry file
 double femGeomManager::xPad(int i, int j) const {
-  return 0.25 *( _x0Pad[i][j] + _x1Pad[i][j] + _x2Pad[i][j] + _x3Pad[i][j] );
+  return 0.;//0.25 *( _x0Pad[i][j] + _x1Pad[i][j] + _x2Pad[i][j] + _x3Pad[i][j] );
 }
 
 ////// Geometry file
 double femGeomManager::yPad(int i, int j) const {
-  return 0.25 *( _y0Pad[i][j] + _y1Pad[i][j] + _y2Pad[i][j] + _y3Pad[i][j] );
+  return 0.;//0.25 *( _y0Pad[i][j] + _y1Pad[i][j] + _y2Pad[i][j] + _y3Pad[i][j] );
 }
 
 int femGeomManager::readGeometry() {
@@ -234,54 +237,35 @@ int femGeomManager::readGeometry() {
     return -1;
   }
 
-  char   varName[20];
-  double width;
-  double ymin, ymax;
-
-  padGeomFile >> varName >> width;  // half width of the pad panel
-  padGeomFile >> varName >> ymin;
-  padGeomFile >> varName >> ymax;
-
   // tpcPanelWidth  = 2. * width;         // total width  of the pad array
   // tpcPanelHeight = ymax - ymin;        // total height of the pad array
 
   cout << " ===== Decoding geometry ======== " << endl;
-  cout << "FEM Pad Panel: w , ymin, ymax = "
-       << width << ", " << ymin << ", " << ymax << endl;
 
-  unsigned nRow = _iPadMax - _iPadMin + 1;
-  unsigned nCol = _jPadMax - _jPadMin + 1;
-  vector<vector<double> > x0_v(nRow),y0_v(nRow);
-  vector<vector<double> > x1_v(nRow),y1_v(nRow);
-  vector<vector<double> > x2_v(nRow),y2_v(nRow);
-  vector<vector<double> > x3_v(nRow),y3_v(nRow);
+  vector<double > x_v,y_v;
+  vector<double > dx_v,dy_v;
 
-  for( unsigned ix = 0 ; ix < x0_v.size(); ix++ ) {
-    x0_v[ix].resize(nCol,-1.);   y0_v[ix].resize(nCol,-1.);
-    x1_v[ix].resize(nCol,-1.);   y1_v[ix].resize(nCol,-1.);
-    x2_v[ix].resize(nCol,-1.);   y2_v[ix].resize(nCol,-1.);
-    x3_v[ix].resize(nCol,-1.);   y3_v[ix].resize(nCol,-1.);
-  }
-
+  int ph_channel = 0;
   while ( padGeomFile.good() && !padGeomFile.eof() ) {
-    int row, col;
-    double x0, y0, x1, y1, x2, y2, x3, y3;
-    padGeomFile >> row >> col
-                >> x0 >> y0 >> x1 >> y1 >> x2 >> y2 >> x3 >> y3;
+    int ch, group, row;
+    double x, y, dx, dy;
+    padGeomFile >> ch >> group >> row >> x >> y >> dx >> dy;
+    x_v.push_back(x);  y_v.push_back(y);
+    dx_v.push_back(dx);  dy_v.push_back(dy);
 
-    x0_v[row][col] = x0;  y0_v[row][col] = y0;
-    x1_v[row][col] = x1;  y1_v[row][col] = y1;
-    x2_v[row][col] = x2;  y2_v[row][col] = y2;
-    x3_v[row][col] = x3;  y3_v[row][col] = y3;
-
+    ++ph_channel;
   }
 
   padGeomFile.close();
 
-  _x0Pad = x0_v;  _y0Pad = y0_v;
-  _x1Pad = x1_v;  _y1Pad = y1_v;
-  _x2Pad = x2_v;  _y2Pad = y2_v;
-  _x3Pad = x3_v;  _y3Pad = y3_v;
+  if (ph_channel != 1728 || x_v.size() != 1728) {
+    cerr << "ERROR femGeomManager::readGeomtry(...): The numberf of channels are different from 1728 " << ph_channel  << endl;
+    return -1;
+  }
+
+  _xPad = x_v;  _yPad = y_v;
+  _dxPad = dx_v;  _dyPad = dy_v;
+
 
   //  setGeo2DVisual();
 
@@ -289,22 +273,22 @@ int femGeomManager::readGeometry() {
   return 0;
 }
 double femGeomManager::xPadCoord( int i, int j, int k ) const {
-
+/*
   if( k == 0 ) return _x0Pad[i][j];
   if( k == 1 ) return _x1Pad[i][j];
   if( k == 2 ) return _x2Pad[i][j];
   if( k == 3 ) return _x3Pad[i][j];
-
+*/
   return -1;
 }
 
 double femGeomManager::yPadCoord( int i, int j, int k) const {
-
+/*
   if( k == 0 ) return _y0Pad[i][j];
   if( k == 1 ) return _y1Pad[i][j];
   if( k == 2 ) return _y2Pad[i][j];
   if( k == 3 ) return _y3Pad[i][j];
-
+*/
   return -1;
 }
 
@@ -325,14 +309,12 @@ void femGeomManager::dumpToRootFile(TFile *f, const std::string &treeName ) {
   t->Branch("iAsic", &_iAsic );
   t->Branch("iFec" , &_iFec  );
   t->Branch("iPadInAsic" , &_iPadInAsic  );
-  t->Branch("x0Pad" , &_x0Pad  );
-  t->Branch("x1Pad" , &_x1Pad  );
-  t->Branch("x2Pad" , &_x2Pad  );
-  t->Branch("x3Pad" , &_x3Pad  );
-  t->Branch("y0Pad" , &_y0Pad  );
-  t->Branch("y1Pad" , &_y1Pad  );
-  t->Branch("y2Pad" , &_y2Pad  );
-  t->Branch("y3Pad" , &_y3Pad  );
+  t->Branch("xPad" , &_xPad  );
+  t->Branch("dxPad", &_dxPad );
+
+  t->Branch("yPad" , &_yPad  );
+  t->Branch("dyPad", &_dyPad );
+
   t->Branch("iPadMin", &_iPadMin );
   t->Branch("jPadMin", &_jPadMin );
   t->Branch("iPadMax", &_iPadMax );
@@ -349,25 +331,25 @@ void femGeomManager::initFromRootFile(std::string rootFileName, const std::strin
     cerr << " ERROR[ femGeomManager::initFromRootFile ] input root file is not opened properly... " << endl;
     return;
   }
-
+/*
   f.cd();
   TTree *t = (TTree*) f.Get(treeName.c_str());
   vector<int> *tmp_iPad(0), *tmp_jPad(0), *tmp_iAsic(0), *tmp_iFec(0), *tmp_iPadInAsic(0);
-  std::vector<std::vector<double> > *tmp_x0Pad(0), *tmp_x1Pad(0), *tmp_x2Pad(0), *tmp_x3Pad(0);
-  std::vector<std::vector<double> > *tmp_y0Pad(0), *tmp_y1Pad(0), *tmp_y2Pad(0), *tmp_y3Pad(0);
+  std::vector<double > *tmp_xPad;
+  std::vector<double > *tmp_yPad;
+  std::vector<double > *tmp_dxPad;
+  std::vector<double > *tmp_dyPad;
   t->SetBranchAddress("iPad" , &tmp_iPad  );
   t->SetBranchAddress("jPad" , &tmp_jPad  );
   t->SetBranchAddress("iAsic", &tmp_iAsic );
   t->SetBranchAddress("iFec" , &tmp_iFec  );
   t->SetBranchAddress("iPadInAsic" , &tmp_iPadInAsic  );
-  t->SetBranchAddress("x0Pad" , &tmp_x0Pad  );
-  t->SetBranchAddress("x1Pad" , &tmp_x1Pad  );
-  t->SetBranchAddress("x2Pad" , &tmp_x2Pad  );
-  t->SetBranchAddress("x3Pad" , &tmp_x3Pad  );
-  t->SetBranchAddress("y0Pad" , &tmp_y0Pad  );
-  t->SetBranchAddress("y1Pad" , &tmp_y1Pad  );
-  t->SetBranchAddress("y2Pad" , &tmp_y2Pad  );
-  t->SetBranchAddress("y3Pad" , &tmp_y3Pad  );
+  t->SetBranchAddress("xPad" , &tmp_xPad  );
+  t->SetBranchAddress("dxPad", &tmp_dxPad  );
+
+  t->SetBranchAddress("yPad" , &tmp_yPad  );
+  t->SetBranchAddress("dyPad", &tmp_dyPad  );
+
   t->SetBranchAddress("iPadMin", &_iPadMin );
   t->SetBranchAddress("jPadMin", &_jPadMin );
   t->SetBranchAddress("iPadMax", &_iPadMax );
@@ -381,13 +363,16 @@ void femGeomManager::initFromRootFile(std::string rootFileName, const std::strin
   _iFec  = *tmp_iFec;
   _iPadInAsic  = *tmp_iPadInAsic;
 
-  _x0Pad = *tmp_x0Pad;   _x1Pad = *tmp_x1Pad;   _x2Pad = *tmp_x2Pad;   _x3Pad = *tmp_x3Pad;
-  _y0Pad = *tmp_y0Pad;   _y1Pad = *tmp_y1Pad;   _y2Pad = *tmp_y2Pad;   _y3Pad = *tmp_y3Pad;
+  _xPad = *tmp_xPad;
+  _yPad = *tmp_yPad;
+
+  _dxPad = *tmp_dxPad;
+  _dyPad = *tmp_dyPad;
 
   _elecSetupDone = true;
   _geomSetupDone = true;
 
-  f.Close();
+  f.Close();*/
 }
 
 
@@ -395,7 +380,7 @@ void femGeomManager::initFromRootFile(std::string rootFileName, const std::strin
 
 #include <TH2Poly.h>
 bool femGeomViewer::init(string rootName, const femGeomManager &geo )  {
-  reset();
+  /*reset();
   if( _XYviewer.get() ) return false;
 
 
@@ -440,7 +425,7 @@ bool femGeomViewer::init(string rootName, const femGeomManager &geo )  {
   _XTviewer->GetYaxis()->SetTitle("t [#samples]"); _XTviewer->GetYaxis()->CenterTitle();
   _TYviewer->GetXaxis()->SetTitle("t [#samples]"); _TYviewer->GetXaxis()->CenterTitle();
   _TYviewer->GetYaxis()->SetTitle("y [mm]"      ); _TYviewer->GetYaxis()->CenterTitle();
-
+*/
   return true;
 }
 

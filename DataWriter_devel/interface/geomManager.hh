@@ -10,8 +10,8 @@ class TFile;
 
 class femGeomManager {
 public:
-  femGeomManager(void); 
-  ~femGeomManager(void); 
+  femGeomManager(void);
+  ~femGeomManager(void);
 
   femGeomManager( const femGeomManager & geo );
   femGeomManager& operator=( const femGeomManager & );
@@ -39,7 +39,7 @@ public:
 
 
 
-  //// isobarycenter of the pad from the 4 corners 
+  //// isobarycenter of the pad from the 4 corners
   double xPad(int i, int j) const;
   double yPad(int i, int j) const;
   double xPad(int iPhysCh) const { return xPad(iPad(iPhysCh),jPad(iPhysCh)); }
@@ -51,7 +51,7 @@ public:
   /// i/o to store geom in a root file
   void dumpToRootFile( TFile *f, const std::string & geoTreeName = "femGeomTree" );
   void initFromRootFile(std::string rootFileName, const std::string &treeName = "femGeomTree" );
-  
+
 
 private:
   void readElectronic(void);
@@ -64,8 +64,11 @@ private:
   std::vector<int>      _iPad, _jPad;
   std::vector<int>      _iAsic, _iFec, _iPadInAsic; /// electronic path
 
-  std::vector<std::vector<double> > _x0Pad, _x1Pad, _x2Pad, _x3Pad;
-  std::vector<std::vector<double> > _y0Pad, _y1Pad, _y2Pad, _y3Pad;
+  std::vector<double > _xPad;
+  std::vector<double > _yPad;
+
+  std::vector<double > _dxPad;
+  std::vector<double > _dyPad;
 
   bool _elecSetupDone;
   bool _geomSetupDone;
@@ -82,10 +85,10 @@ class TH2F;
 class femGeomViewer {
 public:
   femGeomViewer(std::string rootName, const femGeomManager &geo ) { init(rootName,geo); }
-  femGeomViewer(void ) : _XYviewer(0), _XTviewer(0), _TYviewer(0) {}  
+  femGeomViewer(void ) : _XYviewer(0), _XTviewer(0), _TYviewer(0) {}
 
   /// init is actually done only if the viewer is not setup otherwise this is really long
-  bool init(std::string rootName, const femGeomManager &geo );  
+  bool init(std::string rootName, const femGeomManager &geo );
   void reset();
 
   void setBinContent( int iPad, int jPad, int tPad, double val );
@@ -96,13 +99,13 @@ public:
   void drawCopyXT(std::string options = "" );
   void drawCopyTY(std::string options = "" );
   void setMinMax( double min, double max  );
-  
-  
+
+
   /// accessors if the user want to fill the histo himself...
   // no need to worry about memory
   std::auto_ptr<TH2Poly> getHistoXY(void) { return _XYviewer; }
   int  getBinNumber( int iPad, int jPad) const;
-  
+
 private:
   /// use smart pointer so it owns the pointer;
   std::auto_ptr<TH2Poly>         _XYviewer;
@@ -110,7 +113,7 @@ private:
   std::auto_ptr<TH2F>            _TYviewer;
 
   std::vector<std::vector<int> > _binNumber2D;
-  
+
 };
 
 
