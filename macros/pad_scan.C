@@ -6,7 +6,7 @@
 #include <fstream>
 #include <stdio.h>
 #include <stdlib.h>
-#include "common_header.h"
+#include "ilc/common_header.h"
 
 /*
 
@@ -28,7 +28,7 @@ void  pad_scan(){
 
   bool DEBUG = false;
 
-  int thr=100;     //seuil
+  int thr=0.;     //seuil
   int nbins=100;
   int Ndefaultevents=0;
   // int cut_adc=400000;
@@ -90,29 +90,13 @@ void  pad_scan(){
     }
   } //Argument parsing
 
-  //TCanvas *c1 = new TCanvas("c1","evadc",900,700);
-
-  // Dfinition des histos
-  TH1F* hout=new TH1F("htime","Time",nbins,0,600);
-  hout->Sumw2();
-  TH1F* hadc=new TH1F("hadc","hadc",500,0,5000);
-  // TH1F* evadc=new TH1F("evadc","evadc",500,0,10000);
-  // TH1F* adc=new TH1F("adc","adc",100,0,500000);
-  //TH2F* PadDisplay=new TH2F("PadDisplay","I vs J of hits",72,-0.5,71+0.5,24,0-0.5,23+0.5);
-  TH1F* htmin=new TH1F("htmin","tmin for non contained track",100,0,100);
-  TH1F* htmax=new TH1F("htmax","tmax for non contained track",100,280,380);
-
   TH1F* RowNumber = new TH1F("nRow","Number of row", 24, 0. , 24);
 
   vector<TH1F*> MaximumSep;
-  //vector<TH1F*>
   MaximumSep.resize(24, NULL);
   for (int i = 0; i < 24; ++i) {
     MaximumSep[i] = new TH1F(Form("maxSep%i", i),"Maximum X separation between pads", 24, 0. , 24);
   }
-
-
-  //TH2F* PadSelection=new TH2F("PadSelection","I vs J of hits",72,-0.5,71+0.5,24,0-0.5,23+0.5);
 
   TFile*f=0;
   for (uint ifile=0;ifile< listOfFiles.size();ifile++){
@@ -127,9 +111,23 @@ void  pad_scan(){
 
     vector<int> *iPad(0);
     vector<int> *jPad(0);
+
+    vector<double> *xPad(0);
+    vector<double> *yPad(0);
+
+    vector<double> *dxPad(0);
+    vector<double> *dyPad(0);
+
     TTree * tgeom= (TTree*) f->Get("femGeomTree");
     tgeom->SetBranchAddress("jPad", &jPad );
     tgeom->SetBranchAddress("iPad", &iPad );
+
+    tgeom->SetBranchAddress("xPad", &xPad );
+    tgeom->SetBranchAddress("yPad", &yPad );
+
+    tgeom->SetBranchAddress("dxPad", &dxPad );
+    tgeom->SetBranchAddress("dyPad", &dyPad );
+
     tgeom->GetEntry(0); // put into memory geometry info
     cout << "reading geometry" << endl;
     cout << "jPad->size() " << jPad->size() <<endl;
@@ -166,13 +164,6 @@ void  pad_scan(){
       cout << "ImaxI = " << Imax << " IminI = " << Imin << " JmaxI = " << Jmax << " JminI = " << Jmin << endl;
     }
 
-
-    // TODO Think about it
-    /*for (uint i=0; i<jPad->size(); i++){
-       cout << " i " << i << " jPad " << (*jPad)[i] << endl;
-    }*/
-
-
     gStyle->SetPalette(1);
     gStyle->SetOptStat(0);
     int Nevents=Ndefaultevents;
@@ -185,19 +176,10 @@ void  pad_scan(){
     t->SetBranchAddress("PadphysChannels", &listOfChannels );
     t->SetBranchAddress("PadADCvsTime"   , &listOfSamples );
 
-    // float good_evt = 0;
-    // float adc_tot = 0;
-    int nb_evt = 0;
-
-
     if (Nevents<=0) Nevents=t->GetEntries();
     if (Nevents>t->GetEntries()) Nevents=t->GetEntries();
 
     cout << "[          ] Nev="<<Nevents<<"\r[";
-
-    // to win time, disable MG data
-    //t->SetBranchStatus("MGADCvsTime",0);
-    //t->SetBranchStatus("MGphysChannels",0);
 
     int listofRow[24]; //to count how many rows have been hit
 
@@ -217,18 +199,8 @@ void  pad_scan(){
         cout << "event i " << ievt << endl;
       t->GetEntry(ievt);
 
-      TH2F* PadDisplay=new TH2F("PadDisplay","I vs J of hits",50,-1.,49.,38,-1.,37.);
-
-      int adc_sum = 0;
-      int adc_side = 0 ;
-      int adc_up = 0 ;
-      int adc_down = 0 ;
-      int adc_calc = 0;
-
-
-      //  PadDisplay->Reset();
-      //PadSelection->Reset();
-
+      TH2F* PadDisplay=new TH2F("PadDisplay","I vs J of hits",38,-1.,37.,50,-1.,49.);
+      TH2F* PadDisplayGeo=new TH2F("PadDisplayGeo","X vs Y of hits",50,-17.15,17.15, 38,-18.13,18.13);
 
       for (int i = 0; i < 24; i++)
         listofRow[i]=0;
@@ -264,40 +236,15 @@ void  pad_scan(){
         listofT.push_back(itmax);
         listofRow[(*iPad)[chan]]=1; //the row has been hit
 
-        /*
-        if (((*jPad)[chan]<2) || ((*jPad)[chan]>69)) {
-          adc_side += adcmax ;
-        } else {adc_sum += adcmax;}
-        if ((*iPad)[chan]<2) {
-          adc_down += adcmax;
-        } else if ((*iPad)[chan]>21) {
-          adc_up += adcmax;
-        } else {adc_calc += adcmax;}
-        */
-        adc_sum += adcmax;
-
-        float weight=1;
-        if (Eweight) weight=adcmax;
-        if (adcmax>thr) {hout->Fill(itmax,weight); hadc->Fill(adcmax);}
-
-        PadDisplay->Fill((*jPad)[chan],(*iPad)[chan],adcmax);
+        PadDisplay->Fill((*iPad)[chan],(*jPad)[chan],adcmax);
+        if (ic > 1727)
+          continue;
+        // ommit the borders
+        if ((*iPad)[chan] == Imin || (*iPad)[chan] == Imax ||
+            (*jPad)[chan] == Jmin || (*jPad)[chan] == Jmax)
+            continue;
+        PadDisplayGeo->Fill((*xPad)[chan],(*yPad)[chan], adcmax);
       } //loop over channels
-
-      // Loop over pads i j
-      /*for (int i = 0; i < Imax; ++i) {
-        int prev = 1E6;
-        int MaxSep = -1;
-        // int hit = 0;
-        for (int j = 0; j < Jmax; ++j) {
-          if (PadDisplay->GetBinContent(i, j) > 0) {
-            if (j - prev - 1 > MaxSep)
-              MaxSep = j - prev - 1;
-            prev = j;
-          }
-        }
-        if (MaxSep >= 0)
-          MaximumSep[i]->Fill(MaxSep);
-      }*/
 
       //determine number of rows:
       int Nrow = 0;
@@ -306,106 +253,73 @@ void  pad_scan(){
 
       RowNumber->Fill(Nrow);
 
-      /*if (Nrow > 15) {
+      TCanvas* c1 = new TCanvas("can1", "can1");
+      c1->cd();
+      PadDisplay->Draw("colz");
+      gPad->Update();
+      //TCanvas* c2 = new TCanvas("can2", "can2");
+      PadDisplayGeo->Fit("pol1");
+      TF1* fit = PadDisplayGeo->GetFunction("pol1");
+      if(fit)
+        cout << "Chi1/NDOF                 = " << fit->GetChisquare() / fit->GetNDF() << endl;
+      //PadDisplayGeo->Draw("colz");
+      //gPad->Update();
+      /*cout << "Draw ADC?" << endl;
+      char res;
+      cin >> res;
+      if (res == 'y') {
+        bool cont_B = true;
+        while (cont_B) {
+          int j_int = 0;
+          int i_int = 0;
+          cout << "Enter j" << endl;
+          cin >> j_int;
+          cout << "Enter i" << endl;
+          cin >> i_int;
 
-        if (adc_side <= 0)  adc->Fill(adc_sum);
-        //cout << " adcsum " << adc_sum << endl ;
-        if ((adc_side<=0) && (adc_sum<cut_adc)){
-          //cout << " good event " << endl ;
-          adc_tot += adc_sum ;
-          good_evt +=1 ;
-          evadc-> Fill(ievt,adc_sum);
+          cout << j_int <<  "     " << i_int << endl;
+          int channel = -1;
+          for (unsigned long i = 0; i < iPad->size(); ++ i) {
+            if ((*iPad)[i] == i_int && (*jPad)[i] == j_int) {
+              channel = i;
+              break;
+            }
+          }
+
+          int it = -1;
+          for (uint ic=0; ic< listOfChannels->size(); ic++){
+            if (channel == (*listOfChannels)[ic])
+              it = ic;
+          }
+          cout << "channel " << channel << endl;
+          cout << "channel number " << (*listOfSamples)[it].size() << endl;
+
+          TH1F* adc1=new TH1F("adc1","adc",(*listOfSamples)[it].size(),0,(*listOfSamples)[it].size());
+
+          for (unsigned long i = 0; i < (*listOfSamples)[it].size(); ++i) {
+            adc1->SetBinContent(i, 0);
+            if ((*listOfSamples)[it][i] > 0){
+              Double_t content = (*listOfSamples)[it][i];
+              cout << it << "   " <<  i << "  from "  << (*listOfSamples)[it].size() << "    " << content << endl;
+              adc1->SetBinContent(i, content);
+            }
+          }
+          adc1->Draw();
+          gPad->Update();
+
+          cout << "Continue?" << endl;
+          char cont;
+          cin >> cont;
+          if (cont == 'n')
+            cont_B = false;
         }
       }*/
 
-      //if (adc_side > 0){}
-      //cout << ievt << " adc_side " << adc_side << endl ;
-      if (adc_side <= 0){
-        //cout << " adc_down " << adc_down << " adc_up " << adc_up << endl;
-        if (((adc_up > 0) && (adc_down <= 0) && (adc_calc > adc_min)) || ((adc_up <= 0) && (adc_down > 0) && (adc_calc > adc_min))){
-          cout << "evenement semi_contenu "<< ievt/2+1 << " adc_up " << adc_up << " adc_down " << adc_down << endl;
-          nb_evt += 1;
+      PadDisplay->Reset();
 
-          std::sort(listofT.begin(),listofT.end());
-          int   tmin=listofT[0];
-          int   tmax=listofT[listofT.size()-1];
-
-          cout << "       Tmin Tmax of Track " << tmin <<   "  "  <<tmax << endl;;
-          if (tmax >200) htmax->Fill(tmax);
-          if (tmin <200) htmin->Fill(tmin);
-
-          //gPad->Update();
-          //getchar();
-        }
-      }
-
-
-      if (ievt<50){
-        cout << " event " << ievt  <<endl;
-        //TCanvas* c1 = new TCanvas();
-        //c1->Clear();
-        PadDisplay->Draw("colz");
-        //c1->Print("../pad.png");
-        //PadSelection->Draw("colz");
-        gPad->Update();
-        cout << "Draw ADC?" << endl;
-        char res;
-        cin >> res;
-        if (res == 'y') {
-          bool cont_B = true;
-          while (cont_B) {
-            int j_int = 0;
-            int i_int = 0;
-            cout << "Enter j" << endl;
-            cin >> j_int;
-            cout << "Enter i" << endl;
-            cin >> i_int;
-
-            cout << j_int <<  "     " << i_int << endl;
-            int channel = -1;
-            for (unsigned long i = 0; i < iPad->size(); ++ i) {
-              if ((*iPad)[i] == i_int && (*jPad)[i] == j_int) {
-                channel = i;
-                break;
-              }
-            }
-
-            int it = -1;
-            for (uint ic=0; ic< listOfChannels->size(); ic++){
-              if (channel == (*listOfChannels)[ic])
-                it = ic;
-            }
-            cout << channel << endl;
-            cout << (*listOfSamples)[it].size() << endl;
-
-            TH1F* adc1=new TH1F("adc1","adc",(*listOfSamples)[it].size(),0,(*listOfSamples)[it].size());
-
-            for (unsigned long i = 0; i < (*listOfSamples)[it].size(); ++i) {
-              adc1->SetBinContent(i, 0);
-              if ((*listOfSamples)[it][i] > 0){
-                Double_t content = (*listOfSamples)[it][i];
-                cout << it << "   " <<  i << "  from "  << (*listOfSamples)[it].size() << "    " << content << endl;
-                adc1->SetBinContent(i, content);
-              }
-            }
-            adc1->Draw();
-            gPad->Update();
-            //c1->Print("../adc.png");
-
-            cout << "Continue?" << endl;
-            char cont;
-            cin >> cont;
-            if (cont == 'n')
-              cont_B = false;
-          }
-        }
-
-        cout << " enter to go on" <<endl;
-        getchar();
-      }
-
-      if (adc_sum > 0) {
-      }
+      cout << " enter to go on" <<endl;
+      char k[25];
+      cin >> k;
     }
   }
   if (ExitAtEnd) {getchar(); exit(0);}

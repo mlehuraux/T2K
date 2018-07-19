@@ -1,10 +1,10 @@
-#define THIS_NAME hit_map
+#define THIS_NAME ana
 #define NOINTERACTIVE_OUTPUT
 #define OVERRIDE_OPTIONS
 
 #include "ilc/common_header.h"
 
-void hit_map() {
+void ana() {
   vector<TString> listOfFiles;
   TString file="default.root";
   for (int iarg=0; iarg<gApplication->Argc(); iarg++){
@@ -29,12 +29,24 @@ void hit_map() {
     }
   }
 
+  int thr  = 100.;
+  double alpha = 0.7;
   TCanvas *c1 = new TCanvas("c1","evadc",900,700);
   TString prefix = "~/T2K/figure/T2KTPC/";
+  TH2F* PadDisplayGeo=new TH2F("PadDisplayGeo","X vs Y of hits",50,-17.15,17.15, 38,-18.13,18.13);
 
-  // define output
+  TH1F* ClusterCharge     = new TH1F("cluster_charge","Cluster charge",150,0,7000);
+  TH1F* ClusterNormCharge = new TH1F("cluster_norm_charge","Truncated mean energy deposit",150,0,4000);
+
+  TH1F* TimeMaximum       = new TH1F("time_max", "time of the maximum", 530, 0., 530.);
+  TH1F* TimeMaximumL      = new TH1F("time_maxL", "time of the maximum", 100, 0., 530.);
+
   TH2F* PadDisplayHIT=new TH2F("PadDisplay","I vs J of hits",38,-1.,37.,50,-1.,49.);
   TH2F* PadDisplayMAX=new TH2F("PadDisplay","I vs J of hits",38,-1.,37.,50,-1.,49.);
+
+  Int_t total_events = 0;
+  Int_t sel_events = 0;
+  Int_t filled_events = 0;
 
   //************************************************************
   //****************** LOOP OVER FILES  ************************
@@ -54,9 +66,21 @@ void hit_map() {
 
     vector<int> *iPad(0);
     vector<int> *jPad(0);
+    vector<double> *xPad(0);
+    vector<double> *yPad(0);
+
+    vector<double> *dxPad(0);
+    vector<double> *dyPad(0);
+
     TTree * tgeom= (TTree*) f->Get("femGeomTree");
     tgeom->SetBranchAddress("jPad", &jPad );
     tgeom->SetBranchAddress("iPad", &iPad );
+
+    tgeom->SetBranchAddress("xPad", &xPad );
+    tgeom->SetBranchAddress("yPad", &yPad );
+
+    tgeom->SetBranchAddress("dxPad", &dxPad );
+    tgeom->SetBranchAddress("dyPad", &dyPad );
     tgeom->GetEntry(0); // put into memory geometry info
     cout << "reading geometry" << endl;
     cout << "jPad->size() " << jPad->size() <<endl;
@@ -77,9 +101,6 @@ void hit_map() {
       if (Jmin > (*jPad)[i])
         Jmin = (*jPad)[i];
     }
-
-    cout << "J goes " << Jmin << "   " << Jmax << endl;
-    cout << "I goes " << Imin << "   " << Imax << endl;
 
     gStyle->SetPalette(1);
     gStyle->SetOptStat(0);
@@ -107,13 +128,14 @@ void hit_map() {
 
       t->GetEntry(ievt);
 
+      // clean for the next event
+      PadDisplayGeo->Reset();
+
       vector< vector<int> > PadDisplay;
       PadDisplay.resize(Jmax+1);
       for (int z=0; z <= Jmax; ++z)
         PadDisplay[z].resize(Imax+1, 0);
 
-      //for (int i = 0; i < 24; i++)
-      //  listofRow[i]=0;
 
       //************************************************************
       //*****************LOOP OVER CHANNELS ************************
@@ -122,31 +144,109 @@ void hit_map() {
         int chan= (*listOfChannels)[ic];
         // find out the maximum
         float adcmax=-1;
+        Int_t it_max = -1;
 
         // one maximum per channel
         for (uint it = 0; it < (*listOfSamples)[ic].size(); it++){
           int adc= (*listOfSamples)[ic][it];
-          if (adc>adcmax) {
-            adcmax=adc;
-            itmax=it;
+          if (adc>adcmax && adc > thr) {
+            adcmax = adc;
+            it_max = it;
           }
         }
 
         if (adcmax<0) continue; // remove noise
-
-        //listofRow[(*iPad)[chan]]=1; //the row has been hit
+        if ((*iPad)[chan] == Imin || (*iPad)[chan] == Imax ||
+            (*jPad)[chan] == Jmin || (*jPad)[chan] == Jmax)
+            continue;
 
         PadDisplay[(*jPad)[chan]][(*iPad)[chan]] = adcmax;
-        if (adcmax > 0)
-          PadDisplayHIT->Fill((*iPad)[chan], (*jPad)[chan], 1);
-        PadDisplayMAX->Fill((*iPad)[chan], (*jPad)[chan], adcmax);
+        if (chan < 1728)
+          PadDisplayGeo->Fill((*xPad)[chan],(*yPad)[chan], adcmax);
+
+        TimeMaximum->Fill(it_max);
+        TimeMaximumL->Fill(it_max);
       } //loop over channels
+      ++total_events;
+
+      // not empty
+      if (PadDisplayGeo->Integral() == 0)
+        continue;
+
+      ++filled_events;
+
+      PadDisplayGeo->Fit("pol1", "Q");
+      TF1* fit = PadDisplayGeo->GetFunction("pol1");
+
+      double quality = fit->GetChisquare() / fit->GetNDF();
+
+      // track-like
+      if (quality > 150.)
+        continue;
+
+      ++sel_events;
+
+      vector<Float_t > cluster_charge;
+      cluster_charge.clear();
+      for (Int_t it_j = 0; it_j < Jmax; ++it_j) {
+        Int_t cluster = 0;
+        for (Int_t it_i = 0; it_i < Imax; ++it_i) {
+          cluster += PadDisplay[it_j][it_i];
+          if (PadDisplay[it_j][it_i] > 0)
+            PadDisplayHIT->Fill(it_i, it_j, 1);
+          PadDisplayMAX->Fill(it_i, it_j, PadDisplay[it_j][it_i]);
+        }
+        if (cluster != 0) {
+          ClusterCharge->Fill(cluster);
+          cluster_charge.push_back(cluster);
+        }
+      }
+
+      sort(cluster_charge.begin(), cluster_charge.end());
+      Float_t norm_cluster = 0.;
+      Int_t i_max = round(alpha * cluster_charge.size());
+      for (int i = 0; i < std::min(i_max, int(cluster_charge.size())); ++i)
+        norm_cluster += cluster_charge[i];
+
+      norm_cluster *= 1 / (alpha * cluster_charge.size());
+
+      ClusterNormCharge->Fill(norm_cluster);
+
+
     } // loop over events
   } // loop over files
+  cout << endl;
+  gStyle->SetOptStat("RMne");
+
+  ClusterCharge->Draw();
+  c1->Print((prefix+"ClusterCharge.pdf").Data());
+
+
+  TF1* f1 = new TF1("f1", "( (x < [1] ) ? [0] * TMath::Gaus(x, [1], [2]) : [0] * TMath::Gaus(x, [1], [3]))", 0, 1300);
+  f1->SetParameters(200, 700, 50, 50);
+  f1->SetParName(0, "Const");
+  f1->SetParName(1, "Mean");
+  f1->SetParName(2, "Left sigma");
+  f1->SetParName(3, "Right sigma");
+  ClusterNormCharge->Fit("f1");
+
+  ClusterNormCharge->Draw();
+  c1->Print((prefix+"ClusterChargeNorm.pdf").Data());
+
+  TimeMaximum->Draw();
+  c1->Print((prefix+"TimeMaximum.pdf").Data());
+  TimeMaximumL->Draw();
+  c1->Print((prefix+"TimeMaximumL.pdf").Data());
 
   PadDisplayHIT->Draw("colz");
-  c1->Print((prefix+"pad_scan_hit.pdf").Data());
+  c1->Print((prefix+"pad_scan_hit_track.pdf").Data());
   PadDisplayMAX->Draw("colz");
-  c1->Print((prefix+"pad_scan_max.pdf").Data());
+  c1->Print((prefix+"pad_scan_max_track.pdf").Data());
+
+
+  cout << "Total events number     : " << total_events << endl;
+  cout << "Not empty events number : " << filled_events << endl;
+  cout << "Track events number     : " << sel_events << endl;
+
   return;
 }

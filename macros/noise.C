@@ -1,10 +1,10 @@
-#define THIS_NAME hit_map
+#define THIS_NAME noise
 #define NOINTERACTIVE_OUTPUT
 #define OVERRIDE_OPTIONS
 
 #include "ilc/common_header.h"
 
-void hit_map() {
+void noise() {
   vector<TString> listOfFiles;
   TString file="default.root";
   for (int iarg=0; iarg<gApplication->Argc(); iarg++){
@@ -29,17 +29,27 @@ void hit_map() {
     }
   }
 
+  TH2D* mean = new TH2D("mean_n", "Mean noise", 38,-1.,37.,50,-1.,49.);
+  TH2D* sigma = new TH2D("sigma_n", "Sigma noise", 38,-1.,37.,50,-1.,49.);
+
   TCanvas *c1 = new TCanvas("c1","evadc",900,700);
   TString prefix = "~/T2K/figure/T2KTPC/";
 
-  // define output
-  TH2F* PadDisplayHIT=new TH2F("PadDisplay","I vs J of hits",38,-1.,37.,50,-1.,49.);
-  TH2F* PadDisplayMAX=new TH2F("PadDisplay","I vs J of hits",38,-1.,37.,50,-1.,49.);
+  Int_t total_events = 0;
+  Int_t sel_events = 0;
+
+  vector< vector<float> > mean_adc;
+  vector< vector<float> > sigma_adc;
+  mean_adc.resize(35+1);
+  sigma_adc.resize(35+1);
+  for (int z=0; z <= 35; ++z) {
+    mean_adc[z].resize(47+1, 0);
+    sigma_adc[z].resize(47+1, 0);
+  }
 
   //************************************************************
   //****************** LOOP OVER FILES  ************************
   //************************************************************
-  vector< vector<int > > EventClusters;
 
   TFile*f=0;
   for (uint ifile=0;ifile< listOfFiles.size();ifile++){
@@ -54,9 +64,21 @@ void hit_map() {
 
     vector<int> *iPad(0);
     vector<int> *jPad(0);
+    vector<double> *xPad(0);
+    vector<double> *yPad(0);
+
+    vector<double> *dxPad(0);
+    vector<double> *dyPad(0);
+
     TTree * tgeom= (TTree*) f->Get("femGeomTree");
     tgeom->SetBranchAddress("jPad", &jPad );
     tgeom->SetBranchAddress("iPad", &iPad );
+
+    tgeom->SetBranchAddress("xPad", &xPad );
+    tgeom->SetBranchAddress("yPad", &yPad );
+
+    tgeom->SetBranchAddress("dxPad", &dxPad );
+    tgeom->SetBranchAddress("dyPad", &dyPad );
     tgeom->GetEntry(0); // put into memory geometry info
     cout << "reading geometry" << endl;
     cout << "jPad->size() " << jPad->size() <<endl;
@@ -78,8 +100,8 @@ void hit_map() {
         Jmin = (*jPad)[i];
     }
 
-    cout << "J goes " << Jmin << "   " << Jmax << endl;
-    cout << "I goes " << Imin << "   " << Imax << endl;
+    cout << "Imax = " << Imax << " Imin = " << Imin << " Jmax = " << Jmax << " Jmin = " << Jmin << endl;
+    cout << "ImaxI = " << Imax << " IminI = " << Imin << " JmaxI = " << Jmax << " JminI = " << Jmin << endl;
 
     gStyle->SetPalette(1);
     gStyle->SetOptStat(0);
@@ -106,47 +128,74 @@ void hit_map() {
         cout <<"."<<flush;
 
       t->GetEntry(ievt);
+      ++total_events;
 
-      vector< vector<int> > PadDisplay;
-      PadDisplay.resize(Jmax+1);
-      for (int z=0; z <= Jmax; ++z)
-        PadDisplay[z].resize(Imax+1, 0);
+      //************************************************************
+      //*****************LOOP OVER CHANNELS ************************
+      //************************************************************
+      bool event = false;
+      for (uint ic=0; ic< listOfChannels->size(); ic++){
+        for (uint it = 0; it < 511; it++){
+          int adc= (*listOfSamples)[ic][it];
+          if (adc > 400) {
+            event = true;
+            break;
+          }
+        }
+        if (event) break;
+      } //loop over channels
 
-      //for (int i = 0; i < 24; i++)
-      //  listofRow[i]=0;
+      if (event)
+        continue;
+      ++sel_events;
 
       //************************************************************
       //*****************LOOP OVER CHANNELS ************************
       //************************************************************
       for (uint ic=0; ic< listOfChannels->size(); ic++){
         int chan= (*listOfChannels)[ic];
-        // find out the maximum
-        float adcmax=-1;
 
-        // one maximum per channel
-        for (uint it = 0; it < (*listOfSamples)[ic].size(); it++){
+        TH1D* histo =  new TH1D(Form("noise%i_%i", ievt, ic), Form("noise%i_%i", (*iPad)[chan], (*jPad)[chan]),
+          120, 200., 320.);
+        for (uint it = 0; it < listOfChannels->size(); it++){
           int adc= (*listOfSamples)[ic][it];
-          if (adc>adcmax) {
-            adcmax=adc;
-            itmax=it;
-          }
+          histo->Fill(adc);
         }
+        histo->Fit("gaus", "Q");
+        TF1 *fit = histo->GetFunction("gaus");
+        Float_t m     = fit->GetParameter(1);
+        Float_t s     = fit->GetParameter(2);
+        /*histo->Draw();
+        gPad->Update();
+        char k[20];
+        cin >> k;*/
+        mean_adc[(*iPad)[chan]][(*jPad)[chan]] += m;
+        sigma_adc[(*iPad)[chan]][(*jPad)[chan]] += s;
 
-        if (adcmax<0) continue; // remove noise
-
-        //listofRow[(*iPad)[chan]]=1; //the row has been hit
-
-        PadDisplay[(*jPad)[chan]][(*iPad)[chan]] = adcmax;
-        if (adcmax > 0)
-          PadDisplayHIT->Fill((*iPad)[chan], (*jPad)[chan], 1);
-        PadDisplayMAX->Fill((*iPad)[chan], (*jPad)[chan], adcmax);
-      } //loop over channels
+        histo->Reset();
+        delete histo;
+      } // 2nd loop over channel
     } // loop over events
   } // loop over files
+  cout << endl;
 
-  PadDisplayHIT->Draw("colz");
-  c1->Print((prefix+"pad_scan_hit.pdf").Data());
-  PadDisplayMAX->Draw("colz");
-  c1->Print((prefix+"pad_scan_max.pdf").Data());
+  for (int it_j = 0; it_j <= 47; ++it_j) {
+    for (int it_i = 0; it_i <= 35; ++it_i) {
+      mean->Fill(it_i, it_j, mean_adc[it_i][it_j] / sel_events);
+      sigma->Fill(it_i, it_j, sigma_adc[it_i][it_j] / sel_events);
+    }
+  }
+
+  gStyle->SetOptStat(0);
+  mean->GetZaxis()->SetRangeUser(240., 260.);
+  mean->Draw("colz");
+  c1->Print((prefix+"MeannNoise.pdf").Data());
+
+  sigma->Draw("colz");
+  c1->Print((prefix+"SigmaNoise.pdf").Data());
+
+  cout << "Total events number     : " << total_events << endl;
+  cout << "Sel events number       : " << sel_events << endl;
+
   return;
 }
