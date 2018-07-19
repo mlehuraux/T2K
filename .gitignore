@@ -1,6 +1,10 @@
 ilc_macros/
 *mydict*
 *data_acq/
-.*/
 bin/
 lib/
+*.o
+*.d
+*pcm
+/DataWriter_devel/interface/dict_interface.cc
+/DataWriter_devel/interface/dict_interface.h
