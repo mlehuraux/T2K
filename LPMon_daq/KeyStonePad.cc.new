@@ -1,0 +1,167 @@
+
+#include <iostream>
+
+using namespace std;
+
+#include "TH1F.h"
+#include "TROOT.h"
+
+#include "TCanvas.h"
+#include "TPolyLine.h"
+#include "TMath.h"
+#include "RQ_OBJECT.h"
+
+#include "KeyStonePad.h"
+
+namespace {
+  const int kMaxColumns = 72;
+}
+
+//-----------------------------------------------------------------------------
+// Primitive Class for KeyStone Pad :
+//-----------------------------------
+TCanvas *KeyStonePad::fPad;
+
+KeyStonePad::KeyStonePad(int id, double *x, double *y)
+{
+  fId = id;
+
+  const int kNPoints = 4;
+  double xCorner[kNPoints+1];  // +1 to close
+  double yCorner[kNPoints+1];
+  if ( x!=0 && y!=0 ) {
+    for (int i=0; i<kNPoints; i++) {
+      xCorner[i] = x[i];
+      yCorner[i] = y[i];
+    }
+    xCorner[kNPoints] = x[0];
+    yCorner[kNPoints] = y[0];
+    
+    fPolyLine = new TPolyLine(kNPoints+1, xCorner, yCorner);
+    fPolyLine->SetLineColor(1);
+    fPolyLine->SetLineWidth(2);
+    fPolyLine->Draw("f");
+  }
+  else {
+    fPolyLine = 0;
+  }
+}
+
+// Mouse button event handler
+void KeyStonePad::ExecuteEvent(Int_t event, Int_t px, Int_t py, TObject *sel)
+{
+  //const int width  = 400;
+  //const int height = 300;
+  const int width  = 900;
+  const int height = 400;
+  static bool first = true;
+
+  static TCanvas *cADC;
+
+  if ( event == kButton1Down ) {
+
+  
+    //double *x = fPolyLine->GetX();
+    //double *y = fPolyLine->GetY();
+    //
+    //cout << "padId = " << fId << " is inside ? " 
+    //     << TMath::IsInside(fPad->AbsPixeltoX(px), fPad->AbsPixeltoY(py), 
+    //                        5, x, y) << " : " 
+    //     << "x[0]==x[4] ? " << (x[0]==x[4]) << ", "
+    //     << "y[0]==y[4] ? " << (y[0]==y[4]) << ", "
+    //     << "px=" << px << ", " << "py=" << py << ", " 
+    //     << "gPad->AbsPixeltoX(px)=" << fPad->AbsPixeltoX(px) << ", "
+    //     << "gPad->AbsPixeltoY(py)=" << fPad->AbsPixeltoY(py) << ", "
+    //     << "gPad->GetName()="       << fPad->GetName() << endl;
+
+    // Is the mouse inside ?
+    if ( TMath::IsInside(fPad->AbsPixeltoX(px), fPad->AbsPixeltoY(py), 
+                         5, fPolyLine->GetX(), fPolyLine->GetY())) {
+
+      if ( first ) {
+        cADC = new TCanvas("cADC", "ADC", width, height);
+        cADC->Divide(3,1);
+        first = false;
+      }
+
+      //cout << "We're in a pad : " << fId << " (hid=" << fHid << ")" << endl;
+
+      // Get layout info
+      int row = fId / kMaxColumns;
+      int col = fId % kMaxColumns;
+
+
+      // Left   -\  need map !  <== (r,w) -> pad id -> chan id,  OR
+      // Right  -/  be able to get pointer of other obj by using index
+      leftPadId  = row*kMaxColumns + (col-1);
+      rightPadId = row*kMaxColumns + (col+1);
+
+      TVirtualPad* gPadOld = gPad;
+
+      // Just in case check if the canvas is destroyed
+      cADC = dynamic_cast<TCanvas*>( gROOT->FindObject("cADC") );
+      if (!cADC) {
+        cout << "Creating a window for ADC waveform" << endl;
+        cADC = new TCanvas("cADC", "ADC", width, height);
+      }
+
+      cADC->cd(); // NEED to change gPad to point this to make Draw() work cor.
+
+      char hname[20];
+      sprintf(hname, "hADC %d", fHid);
+      TH1F *h0 = dynamic_cast<TH1F*>( gROOT->FindObject( hname ) );
+
+      sprintf(hname, "hADC %d", fHid);
+      TH1F *h0 = dynamic_cast<TH1F*>( gROOT->FindObject( hname ) );
+
+      sprintf(hname, "hADC %d", fHid);
+      TH1F *h0 = dynamic_cast<TH1F*>( gROOT->FindObject( hname ) );
+
+      
+      if ( h ) {
+        //cout << "Found hist object : " << h->GetName() << endl;
+        h->SetStats( kFALSE );
+        h->Draw();
+        cADC->Update();
+      }
+      else {
+        cout << "Can't find hist object for hid = " << fHid << endl;
+      }
+
+      gPad = gPadOld;
+
+      KeyStonePadSelected( fId );
+    }
+  }
+
+  // If so, draw histogram in a new window
+  
+}
+
+void KeyStonePad::KeyStonePadSelected(Int_t) 
+{
+   // Emit KeyStonePadSelected() signal.
+
+   Emit("KeyStonePadSelected(Int_t)", fId);
+}
+
+
+/*
+void PrintSelectedPadInfo( Int_t padId )
+{
+  cout << "SelectedPadInfo: " ;
+
+  int row = padId / kMaxCols;
+  int col = padId % kMaxCols;
+  int hId = iCHAN[padId];
+
+  //static TCanvas *cADC = new TCanvas("cADC","ADC", 200, 150);
+  //cADC->cd();
+      
+  //cout << "SelectedPadInfo: " 
+  cout << "SelectedPadInfo: " 
+       << "row=" << row << ", "
+       << "col=" << col << ", "
+       << "histId=" << hId << endl;
+}
+*/

@@ -1,0 +1,1762 @@
+  *******************************************
+  *                                         *
+  *        W E L C O M E  to  R O O T       *
+  *                                         *
+  *   Version   5.20/00      24 June 2008   *
+  *                                         *
+  *  You are welcome to visit our Web site  *
+  *          http://root.cern.ch            *
+  *                                         *
+  *******************************************
+
+ROOT 5.20/00 (trunk@24524, Aug 19 2008, 00:36:00 on linux)
+
+CINT/ROOT C/C++ Interpreter version 5.16.29, Jan 08, 2008
+Type ? for help. Commands must be C++ statements.
+Enclose multiple statements between { }.
+Running GUI environment for MM monitoring ...
+--------------------------------
+Opening layout file ...
+Prepare mapping ...
+Line:    0  FEC:  0  ASIC:  0  Chan:   67  row,col: 23,71     0,23,71
+Line:    1  FEC:  0  ASIC:  0  Chan:   61  row,col: 22,71     0,22,71
+Line:    2  FEC:  0  ASIC:  0  Chan:   55  row,col: 21,71     0,21,71
+Line:    3  FEC:  0  ASIC:  0  Chan:   49  row,col: 20,71     0,20,71
+Line:    4  FEC:  0  ASIC:  0  Chan:   43  row,col: 19,71     0,19,71
+Line:    5  FEC:  0  ASIC:  0  Chan:   37  row,col: 18,71     0,18,71
+Line:    6  FEC:  0  ASIC:  0  Chan:   34  row,col: 17,71     0,17,71
+Line:    7  FEC:  0  ASIC:  0  Chan:   28  row,col: 16,71     0,16,71
+Line:    8  FEC:  0  ASIC:  0  Chan:   22  row,col: 15,71     0,15,71
+Line:    9  FEC:  0  ASIC:  0  Chan:   16  row,col: 14,71     0,14,71
+Line:   10  FEC:  0  ASIC:  0  Chan:   10  row,col: 13,71     0,13,71
+Line:   11  FEC:  0  ASIC:  0  Chan:    4  row,col: 12,71     0,12,71
+Line:   12  FEC:  0  ASIC:  1  Chan:  143  row,col: 23,65     1,23,65
+Line:   13  FEC:  0  ASIC:  1  Chan:  132  row,col: 22,65     1,22,65
+Line:   14  FEC:  0  ASIC:  1  Chan:  126  row,col: 21,65     1,21,65
+Line:   15  FEC:  0  ASIC:  1  Chan:   73  row,col: 20,65     1,20,65
+Line:   16  FEC:  0  ASIC:  1  Chan:  121  row,col: 19,65     1,19,65
+Line:   17  FEC:  0  ASIC:  1  Chan:  115  row,col: 18,65     1,18,65
+Line:   18  FEC:  0  ASIC:  1  Chan:  109  row,col: 17,65     1,17,65
+Line:   19  FEC:  0  ASIC:  1  Chan:  103  row,col: 16,65     1,16,65
+Line:   20  FEC:  0  ASIC:  1  Chan:   97  row,col: 15,65     1,15,65
+Line:   21  FEC:  0  ASIC:  1  Chan:   92  row,col: 14,65     1,14,65
+Line:   22  FEC:  0  ASIC:  1  Chan:   86  row,col: 13,65     1,13,65
+Line:   23  FEC:  0  ASIC:  1  Chan:   79  row,col: 12,65     1,12,65
+Line:   24  FEC:  0  ASIC:  2  Chan:  215  row,col: 11,65     2,11,65
+Line:   25  FEC:  0  ASIC:  2  Chan:  205  row,col: 10,65     2,10,65
+Line:   26  FEC:  0  ASIC:  2  Chan:  199  row,col:  9,65     2,9,65
+Line:   27  FEC:  0  ASIC:  2  Chan:  193  row,col:  8,65     2,8,65
+Line:   28  FEC:  0  ASIC:  2  Chan:  190  row,col:  7,65     2,7,65
+Line:   29  FEC:  0  ASIC:  2  Chan:  184  row,col:  6,65     2,6,65
+Line:   30  FEC:  0  ASIC:  2  Chan:  178  row,col:  5,65     2,5,65
+Line:   31  FEC:  0  ASIC:  2  Chan:  179  row,col:  4,65     2,4,65
+Line:   32  FEC:  0  ASIC:  2  Chan:  176  row,col:  3,65     2,3,65
+Line:   33  FEC:  0  ASIC:  2  Chan:  165  row,col:  2,65     2,2,65
+Line:   34  FEC:  0  ASIC:  2  Chan:  145  row,col:  1,65     2,1,65
+Line:   35  FEC:  0  ASIC:  2  Chan:  144  row,col:  0,65     2,0,65
+Line:   36  FEC:  0  ASIC:  3  Chan:  282  row,col: 11,71     3,11,71
+Line:   37  FEC:  0  ASIC:  3  Chan:  276  row,col: 10,71     3,10,71
+Line:   38  FEC:  0  ASIC:  3  Chan:  270  row,col:  9,71     3,9,71
+Line:   39  FEC:  0  ASIC:  3  Chan:  264  row,col:  8,71     3,8,71
+Line:   40  FEC:  0  ASIC:  3  Chan:  258  row,col:  7,71     3,7,71
+Line:   41  FEC:  0  ASIC:  3  Chan:  257  row,col:  6,71     3,6,71
+Line:   42  FEC:  0  ASIC:  3  Chan:  251  row,col:  5,71     3,5,71
+Line:   43  FEC:  0  ASIC:  3  Chan:  246  row,col:  4,71     3,4,71
+Line:   44  FEC:  0  ASIC:  3  Chan:  240  row,col:  3,71     3,3,71
+Line:   45  FEC:  0  ASIC:  3  Chan:  233  row,col:  2,71     3,2,71
+Line:   46  FEC:  0  ASIC:  3  Chan:  217  row,col:  1,71     3,1,71
+Line:   47  FEC:  0  ASIC:  3  Chan:  226  row,col:  0,71     3,0,71
+Line:   48  FEC:  0  ASIC:  0  Chan:   66  row,col: 23,70     0,23,70
+Line:   49  FEC:  0  ASIC:  0  Chan:   60  row,col: 22,70     0,22,70
+Line:   50  FEC:  0  ASIC:  0  Chan:   54  row,col: 21,70     0,21,70
+Line:   51  FEC:  0  ASIC:  0  Chan:   48  row,col: 20,70     0,20,70
+Line:   52  FEC:  0  ASIC:  0  Chan:   42  row,col: 19,70     0,19,70
+Line:   53  FEC:  0  ASIC:  0  Chan:   36  row,col: 18,70     0,18,70
+Line:   54  FEC:  0  ASIC:  0  Chan:   35  row,col: 17,70     0,17,70
+Line:   55  FEC:  0  ASIC:  0  Chan:   29  row,col: 16,70     0,16,70
+Line:   56  FEC:  0  ASIC:  0  Chan:   23  row,col: 15,70     0,15,70
+Line:   57  FEC:  0  ASIC:  0  Chan:   17  row,col: 14,70     0,14,70
+Line:   58  FEC:  0  ASIC:  0  Chan:   11  row,col: 13,70     0,13,70
+Line:   59  FEC:  0  ASIC:  0  Chan:    5  row,col: 12,70     0,12,70
+Line:   60  FEC:  0  ASIC:  1  Chan:  142  row,col: 23,64     1,23,64
+Line:   61  FEC:  0  ASIC:  1  Chan:  133  row,col: 22,64     1,22,64
+Line:   62  FEC:  0  ASIC:  1  Chan:  127  row,col: 21,64     1,21,64
+Line:   63  FEC:  0  ASIC:  1  Chan:   72  row,col: 20,64     1,20,64
+Line:   64  FEC:  0  ASIC:  1  Chan:  120  row,col: 19,64     1,19,64
+Line:   65  FEC:  0  ASIC:  1  Chan:  114  row,col: 18,64     1,18,64
+Line:   66  FEC:  0  ASIC:  1  Chan:  108  row,col: 17,64     1,17,64
+Line:   67  FEC:  0  ASIC:  1  Chan:  102  row,col: 16,64     1,16,64
+Line:   68  FEC:  0  ASIC:  1  Chan:   96  row,col: 15,64     1,15,64
+Line:   69  FEC:  0  ASIC:  1  Chan:   90  row,col: 14,64     1,14,64
+Line:   70  FEC:  0  ASIC:  1  Chan:   85  row,col: 13,64     1,13,64
+Line:   71  FEC:  0  ASIC:  1  Chan:   78  row,col: 12,64     1,12,64
+Line:   72  FEC:  0  ASIC:  2  Chan:  214  row,col: 11,64     2,11,64
+Line:   73  FEC:  0  ASIC:  2  Chan:  204  row,col: 10,64     2,10,64
+Line:   74  FEC:  0  ASIC:  2  Chan:  198  row,col:  9,64     2,9,64
+Line:   75  FEC:  0  ASIC:  2  Chan:  192  row,col:  8,64     2,8,64
+Line:   76  FEC:  0  ASIC:  2  Chan:  191  row,col:  7,64     2,7,64
+Line:   77  FEC:  0  ASIC:  2  Chan:  185  row,col:  6,64     2,6,64
+Line:   78  FEC:  0  ASIC:  2  Chan:  177  row,col:  5,64     2,5,64
+Line:   79  FEC:  0  ASIC:  2  Chan:  174  row,col:  4,64     2,4,64
+Line:   80  FEC:  0  ASIC:  2  Chan:  175  row,col:  3,64     2,3,64
+Line:   81  FEC:  0  ASIC:  2  Chan:  162  row,col:  2,64     2,2,64
+Line:   82  FEC:  0  ASIC:  2  Chan:  147  row,col:  1,64     2,1,64
+Line:   83  FEC:  0  ASIC:  2  Chan:  146  row,col:  0,64     2,0,64
+Line:   84  FEC:  0  ASIC:  3  Chan:  283  row,col: 11,70     3,11,70
+Line:   85  FEC:  0  ASIC:  3  Chan:  277  row,col: 10,70     3,10,70
+Line:   86  FEC:  0  ASIC:  3  Chan:  271  row,col:  9,70     3,9,70
+Line:   87  FEC:  0  ASIC:  3  Chan:  265  row,col:  8,70     3,8,70
+Line:   88  FEC:  0  ASIC:  3  Chan:  259  row,col:  7,70     3,7,70
+Line:   89  FEC:  0  ASIC:  3  Chan:  256  row,col:  6,70     3,6,70
+Line:   90  FEC:  0  ASIC:  3  Chan:  250  row,col:  5,70     3,5,70
+Line:   91  FEC:  0  ASIC:  3  Chan:  245  row,col:  4,70     3,4,70
+Line:   92  FEC:  0  ASIC:  3  Chan:  239  row,col:  3,70     3,3,70
+Line:   93  FEC:  0  ASIC:  3  Chan:  232  row,col:  2,70     3,2,70
+Line:   94  FEC:  0  ASIC:  3  Chan:  219  row,col:  1,70     3,1,70
+Line:   95  FEC:  0  ASIC:  3  Chan:  224  row,col:  0,70     3,0,70
+Line:   96  FEC:  0  ASIC:  0  Chan:   69  row,col: 23,69     0,23,69
+Line:   97  FEC:  0  ASIC:  0  Chan:   63  row,col: 22,69     0,22,69
+Line:   98  FEC:  0  ASIC:  0  Chan:   57  row,col: 21,69     0,21,69
+Line:   99  FEC:  0  ASIC:  0  Chan:   51  row,col: 20,69     0,20,69
+Line:  100  FEC:  0  ASIC:  0  Chan:   45  row,col: 19,69     0,19,69
+Line:  101  FEC:  0  ASIC:  0  Chan:   39  row,col: 18,69     0,18,69
+Line:  102  FEC:  0  ASIC:  0  Chan:   32  row,col: 17,69     0,17,69
+Line:  103  FEC:  0  ASIC:  0  Chan:   26  row,col: 16,69     0,16,69
+Line:  104  FEC:  0  ASIC:  0  Chan:   20  row,col: 15,69     0,15,69
+Line:  105  FEC:  0  ASIC:  0  Chan:   14  row,col: 14,69     0,14,69
+Line:  106  FEC:  0  ASIC:  0  Chan:    8  row,col: 13,69     0,13,69
+Line:  107  FEC:  0  ASIC:  0  Chan:    2  row,col: 12,69     0,12,69
+Line:  108  FEC:  0  ASIC:  1  Chan:  141  row,col: 23,63     1,23,63
+Line:  109  FEC:  0  ASIC:  1  Chan:  134  row,col: 22,63     1,22,63
+Line:  110  FEC:  0  ASIC:  1  Chan:  128  row,col: 21,63     1,21,63
+Line:  111  FEC:  0  ASIC:  1  Chan:  122  row,col: 20,63     1,20,63
+Line:  112  FEC:  0  ASIC:  1  Chan:  116  row,col: 19,63     1,19,63
+Line:  113  FEC:  0  ASIC:  1  Chan:  110  row,col: 18,63     1,18,63
+Line:  114  FEC:  0  ASIC:  1  Chan:  104  row,col: 17,63     1,17,63
+Line:  115  FEC:  0  ASIC:  1  Chan:  101  row,col: 16,63     1,16,63
+Line:  116  FEC:  0  ASIC:  1  Chan:   95  row,col: 15,63     1,15,63
+Line:  117  FEC:  0  ASIC:  1  Chan:   89  row,col: 14,63     1,14,63
+Line:  118  FEC:  0  ASIC:  1  Chan:   83  row,col: 13,63     1,13,63
+Line:  119  FEC:  0  ASIC:  1  Chan:   77  row,col: 12,63     1,12,63
+Line:  120  FEC:  0  ASIC:  2  Chan:  213  row,col: 11,63     2,11,63
+Line:  121  FEC:  0  ASIC:  2  Chan:  207  row,col: 10,63     2,10,63
+Line:  122  FEC:  0  ASIC:  2  Chan:  201  row,col:  9,63     2,9,63
+Line:  123  FEC:  0  ASIC:  2  Chan:  195  row,col:  8,63     2,8,63
+Line:  124  FEC:  0  ASIC:  2  Chan:  188  row,col:  7,63     2,7,63
+Line:  125  FEC:  0  ASIC:  2  Chan:  182  row,col:  6,63     2,6,63
+Line:  126  FEC:  0  ASIC:  2  Chan:  172  row,col:  5,63     2,5,63
+Line:  127  FEC:  0  ASIC:  2  Chan:  173  row,col:  4,63     2,4,63
+Line:  128  FEC:  0  ASIC:  2  Chan:  170  row,col:  3,63     2,3,63
+Line:  129  FEC:  0  ASIC:  2  Chan:  163  row,col:  2,63     2,2,63
+Line:  130  FEC:  0  ASIC:  2  Chan:  149  row,col:  1,63     2,1,63
+Line:  131  FEC:  0  ASIC:  2  Chan:  148  row,col:  0,63     2,0,63
+Line:  132  FEC:  0  ASIC:  3  Chan:  284  row,col: 11,69     3,11,69
+Line:  133  FEC:  0  ASIC:  3  Chan:  278  row,col: 10,69     3,10,69
+Line:  134  FEC:  0  ASIC:  3  Chan:  272  row,col:  9,69     3,9,69
+Line:  135  FEC:  0  ASIC:  3  Chan:  266  row,col:  8,69     3,8,69
+Line:  136  FEC:  0  ASIC:  3  Chan:  260  row,col:  7,69     3,7,69
+Line:  137  FEC:  0  ASIC:  3  Chan:  255  row,col:  6,69     3,6,69
+Line:  138  FEC:  0  ASIC:  3  Chan:  249  row,col:  5,69     3,5,69
+Line:  139  FEC:  0  ASIC:  3  Chan:  243  row,col:  4,69     3,4,69
+Line:  140  FEC:  0  ASIC:  3  Chan:  238  row,col:  3,69     3,3,69
+Line:  141  FEC:  0  ASIC:  3  Chan:  231  row,col:  2,69     3,2,69
+Line:  142  FEC:  0  ASIC:  3  Chan:  221  row,col:  1,69     3,1,69
+Line:  143  FEC:  0  ASIC:  3  Chan:  222  row,col:  0,69     3,0,69
+Line:  144  FEC:  0  ASIC:  0  Chan:   68  row,col: 23,68     0,23,68
+Line:  145  FEC:  0  ASIC:  0  Chan:   62  row,col: 22,68     0,22,68
+Line:  146  FEC:  0  ASIC:  0  Chan:   56  row,col: 21,68     0,21,68
+Line:  147  FEC:  0  ASIC:  0  Chan:   50  row,col: 20,68     0,20,68
+Line:  148  FEC:  0  ASIC:  0  Chan:   44  row,col: 19,68     0,19,68
+Line:  149  FEC:  0  ASIC:  0  Chan:   38  row,col: 18,68     0,18,68
+Line:  150  FEC:  0  ASIC:  0  Chan:   33  row,col: 17,68     0,17,68
+Line:  151  FEC:  0  ASIC:  0  Chan:   27  row,col: 16,68     0,16,68
+Line:  152  FEC:  0  ASIC:  0  Chan:   21  row,col: 15,68     0,15,68
+Line:  153  FEC:  0  ASIC:  0  Chan:   15  row,col: 14,68     0,14,68
+Line:  154  FEC:  0  ASIC:  0  Chan:    9  row,col: 13,68     0,13,68
+Line:  155  FEC:  0  ASIC:  0  Chan:    3  row,col: 12,68     0,12,68
+Line:  156  FEC:  0  ASIC:  1  Chan:  140  row,col: 23,62     1,23,62
+Line:  157  FEC:  0  ASIC:  1  Chan:  135  row,col: 22,62     1,22,62
+Line:  158  FEC:  0  ASIC:  1  Chan:  129  row,col: 21,62     1,21,62
+Line:  159  FEC:  0  ASIC:  1  Chan:  123  row,col: 20,62     1,20,62
+Line:  160  FEC:  0  ASIC:  1  Chan:  117  row,col: 19,62     1,19,62
+Line:  161  FEC:  0  ASIC:  1  Chan:  111  row,col: 18,62     1,18,62
+Line:  162  FEC:  0  ASIC:  1  Chan:  105  row,col: 17,62     1,17,62
+Line:  163  FEC:  0  ASIC:  1  Chan:  100  row,col: 16,62     1,16,62
+Line:  164  FEC:  0  ASIC:  1  Chan:   94  row,col: 15,62     1,15,62
+Line:  165  FEC:  0  ASIC:  1  Chan:   88  row,col: 14,62     1,14,62
+Line:  166  FEC:  0  ASIC:  1  Chan:   82  row,col: 13,62     1,13,62
+Line:  167  FEC:  0  ASIC:  1  Chan:   76  row,col: 12,62     1,12,62
+Line:  168  FEC:  0  ASIC:  2  Chan:  212  row,col: 11,62     2,11,62
+Line:  169  FEC:  0  ASIC:  2  Chan:  206  row,col: 10,62     2,10,62
+Line:  170  FEC:  0  ASIC:  2  Chan:  200  row,col:  9,62     2,9,62
+Line:  171  FEC:  0  ASIC:  2  Chan:  194  row,col:  8,62     2,8,62
+Line:  172  FEC:  0  ASIC:  2  Chan:  189  row,col:  7,62     2,7,62
+Line:  173  FEC:  0  ASIC:  2  Chan:  183  row,col:  6,62     2,6,62
+Line:  174  FEC:  0  ASIC:  2  Chan:  168  row,col:  5,62     2,5,62
+Line:  175  FEC:  0  ASIC:  2  Chan:  171  row,col:  4,62     2,4,62
+Line:  176  FEC:  0  ASIC:  2  Chan:  167  row,col:  3,62     2,3,62
+Line:  177  FEC:  0  ASIC:  2  Chan:  159  row,col:  2,62     2,2,62
+Line:  178  FEC:  0  ASIC:  2  Chan:  151  row,col:  1,62     2,1,62
+Line:  179  FEC:  0  ASIC:  2  Chan:  150  row,col:  0,62     2,0,62
+Line:  180  FEC:  0  ASIC:  3  Chan:  285  row,col: 11,68     3,11,68
+Line:  181  FEC:  0  ASIC:  3  Chan:  279  row,col: 10,68     3,10,68
+Line:  182  FEC:  0  ASIC:  3  Chan:  273  row,col:  9,68     3,9,68
+Line:  183  FEC:  0  ASIC:  3  Chan:  267  row,col:  8,68     3,8,68
+Line:  184  FEC:  0  ASIC:  3  Chan:  261  row,col:  7,68     3,7,68
+Line:  185  FEC:  0  ASIC:  3  Chan:  254  row,col:  6,68     3,6,68
+Line:  186  FEC:  0  ASIC:  3  Chan:  248  row,col:  5,68     3,5,68
+Line:  187  FEC:  0  ASIC:  3  Chan:  242  row,col:  4,68     3,4,68
+Line:  188  FEC:  0  ASIC:  3  Chan:  237  row,col:  3,68     3,3,68
+Line:  189  FEC:  0  ASIC:  3  Chan:  230  row,col:  2,68     3,2,68
+Line:  190  FEC:  0  ASIC:  3  Chan:  223  row,col:  1,68     3,1,68
+Line:  191  FEC:  0  ASIC:  3  Chan:  220  row,col:  0,68     3,0,68
+Line:  192  FEC:  0  ASIC:  0  Chan:   71  row,col: 23,67     0,23,67
+Line:  193  FEC:  0  ASIC:  0  Chan:   65  row,col: 22,67     0,22,67
+Line:  194  FEC:  0  ASIC:  0  Chan:   59  row,col: 21,67     0,21,67
+Line:  195  FEC:  0  ASIC:  0  Chan:   53  row,col: 20,67     0,20,67
+Line:  196  FEC:  0  ASIC:  0  Chan:   47  row,col: 19,67     0,19,67
+Line:  197  FEC:  0  ASIC:  0  Chan:   41  row,col: 18,67     0,18,67
+Line:  198  FEC:  0  ASIC:  0  Chan:   30  row,col: 17,67     0,17,67
+Line:  199  FEC:  0  ASIC:  0  Chan:   24  row,col: 16,67     0,16,67
+Line:  200  FEC:  0  ASIC:  0  Chan:   18  row,col: 15,67     0,15,67
+Line:  201  FEC:  0  ASIC:  0  Chan:   12  row,col: 14,67     0,14,67
+Line:  202  FEC:  0  ASIC:  0  Chan:    6  row,col: 13,67     0,13,67
+Line:  203  FEC:  0  ASIC:  0  Chan:    0  row,col: 12,67     0,12,67
+Line:  204  FEC:  0  ASIC:  1  Chan:  139  row,col: 23,61     1,23,61
+Line:  205  FEC:  0  ASIC:  1  Chan:  136  row,col: 22,61     1,22,61
+Line:  206  FEC:  0  ASIC:  1  Chan:  130  row,col: 21,61     1,21,61
+Line:  207  FEC:  0  ASIC:  1  Chan:  124  row,col: 20,61     1,20,61
+Line:  208  FEC:  0  ASIC:  1  Chan:  118  row,col: 19,61     1,19,61
+Line:  209  FEC:  0  ASIC:  1  Chan:  112  row,col: 18,61     1,18,61
+Line:  210  FEC:  0  ASIC:  1  Chan:  106  row,col: 17,61     1,17,61
+Line:  211  FEC:  0  ASIC:  1  Chan:   99  row,col: 16,61     1,16,61
+Line:  212  FEC:  0  ASIC:  1  Chan:   93  row,col: 15,61     1,15,61
+Line:  213  FEC:  0  ASIC:  1  Chan:   87  row,col: 14,61     1,14,61
+Line:  214  FEC:  0  ASIC:  1  Chan:   81  row,col: 13,61     1,13,61
+Line:  215  FEC:  0  ASIC:  1  Chan:   75  row,col: 12,61     1,12,61
+Line:  216  FEC:  0  ASIC:  2  Chan:  211  row,col: 11,61     2,11,61
+Line:  217  FEC:  0  ASIC:  2  Chan:  209  row,col: 10,61     2,10,61
+Line:  218  FEC:  0  ASIC:  2  Chan:  203  row,col:  9,61     2,9,61
+Line:  219  FEC:  0  ASIC:  2  Chan:  197  row,col:  8,61     2,8,61
+Line:  220  FEC:  0  ASIC:  2  Chan:  186  row,col:  7,61     2,7,61
+Line:  221  FEC:  0  ASIC:  2  Chan:  180  row,col:  6,61     2,6,61
+Line:  222  FEC:  0  ASIC:  2  Chan:  169  row,col:  5,61     2,5,61
+Line:  223  FEC:  0  ASIC:  2  Chan:  160  row,col:  4,61     2,4,61
+Line:  224  FEC:  0  ASIC:  2  Chan:  164  row,col:  3,61     2,3,61
+Line:  225  FEC:  0  ASIC:  2  Chan:  156  row,col:  2,61     2,2,61
+Line:  226  FEC:  0  ASIC:  2  Chan:  153  row,col:  1,61     2,1,61
+Line:  227  FEC:  0  ASIC:  2  Chan:  152  row,col:  0,61     2,0,61
+Line:  228  FEC:  0  ASIC:  3  Chan:  286  row,col: 11,67     3,11,67
+Line:  229  FEC:  0  ASIC:  3  Chan:  280  row,col: 10,67     3,10,67
+Line:  230  FEC:  0  ASIC:  3  Chan:  274  row,col:  9,67     3,9,67
+Line:  231  FEC:  0  ASIC:  3  Chan:  268  row,col:  8,67     3,8,67
+Line:  232  FEC:  0  ASIC:  3  Chan:  262  row,col:  7,67     3,7,67
+Line:  233  FEC:  0  ASIC:  3  Chan:  253  row,col:  6,67     3,6,67
+Line:  234  FEC:  0  ASIC:  3  Chan:  247  row,col:  5,67     3,5,67
+Line:  235  FEC:  0  ASIC:  3  Chan:  241  row,col:  4,67     3,4,67
+Line:  236  FEC:  0  ASIC:  3  Chan:  236  row,col:  3,67     3,3,67
+Line:  237  FEC:  0  ASIC:  3  Chan:  229  row,col:  2,67     3,2,67
+Line:  238  FEC:  0  ASIC:  3  Chan:  225  row,col:  1,67     3,1,67
+Line:  239  FEC:  0  ASIC:  3  Chan:  218  row,col:  0,67     3,0,67
+Line:  240  FEC:  0  ASIC:  0  Chan:   70  row,col: 23,66     0,23,66
+Line:  241  FEC:  0  ASIC:  0  Chan:   64  row,col: 22,66     0,22,66
+Line:  242  FEC:  0  ASIC:  0  Chan:   58  row,col: 21,66     0,21,66
+Line:  243  FEC:  0  ASIC:  0  Chan:   52  row,col: 20,66     0,20,66
+Line:  244  FEC:  0  ASIC:  0  Chan:   46  row,col: 19,66     0,19,66
+Line:  245  FEC:  0  ASIC:  0  Chan:   40  row,col: 18,66     0,18,66
+Line:  246  FEC:  0  ASIC:  0  Chan:   31  row,col: 17,66     0,17,66
+Line:  247  FEC:  0  ASIC:  0  Chan:   25  row,col: 16,66     0,16,66
+Line:  248  FEC:  0  ASIC:  0  Chan:   19  row,col: 15,66     0,15,66
+Line:  249  FEC:  0  ASIC:  0  Chan:   13  row,col: 14,66     0,14,66
+Line:  250  FEC:  0  ASIC:  0  Chan:    7  row,col: 13,66     0,13,66
+Line:  251  FEC:  0  ASIC:  0  Chan:    1  row,col: 12,66     0,12,66
+Line:  252  FEC:  0  ASIC:  1  Chan:  138  row,col: 23,60     1,23,60
+Line:  253  FEC:  0  ASIC:  1  Chan:  137  row,col: 22,60     1,22,60
+Line:  254  FEC:  0  ASIC:  1  Chan:  131  row,col: 21,60     1,21,60
+Line:  255  FEC:  0  ASIC:  1  Chan:  125  row,col: 20,60     1,20,60
+Line:  256  FEC:  0  ASIC:  1  Chan:  119  row,col: 19,60     1,19,60
+Line:  257  FEC:  0  ASIC:  1  Chan:  113  row,col: 18,60     1,18,60
+Line:  258  FEC:  0  ASIC:  1  Chan:  107  row,col: 17,60     1,17,60
+Line:  259  FEC:  0  ASIC:  1  Chan:   98  row,col: 16,60     1,16,60
+Line:  260  FEC:  0  ASIC:  1  Chan:   91  row,col: 15,60     1,15,60
+Line:  261  FEC:  0  ASIC:  1  Chan:   84  row,col: 14,60     1,14,60
+Line:  262  FEC:  0  ASIC:  1  Chan:   80  row,col: 13,60     1,13,60
+Line:  263  FEC:  0  ASIC:  1  Chan:   74  row,col: 12,60     1,12,60
+Line:  264  FEC:  0  ASIC:  2  Chan:  210  row,col: 11,60     2,11,60
+Line:  265  FEC:  0  ASIC:  2  Chan:  208  row,col: 10,60     2,10,60
+Line:  266  FEC:  0  ASIC:  2  Chan:  202  row,col:  9,60     2,9,60
+Line:  267  FEC:  0  ASIC:  2  Chan:  196  row,col:  8,60     2,8,60
+Line:  268  FEC:  0  ASIC:  2  Chan:  187  row,col:  7,60     2,7,60
+Line:  269  FEC:  0  ASIC:  2  Chan:  181  row,col:  6,60     2,6,60
+Line:  270  FEC:  0  ASIC:  2  Chan:  166  row,col:  5,60     2,5,60
+Line:  271  FEC:  0  ASIC:  2  Chan:  161  row,col:  4,60     2,4,60
+Line:  272  FEC:  0  ASIC:  2  Chan:  158  row,col:  3,60     2,3,60
+Line:  273  FEC:  0  ASIC:  2  Chan:  157  row,col:  2,60     2,2,60
+Line:  274  FEC:  0  ASIC:  2  Chan:  155  row,col:  1,60     2,1,60
+Line:  275  FEC:  0  ASIC:  2  Chan:  154  row,col:  0,60     2,0,60
+Line:  276  FEC:  0  ASIC:  3  Chan:  287  row,col: 11,66     3,11,66
+Line:  277  FEC:  0  ASIC:  3  Chan:  281  row,col: 10,66     3,10,66
+Line:  278  FEC:  0  ASIC:  3  Chan:  275  row,col:  9,66     3,9,66
+Line:  279  FEC:  0  ASIC:  3  Chan:  269  row,col:  8,66     3,8,66
+Line:  280  FEC:  0  ASIC:  3  Chan:  263  row,col:  7,66     3,7,66
+Line:  281  FEC:  0  ASIC:  3  Chan:  252  row,col:  6,66     3,6,66
+Line:  282  FEC:  0  ASIC:  3  Chan:  244  row,col:  5,66     3,5,66
+Line:  283  FEC:  0  ASIC:  3  Chan:  234  row,col:  4,66     3,4,66
+Line:  284  FEC:  0  ASIC:  3  Chan:  235  row,col:  3,66     3,3,66
+Line:  285  FEC:  0  ASIC:  3  Chan:  228  row,col:  2,66     3,2,66
+Line:  286  FEC:  0  ASIC:  3  Chan:  227  row,col:  1,66     3,1,66
+Line:  287  FEC:  0  ASIC:  3  Chan:  216  row,col:  0,66     3,0,66
+Line:  288  FEC:  1  ASIC:  4  Chan:  348  row,col: 23,59     0,23,59
+Line:  289  FEC:  1  ASIC:  4  Chan:  336  row,col: 22,59     0,22,59
+Line:  290  FEC:  1  ASIC:  4  Chan:  355  row,col: 21,59     0,21,59
+Line:  291  FEC:  1  ASIC:  4  Chan:  343  row,col: 20,59     0,20,59
+Line:  292  FEC:  1  ASIC:  4  Chan:  331  row,col: 19,59     0,19,59
+Line:  293  FEC:  1  ASIC:  4  Chan:  325  row,col: 18,59     0,18,59
+Line:  294  FEC:  1  ASIC:  4  Chan:  319  row,col: 17,59     0,17,59
+Line:  295  FEC:  1  ASIC:  4  Chan:  316  row,col: 16,59     0,16,59
+Line:  296  FEC:  1  ASIC:  4  Chan:  311  row,col: 15,59     0,15,59
+Line:  297  FEC:  1  ASIC:  4  Chan:  305  row,col: 14,59     0,14,59
+Line:  298  FEC:  1  ASIC:  4  Chan:  299  row,col: 13,59     0,13,59
+Line:  299  FEC:  1  ASIC:  4  Chan:  289  row,col: 12,59     0,12,59
+Line:  300  FEC:  1  ASIC:  5  Chan:  409  row,col: 23,53     1,23,53
+Line:  301  FEC:  1  ASIC:  5  Chan:  431  row,col: 22,53     1,22,53
+Line:  302  FEC:  1  ASIC:  5  Chan:  420  row,col: 21,53     1,21,53
+Line:  303  FEC:  1  ASIC:  5  Chan:  413  row,col: 20,53     1,20,53
+Line:  304  FEC:  1  ASIC:  5  Chan:  400  row,col: 19,53     1,19,53
+Line:  305  FEC:  1  ASIC:  5  Chan:  397  row,col: 18,53     1,18,53
+Line:  306  FEC:  1  ASIC:  5  Chan:  390  row,col: 17,53     1,17,53
+Line:  307  FEC:  1  ASIC:  5  Chan:  384  row,col: 16,53     1,16,53
+Line:  308  FEC:  1  ASIC:  5  Chan:  383  row,col: 15,53     1,15,53
+Line:  309  FEC:  1  ASIC:  5  Chan:  377  row,col: 14,53     1,14,53
+Line:  310  FEC:  1  ASIC:  5  Chan:  371  row,col: 13,53     1,13,53
+Line:  311  FEC:  1  ASIC:  5  Chan:  370  row,col: 12,53     1,12,53
+Line:  312  FEC:  1  ASIC:  6  Chan:  492  row,col: 11,53     2,11,53
+Line:  313  FEC:  1  ASIC:  6  Chan:  493  row,col: 10,53     2,10,53
+Line:  314  FEC:  1  ASIC:  6  Chan:  487  row,col:  9,53     2,9,53
+Line:  315  FEC:  1  ASIC:  6  Chan:  481  row,col:  8,53     2,8,53
+Line:  316  FEC:  1  ASIC:  6  Chan:  478  row,col:  7,53     2,7,53
+Line:  317  FEC:  1  ASIC:  6  Chan:  472  row,col:  6,53     2,6,53
+Line:  318  FEC:  1  ASIC:  6  Chan:  467  row,col:  5,53     2,5,53
+Line:  319  FEC:  1  ASIC:  6  Chan:  461  row,col:  4,53     2,4,53
+Line:  320  FEC:  1  ASIC:  6  Chan:  453  row,col:  3,53     2,3,53
+Line:  321  FEC:  1  ASIC:  6  Chan:  443  row,col:  2,53     2,2,53
+Line:  322  FEC:  1  ASIC:  6  Chan:  432  row,col:  1,53     2,1,53
+Line:  323  FEC:  1  ASIC:  6  Chan:  446  row,col:  0,53     2,0,53
+Line:  324  FEC:  1  ASIC:  7  Chan:  575  row,col: 11,59     3,11,59
+Line:  325  FEC:  1  ASIC:  7  Chan:  565  row,col: 10,59     3,10,59
+Line:  326  FEC:  1  ASIC:  7  Chan:  559  row,col:  9,59     3,9,59
+Line:  327  FEC:  1  ASIC:  7  Chan:  553  row,col:  8,59     3,8,59
+Line:  328  FEC:  1  ASIC:  7  Chan:  546  row,col:  7,59     3,7,59
+Line:  329  FEC:  1  ASIC:  7  Chan:  545  row,col:  6,59     3,6,59
+Line:  330  FEC:  1  ASIC:  7  Chan:  539  row,col:  5,59     3,5,59
+Line:  331  FEC:  1  ASIC:  7  Chan:  533  row,col:  4,59     3,4,59
+Line:  332  FEC:  1  ASIC:  7  Chan:  521  row,col:  3,59     3,3,59
+Line:  333  FEC:  1  ASIC:  7  Chan:  517  row,col:  2,59     3,2,59
+Line:  334  FEC:  1  ASIC:  7  Chan:  526  row,col:  1,59     3,1,59
+Line:  335  FEC:  1  ASIC:  7  Chan:  514  row,col:  0,59     3,0,59
+Line:  336  FEC:  1  ASIC:  4  Chan:  358  row,col: 23,58     0,23,58
+Line:  337  FEC:  1  ASIC:  4  Chan:  338  row,col: 22,58     0,22,58
+Line:  338  FEC:  1  ASIC:  4  Chan:  357  row,col: 21,58     0,21,58
+Line:  339  FEC:  1  ASIC:  4  Chan:  345  row,col: 20,58     0,20,58
+Line:  340  FEC:  1  ASIC:  4  Chan:  333  row,col: 19,58     0,19,58
+Line:  341  FEC:  1  ASIC:  4  Chan:  324  row,col: 18,58     0,18,58
+Line:  342  FEC:  1  ASIC:  4  Chan:  318  row,col: 17,58     0,17,58
+Line:  343  FEC:  1  ASIC:  4  Chan:  317  row,col: 16,58     0,16,58
+Line:  344  FEC:  1  ASIC:  4  Chan:  310  row,col: 15,58     0,15,58
+Line:  345  FEC:  1  ASIC:  4  Chan:  304  row,col: 14,58     0,14,58
+Line:  346  FEC:  1  ASIC:  4  Chan:  298  row,col: 13,58     0,13,58
+Line:  347  FEC:  1  ASIC:  4  Chan:  291  row,col: 12,58     0,12,58
+Line:  348  FEC:  1  ASIC:  5  Chan:  412  row,col: 23,52     1,23,52
+Line:  349  FEC:  1  ASIC:  5  Chan:  428  row,col: 22,52     1,22,52
+Line:  350  FEC:  1  ASIC:  5  Chan:  422  row,col: 21,52     1,21,52
+Line:  351  FEC:  1  ASIC:  5  Chan:  415  row,col: 20,52     1,20,52
+Line:  352  FEC:  1  ASIC:  5  Chan:  403  row,col: 19,52     1,19,52
+Line:  353  FEC:  1  ASIC:  5  Chan:  396  row,col: 18,52     1,18,52
+Line:  354  FEC:  1  ASIC:  5  Chan:  391  row,col: 17,52     1,17,52
+Line:  355  FEC:  1  ASIC:  5  Chan:  385  row,col: 16,52     1,16,52
+Line:  356  FEC:  1  ASIC:  5  Chan:  382  row,col: 15,52     1,15,52
+Line:  357  FEC:  1  ASIC:  5  Chan:  376  row,col: 14,52     1,14,52
+Line:  358  FEC:  1  ASIC:  5  Chan:  369  row,col: 13,52     1,13,52
+Line:  359  FEC:  1  ASIC:  5  Chan:  368  row,col: 12,52     1,12,52
+Line:  360  FEC:  1  ASIC:  6  Chan:  494  row,col: 11,52     2,11,52
+Line:  361  FEC:  1  ASIC:  6  Chan:  495  row,col: 10,52     2,10,52
+Line:  362  FEC:  1  ASIC:  6  Chan:  486  row,col:  9,52     2,9,52
+Line:  363  FEC:  1  ASIC:  6  Chan:  480  row,col:  8,52     2,8,52
+Line:  364  FEC:  1  ASIC:  6  Chan:  479  row,col:  7,52     2,7,52
+Line:  365  FEC:  1  ASIC:  6  Chan:  473  row,col:  6,52     2,6,52
+Line:  366  FEC:  1  ASIC:  6  Chan:  466  row,col:  5,52     2,5,52
+Line:  367  FEC:  1  ASIC:  6  Chan:  459  row,col:  4,52     2,4,52
+Line:  368  FEC:  1  ASIC:  6  Chan:  451  row,col:  3,52     2,3,52
+Line:  369  FEC:  1  ASIC:  6  Chan:  441  row,col:  2,52     2,2,52
+Line:  370  FEC:  1  ASIC:  6  Chan:  434  row,col:  1,52     2,1,52
+Line:  371  FEC:  1  ASIC:  6  Chan:  448  row,col:  0,52     2,0,52
+Line:  372  FEC:  1  ASIC:  7  Chan:  573  row,col: 11,58     3,11,58
+Line:  373  FEC:  1  ASIC:  7  Chan:  564  row,col: 10,58     3,10,58
+Line:  374  FEC:  1  ASIC:  7  Chan:  558  row,col:  9,58     3,9,58
+Line:  375  FEC:  1  ASIC:  7  Chan:  552  row,col:  8,58     3,8,58
+Line:  376  FEC:  1  ASIC:  7  Chan:  547  row,col:  7,58     3,7,58
+Line:  377  FEC:  1  ASIC:  7  Chan:  544  row,col:  6,58     3,6,58
+Line:  378  FEC:  1  ASIC:  7  Chan:  538  row,col:  5,58     3,5,58
+Line:  379  FEC:  1  ASIC:  7  Chan:  531  row,col:  4,58     3,4,58
+Line:  380  FEC:  1  ASIC:  7  Chan:  519  row,col:  3,58     3,3,58
+Line:  381  FEC:  1  ASIC:  7  Chan:  515  row,col:  2,58     3,2,58
+Line:  382  FEC:  1  ASIC:  7  Chan:  524  row,col:  1,58     3,1,58
+Line:  383  FEC:  1  ASIC:  7  Chan:  504  row,col:  0,58     3,0,58
+Line:  384  FEC:  1  ASIC:  4  Chan:  356  row,col: 23,57     0,23,57
+Line:  385  FEC:  1  ASIC:  4  Chan:  340  row,col: 22,57     0,22,57
+Line:  386  FEC:  1  ASIC:  4  Chan:  359  row,col: 21,57     0,21,57
+Line:  387  FEC:  1  ASIC:  4  Chan:  347  row,col: 20,57     0,20,57
+Line:  388  FEC:  1  ASIC:  4  Chan:  335  row,col: 19,57     0,19,57
+Line:  389  FEC:  1  ASIC:  4  Chan:  327  row,col: 18,57     0,18,57
+Line:  390  FEC:  1  ASIC:  4  Chan:  321  row,col: 17,57     0,17,57
+Line:  391  FEC:  1  ASIC:  4  Chan:  314  row,col: 16,57     0,16,57
+Line:  392  FEC:  1  ASIC:  4  Chan:  309  row,col: 15,57     0,15,57
+Line:  393  FEC:  1  ASIC:  4  Chan:  303  row,col: 14,57     0,14,57
+Line:  394  FEC:  1  ASIC:  4  Chan:  297  row,col: 13,57     0,13,57
+Line:  395  FEC:  1  ASIC:  4  Chan:  293  row,col: 12,57     0,12,57
+Line:  396  FEC:  1  ASIC:  5  Chan:  407  row,col: 23,51     1,23,51
+Line:  397  FEC:  1  ASIC:  5  Chan:  430  row,col: 22,51     1,22,51
+Line:  398  FEC:  1  ASIC:  5  Chan:  425  row,col: 21,51     1,21,51
+Line:  399  FEC:  1  ASIC:  5  Chan:  417  row,col: 20,51     1,20,51
+Line:  400  FEC:  1  ASIC:  5  Chan:  402  row,col: 19,51     1,19,51
+Line:  401  FEC:  1  ASIC:  5  Chan:  399  row,col: 18,51     1,18,51
+Line:  402  FEC:  1  ASIC:  5  Chan:  392  row,col: 17,51     1,17,51
+Line:  403  FEC:  1  ASIC:  5  Chan:  386  row,col: 16,51     1,16,51
+Line:  404  FEC:  1  ASIC:  5  Chan:  381  row,col: 15,51     1,15,51
+Line:  405  FEC:  1  ASIC:  5  Chan:  375  row,col: 14,51     1,14,51
+Line:  406  FEC:  1  ASIC:  5  Chan:  367  row,col: 13,51     1,13,51
+Line:  407  FEC:  1  ASIC:  5  Chan:  366  row,col: 12,51     1,12,51
+Line:  408  FEC:  1  ASIC:  6  Chan:  496  row,col: 11,51     2,11,51
+Line:  409  FEC:  1  ASIC:  6  Chan:  497  row,col: 10,51     2,10,51
+Line:  410  FEC:  1  ASIC:  6  Chan:  489  row,col:  9,51     2,9,51
+Line:  411  FEC:  1  ASIC:  6  Chan:  483  row,col:  8,51     2,8,51
+Line:  412  FEC:  1  ASIC:  6  Chan:  476  row,col:  7,51     2,7,51
+Line:  413  FEC:  1  ASIC:  6  Chan:  470  row,col:  6,51     2,6,51
+Line:  414  FEC:  1  ASIC:  6  Chan:  465  row,col:  5,51     2,5,51
+Line:  415  FEC:  1  ASIC:  6  Chan:  457  row,col:  4,51     2,4,51
+Line:  416  FEC:  1  ASIC:  6  Chan:  449  row,col:  3,51     2,3,51
+Line:  417  FEC:  1  ASIC:  6  Chan:  439  row,col:  2,51     2,2,51
+Line:  418  FEC:  1  ASIC:  6  Chan:  436  row,col:  1,51     2,1,51
+Line:  419  FEC:  1  ASIC:  6  Chan:  450  row,col:  0,51     2,0,51
+Line:  420  FEC:  1  ASIC:  7  Chan:  571  row,col: 11,57     3,11,57
+Line:  421  FEC:  1  ASIC:  7  Chan:  567  row,col: 10,57     3,10,57
+Line:  422  FEC:  1  ASIC:  7  Chan:  561  row,col:  9,57     3,9,57
+Line:  423  FEC:  1  ASIC:  7  Chan:  555  row,col:  8,57     3,8,57
+Line:  424  FEC:  1  ASIC:  7  Chan:  548  row,col:  7,57     3,7,57
+Line:  425  FEC:  1  ASIC:  7  Chan:  543  row,col:  6,57     3,6,57
+Line:  426  FEC:  1  ASIC:  7  Chan:  537  row,col:  5,57     3,5,57
+Line:  427  FEC:  1  ASIC:  7  Chan:  529  row,col:  4,57     3,4,57
+Line:  428  FEC:  1  ASIC:  7  Chan:  513  row,col:  3,57     3,3,57
+Line:  429  FEC:  1  ASIC:  7  Chan:  509  row,col:  2,57     3,2,57
+Line:  430  FEC:  1  ASIC:  7  Chan:  522  row,col:  1,57     3,1,57
+Line:  431  FEC:  1  ASIC:  7  Chan:  506  row,col:  0,57     3,0,57
+Line:  432  FEC:  1  ASIC:  4  Chan:  354  row,col: 23,56     0,23,56
+Line:  433  FEC:  1  ASIC:  4  Chan:  342  row,col: 22,56     0,22,56
+Line:  434  FEC:  1  ASIC:  4  Chan:  330  row,col: 21,56     0,21,56
+Line:  435  FEC:  1  ASIC:  4  Chan:  349  row,col: 20,56     0,20,56
+Line:  436  FEC:  1  ASIC:  4  Chan:  337  row,col: 19,56     0,19,56
+Line:  437  FEC:  1  ASIC:  4  Chan:  326  row,col: 18,56     0,18,56
+Line:  438  FEC:  1  ASIC:  4  Chan:  320  row,col: 17,56     0,17,56
+Line:  439  FEC:  1  ASIC:  4  Chan:  315  row,col: 16,56     0,16,56
+Line:  440  FEC:  1  ASIC:  4  Chan:  308  row,col: 15,56     0,15,56
+Line:  441  FEC:  1  ASIC:  4  Chan:  302  row,col: 14,56     0,14,56
+Line:  442  FEC:  1  ASIC:  4  Chan:  296  row,col: 13,56     0,13,56
+Line:  443  FEC:  1  ASIC:  4  Chan:  292  row,col: 12,56     0,12,56
+Line:  444  FEC:  1  ASIC:  5  Chan:  410  row,col: 23,50     1,23,50
+Line:  445  FEC:  1  ASIC:  5  Chan:  418  row,col: 22,50     1,22,50
+Line:  446  FEC:  1  ASIC:  5  Chan:  424  row,col: 21,50     1,21,50
+Line:  447  FEC:  1  ASIC:  5  Chan:  421  row,col: 20,50     1,20,50
+Line:  448  FEC:  1  ASIC:  5  Chan:  405  row,col: 19,50     1,19,50
+Line:  449  FEC:  1  ASIC:  5  Chan:  398  row,col: 18,50     1,18,50
+Line:  450  FEC:  1  ASIC:  5  Chan:  393  row,col: 17,50     1,17,50
+Line:  451  FEC:  1  ASIC:  5  Chan:  387  row,col: 16,50     1,16,50
+Line:  452  FEC:  1  ASIC:  5  Chan:  380  row,col: 15,50     1,15,50
+Line:  453  FEC:  1  ASIC:  5  Chan:  374  row,col: 14,50     1,14,50
+Line:  454  FEC:  1  ASIC:  5  Chan:  365  row,col: 13,50     1,13,50
+Line:  455  FEC:  1  ASIC:  5  Chan:  364  row,col: 12,50     1,12,50
+Line:  456  FEC:  1  ASIC:  6  Chan:  498  row,col: 11,50     2,11,50
+Line:  457  FEC:  1  ASIC:  6  Chan:  499  row,col: 10,50     2,10,50
+Line:  458  FEC:  1  ASIC:  6  Chan:  488  row,col:  9,50     2,9,50
+Line:  459  FEC:  1  ASIC:  6  Chan:  482  row,col:  8,50     2,8,50
+Line:  460  FEC:  1  ASIC:  6  Chan:  477  row,col:  7,50     2,7,50
+Line:  461  FEC:  1  ASIC:  6  Chan:  471  row,col:  6,50     2,6,50
+Line:  462  FEC:  1  ASIC:  6  Chan:  464  row,col:  5,50     2,5,50
+Line:  463  FEC:  1  ASIC:  6  Chan:  460  row,col:  4,50     2,4,50
+Line:  464  FEC:  1  ASIC:  6  Chan:  447  row,col:  3,50     2,3,50
+Line:  465  FEC:  1  ASIC:  6  Chan:  437  row,col:  2,50     2,2,50
+Line:  466  FEC:  1  ASIC:  6  Chan:  438  row,col:  1,50     2,1,50
+Line:  467  FEC:  1  ASIC:  6  Chan:  452  row,col:  0,50     2,0,50
+Line:  468  FEC:  1  ASIC:  7  Chan:  570  row,col: 11,56     3,11,56
+Line:  469  FEC:  1  ASIC:  7  Chan:  566  row,col: 10,56     3,10,56
+Line:  470  FEC:  1  ASIC:  7  Chan:  560  row,col:  9,56     3,9,56
+Line:  471  FEC:  1  ASIC:  7  Chan:  554  row,col:  8,56     3,8,56
+Line:  472  FEC:  1  ASIC:  7  Chan:  549  row,col:  7,56     3,7,56
+Line:  473  FEC:  1  ASIC:  7  Chan:  542  row,col:  6,56     3,6,56
+Line:  474  FEC:  1  ASIC:  7  Chan:  535  row,col:  5,56     3,5,56
+Line:  475  FEC:  1  ASIC:  7  Chan:  527  row,col:  4,56     3,4,56
+Line:  476  FEC:  1  ASIC:  7  Chan:  511  row,col:  3,56     3,3,56
+Line:  477  FEC:  1  ASIC:  7  Chan:  507  row,col:  2,56     3,2,56
+Line:  478  FEC:  1  ASIC:  7  Chan:  520  row,col:  1,56     3,1,56
+Line:  479  FEC:  1  ASIC:  7  Chan:  508  row,col:  0,56     3,0,56
+Line:  480  FEC:  1  ASIC:  4  Chan:  352  row,col: 23,55     0,23,55
+Line:  481  FEC:  1  ASIC:  4  Chan:  344  row,col: 22,55     0,22,55
+Line:  482  FEC:  1  ASIC:  4  Chan:  332  row,col: 21,55     0,21,55
+Line:  483  FEC:  1  ASIC:  4  Chan:  351  row,col: 20,55     0,20,55
+Line:  484  FEC:  1  ASIC:  4  Chan:  339  row,col: 19,55     0,19,55
+Line:  485  FEC:  1  ASIC:  4  Chan:  329  row,col: 18,55     0,18,55
+Line:  486  FEC:  1  ASIC:  4  Chan:  323  row,col: 17,55     0,17,55
+Line:  487  FEC:  1  ASIC:  4  Chan:  313  row,col: 16,55     0,16,55
+Line:  488  FEC:  1  ASIC:  4  Chan:  307  row,col: 15,55     0,15,55
+Line:  489  FEC:  1  ASIC:  4  Chan:  301  row,col: 14,55     0,14,55
+Line:  490  FEC:  1  ASIC:  4  Chan:  295  row,col: 13,55     0,13,55
+Line:  491  FEC:  1  ASIC:  4  Chan:  290  row,col: 12,55     0,12,55
+Line:  492  FEC:  1  ASIC:  5  Chan:  406  row,col: 23,49     1,23,49
+Line:  493  FEC:  1  ASIC:  5  Chan:  416  row,col: 22,49     1,22,49
+Line:  494  FEC:  1  ASIC:  5  Chan:  427  row,col: 21,49     1,21,49
+Line:  495  FEC:  1  ASIC:  5  Chan:  423  row,col: 20,49     1,20,49
+Line:  496  FEC:  1  ASIC:  5  Chan:  411  row,col: 19,49     1,19,49
+Line:  497  FEC:  1  ASIC:  5  Chan:  401  row,col: 18,49     1,18,49
+Line:  498  FEC:  1  ASIC:  5  Chan:  395  row,col: 17,49     1,17,49
+Line:  499  FEC:  1  ASIC:  5  Chan:  389  row,col: 16,49     1,16,49
+Line:  500  FEC:  1  ASIC:  5  Chan:  379  row,col: 15,49     1,15,49
+Line:  501  FEC:  1  ASIC:  5  Chan:  373  row,col: 14,49     1,14,49
+Line:  502  FEC:  1  ASIC:  5  Chan:  363  row,col: 13,49     1,13,49
+Line:  503  FEC:  1  ASIC:  5  Chan:  361  row,col: 12,49     1,12,49
+Line:  504  FEC:  1  ASIC:  6  Chan:  503  row,col: 11,49     2,11,49
+Line:  505  FEC:  1  ASIC:  6  Chan:  501  row,col: 10,49     2,10,49
+Line:  506  FEC:  1  ASIC:  6  Chan:  491  row,col:  9,49     2,9,49
+Line:  507  FEC:  1  ASIC:  6  Chan:  485  row,col:  8,49     2,8,49
+Line:  508  FEC:  1  ASIC:  6  Chan:  475  row,col:  7,49     2,7,49
+Line:  509  FEC:  1  ASIC:  6  Chan:  469  row,col:  6,49     2,6,49
+Line:  510  FEC:  1  ASIC:  6  Chan:  463  row,col:  5,49     2,5,49
+Line:  511  FEC:  1  ASIC:  6  Chan:  455  row,col:  4,49     2,4,49
+Line:  512  FEC:  1  ASIC:  6  Chan:  445  row,col:  3,49     2,3,49
+Line:  513  FEC:  1  ASIC:  6  Chan:  435  row,col:  2,49     2,2,49
+Line:  514  FEC:  1  ASIC:  6  Chan:  440  row,col:  1,49     2,1,49
+Line:  515  FEC:  1  ASIC:  6  Chan:  454  row,col:  0,49     2,0,49
+Line:  516  FEC:  1  ASIC:  7  Chan:  572  row,col: 11,55     3,11,55
+Line:  517  FEC:  1  ASIC:  7  Chan:  569  row,col: 10,55     3,10,55
+Line:  518  FEC:  1  ASIC:  7  Chan:  563  row,col:  9,55     3,9,55
+Line:  519  FEC:  1  ASIC:  7  Chan:  557  row,col:  8,55     3,8,55
+Line:  520  FEC:  1  ASIC:  7  Chan:  551  row,col:  7,55     3,7,55
+Line:  521  FEC:  1  ASIC:  7  Chan:  541  row,col:  6,55     3,6,55
+Line:  522  FEC:  1  ASIC:  7  Chan:  536  row,col:  5,55     3,5,55
+Line:  523  FEC:  1  ASIC:  7  Chan:  523  row,col:  4,55     3,4,55
+Line:  524  FEC:  1  ASIC:  7  Chan:  505  row,col:  3,55     3,3,55
+Line:  525  FEC:  1  ASIC:  7  Chan:  532  row,col:  2,55     3,2,55
+Line:  526  FEC:  1  ASIC:  7  Chan:  518  row,col:  1,55     3,1,55
+Line:  527  FEC:  1  ASIC:  7  Chan:  510  row,col:  0,55     3,0,55
+Line:  528  FEC:  1  ASIC:  4  Chan:  350  row,col: 23,54     0,23,54
+Line:  529  FEC:  1  ASIC:  4  Chan:  346  row,col: 22,54     0,22,54
+Line:  530  FEC:  1  ASIC:  4  Chan:  334  row,col: 21,54     0,21,54
+Line:  531  FEC:  1  ASIC:  4  Chan:  353  row,col: 20,54     0,20,54
+Line:  532  FEC:  1  ASIC:  4  Chan:  341  row,col: 19,54     0,19,54
+Line:  533  FEC:  1  ASIC:  4  Chan:  328  row,col: 18,54     0,18,54
+Line:  534  FEC:  1  ASIC:  4  Chan:  322  row,col: 17,54     0,17,54
+Line:  535  FEC:  1  ASIC:  4  Chan:  312  row,col: 16,54     0,16,54
+Line:  536  FEC:  1  ASIC:  4  Chan:  306  row,col: 15,54     0,15,54
+Line:  537  FEC:  1  ASIC:  4  Chan:  300  row,col: 14,54     0,14,54
+Line:  538  FEC:  1  ASIC:  4  Chan:  294  row,col: 13,54     0,13,54
+Line:  539  FEC:  1  ASIC:  4  Chan:  288  row,col: 12,54     0,12,54
+Line:  540  FEC:  1  ASIC:  5  Chan:  408  row,col: 23,48     1,23,48
+Line:  541  FEC:  1  ASIC:  5  Chan:  414  row,col: 22,48     1,22,48
+Line:  542  FEC:  1  ASIC:  5  Chan:  426  row,col: 21,48     1,21,48
+Line:  543  FEC:  1  ASIC:  5  Chan:  429  row,col: 20,48     1,20,48
+Line:  544  FEC:  1  ASIC:  5  Chan:  419  row,col: 19,48     1,19,48
+Line:  545  FEC:  1  ASIC:  5  Chan:  404  row,col: 18,48     1,18,48
+Line:  546  FEC:  1  ASIC:  5  Chan:  394  row,col: 17,48     1,17,48
+Line:  547  FEC:  1  ASIC:  5  Chan:  388  row,col: 16,48     1,16,48
+Line:  548  FEC:  1  ASIC:  5  Chan:  378  row,col: 15,48     1,15,48
+Line:  549  FEC:  1  ASIC:  5  Chan:  372  row,col: 14,48     1,14,48
+Line:  550  FEC:  1  ASIC:  5  Chan:  362  row,col: 13,48     1,13,48
+Line:  551  FEC:  1  ASIC:  5  Chan:  360  row,col: 12,48     1,12,48
+Line:  552  FEC:  1  ASIC:  6  Chan:  502  row,col: 11,48     2,11,48
+Line:  553  FEC:  1  ASIC:  6  Chan:  500  row,col: 10,48     2,10,48
+Line:  554  FEC:  1  ASIC:  6  Chan:  490  row,col:  9,48     2,9,48
+Line:  555  FEC:  1  ASIC:  6  Chan:  484  row,col:  8,48     2,8,48
+Line:  556  FEC:  1  ASIC:  6  Chan:  474  row,col:  7,48     2,7,48
+Line:  557  FEC:  1  ASIC:  6  Chan:  468  row,col:  6,48     2,6,48
+Line:  558  FEC:  1  ASIC:  6  Chan:  462  row,col:  5,48     2,5,48
+Line:  559  FEC:  1  ASIC:  6  Chan:  458  row,col:  4,48     2,4,48
+Line:  560  FEC:  1  ASIC:  6  Chan:  444  row,col:  3,48     2,3,48
+Line:  561  FEC:  1  ASIC:  6  Chan:  433  row,col:  2,48     2,2,48
+Line:  562  FEC:  1  ASIC:  6  Chan:  442  row,col:  1,48     2,1,48
+Line:  563  FEC:  1  ASIC:  6  Chan:  456  row,col:  0,48     2,0,48
+Line:  564  FEC:  1  ASIC:  7  Chan:  574  row,col: 11,54     3,11,54
+Line:  565  FEC:  1  ASIC:  7  Chan:  568  row,col: 10,54     3,10,54
+Line:  566  FEC:  1  ASIC:  7  Chan:  562  row,col:  9,54     3,9,54
+Line:  567  FEC:  1  ASIC:  7  Chan:  556  row,col:  8,54     3,8,54
+Line:  568  FEC:  1  ASIC:  7  Chan:  550  row,col:  7,54     3,7,54
+Line:  569  FEC:  1  ASIC:  7  Chan:  540  row,col:  6,54     3,6,54
+Line:  570  FEC:  1  ASIC:  7  Chan:  534  row,col:  5,54     3,5,54
+Line:  571  FEC:  1  ASIC:  7  Chan:  525  row,col:  4,54     3,4,54
+Line:  572  FEC:  1  ASIC:  7  Chan:  528  row,col:  3,54     3,3,54
+Line:  573  FEC:  1  ASIC:  7  Chan:  530  row,col:  2,54     3,2,54
+Line:  574  FEC:  1  ASIC:  7  Chan:  516  row,col:  1,54     3,1,54
+Line:  575  FEC:  1  ASIC:  7  Chan:  512  row,col:  0,54     3,0,54
+Line:  576  FEC:  2  ASIC:  8  Chan:  643  row,col: 23,47     0,23,47
+Line:  577  FEC:  2  ASIC:  8  Chan:  641  row,col: 22,47     0,22,47
+Line:  578  FEC:  2  ASIC:  8  Chan:  633  row,col: 21,47     0,21,47
+Line:  579  FEC:  2  ASIC:  8  Chan:  629  row,col: 20,47     0,20,47
+Line:  580  FEC:  2  ASIC:  8  Chan:  619  row,col: 19,47     0,19,47
+Line:  581  FEC:  2  ASIC:  8  Chan:  613  row,col: 18,47     0,18,47
+Line:  582  FEC:  2  ASIC:  8  Chan:  607  row,col: 17,47     0,17,47
+Line:  583  FEC:  2  ASIC:  8  Chan:  599  row,col: 16,47     0,16,47
+Line:  584  FEC:  2  ASIC:  8  Chan:  600  row,col: 15,47     0,15,47
+Line:  585  FEC:  2  ASIC:  8  Chan:  594  row,col: 14,47     0,14,47
+Line:  586  FEC:  2  ASIC:  8  Chan:  588  row,col: 13,47     0,13,47
+Line:  587  FEC:  2  ASIC:  8  Chan:  577  row,col: 12,47     0,12,47
+Line:  588  FEC:  2  ASIC:  9  Chan:  695  row,col: 23,41     1,23,41
+Line:  589  FEC:  2  ASIC:  9  Chan:  693  row,col: 22,41     1,22,41
+Line:  590  FEC:  2  ASIC:  9  Chan:  691  row,col: 21,41     1,21,41
+Line:  591  FEC:  2  ASIC:  9  Chan:  689  row,col: 20,41     1,20,41
+Line:  592  FEC:  2  ASIC:  9  Chan:  685  row,col: 19,41     1,19,41
+Line:  593  FEC:  2  ASIC:  9  Chan:  681  row,col: 18,41     1,18,41
+Line:  594  FEC:  2  ASIC:  9  Chan:  679  row,col: 17,41     1,17,41
+Line:  595  FEC:  2  ASIC:  9  Chan:  673  row,col: 16,41     1,16,41
+Line:  596  FEC:  2  ASIC:  9  Chan:  667  row,col: 15,41     1,15,41
+Line:  597  FEC:  2  ASIC:  9  Chan:  665  row,col: 14,41     1,14,41
+Line:  598  FEC:  2  ASIC:  9  Chan:  659  row,col: 13,41     1,13,41
+Line:  599  FEC:  2  ASIC:  9  Chan:  653  row,col: 12,41     1,12,41
+Line:  600  FEC:  2  ASIC: 10  Chan:  787  row,col: 11,41     2,11,41
+Line:  601  FEC:  2  ASIC: 10  Chan:  781  row,col: 10,41     2,10,41
+Line:  602  FEC:  2  ASIC: 10  Chan:  775  row,col:  9,41     2,9,41
+Line:  603  FEC:  2  ASIC: 10  Chan:  773  row,col:  8,41     2,8,41
+Line:  604  FEC:  2  ASIC: 10  Chan:  767  row,col:  7,41     2,7,41
+Line:  605  FEC:  2  ASIC: 10  Chan:  761  row,col:  6,41     2,6,41
+Line:  606  FEC:  2  ASIC: 10  Chan:  759  row,col:  5,41     2,5,41
+Line:  607  FEC:  2  ASIC: 10  Chan:  755  row,col:  4,41     2,4,41
+Line:  608  FEC:  2  ASIC: 10  Chan:  751  row,col:  3,41     2,3,41
+Line:  609  FEC:  2  ASIC: 10  Chan:  749  row,col:  2,41     2,2,41
+Line:  610  FEC:  2  ASIC: 10  Chan:  747  row,col:  1,41     2,1,41
+Line:  611  FEC:  2  ASIC: 10  Chan:  745  row,col:  0,41     2,0,41
+Line:  612  FEC:  2  ASIC: 11  Chan:  863  row,col: 11,47     3,11,47
+Line:  613  FEC:  2  ASIC: 11  Chan:  851  row,col: 10,47     3,10,47
+Line:  614  FEC:  2  ASIC: 11  Chan:  844  row,col:  9,47     3,9,47
+Line:  615  FEC:  2  ASIC: 11  Chan:  841  row,col:  8,47     3,8,47
+Line:  616  FEC:  2  ASIC: 11  Chan:  839  row,col:  7,47     3,7,47
+Line:  617  FEC:  2  ASIC: 11  Chan:  833  row,col:  6,47     3,6,47
+Line:  618  FEC:  2  ASIC: 11  Chan:  827  row,col:  5,47     3,5,47
+Line:  619  FEC:  2  ASIC: 11  Chan:  819  row,col:  4,47     3,4,47
+Line:  620  FEC:  2  ASIC: 11  Chan:  813  row,col:  3,47     3,3,47
+Line:  621  FEC:  2  ASIC: 11  Chan:  811  row,col:  2,47     3,2,47
+Line:  622  FEC:  2  ASIC: 11  Chan:  809  row,col:  1,47     3,1,47
+Line:  623  FEC:  2  ASIC: 11  Chan:  807  row,col:  0,47     3,0,47
+Line:  624  FEC:  2  ASIC:  8  Chan:  620  row,col: 23,46     0,23,46
+Line:  625  FEC:  2  ASIC:  8  Chan:  647  row,col: 22,46     0,22,46
+Line:  626  FEC:  2  ASIC:  8  Chan:  639  row,col: 21,46     0,21,46
+Line:  627  FEC:  2  ASIC:  8  Chan:  631  row,col: 20,46     0,20,46
+Line:  628  FEC:  2  ASIC:  8  Chan:  621  row,col: 19,46     0,19,46
+Line:  629  FEC:  2  ASIC:  8  Chan:  615  row,col: 18,46     0,18,46
+Line:  630  FEC:  2  ASIC:  8  Chan:  606  row,col: 17,46     0,17,46
+Line:  631  FEC:  2  ASIC:  8  Chan:  603  row,col: 16,46     0,16,46
+Line:  632  FEC:  2  ASIC:  8  Chan:  597  row,col: 15,46     0,15,46
+Line:  633  FEC:  2  ASIC:  8  Chan:  591  row,col: 14,46     0,14,46
+Line:  634  FEC:  2  ASIC:  8  Chan:  585  row,col: 13,46     0,13,46
+Line:  635  FEC:  2  ASIC:  8  Chan:  579  row,col: 12,46     0,12,46
+Line:  636  FEC:  2  ASIC:  9  Chan:  701  row,col: 23,40     1,23,40
+Line:  637  FEC:  2  ASIC:  9  Chan:  703  row,col: 22,40     1,22,40
+Line:  638  FEC:  2  ASIC:  9  Chan:  705  row,col: 21,40     1,21,40
+Line:  639  FEC:  2  ASIC:  9  Chan:  719  row,col: 20,40     1,20,40
+Line:  640  FEC:  2  ASIC:  9  Chan:  707  row,col: 19,40     1,19,40
+Line:  641  FEC:  2  ASIC:  9  Chan:  697  row,col: 18,40     1,18,40
+Line:  642  FEC:  2  ASIC:  9  Chan:  687  row,col: 17,40     1,17,40
+Line:  643  FEC:  2  ASIC:  9  Chan:  677  row,col: 16,40     1,16,40
+Line:  644  FEC:  2  ASIC:  9  Chan:  671  row,col: 15,40     1,15,40
+Line:  645  FEC:  2  ASIC:  9  Chan:  663  row,col: 14,40     1,14,40
+Line:  646  FEC:  2  ASIC:  9  Chan:  655  row,col: 13,40     1,13,40
+Line:  647  FEC:  2  ASIC:  9  Chan:  651  row,col: 12,40     1,12,40
+Line:  648  FEC:  2  ASIC: 10  Chan:  789  row,col: 11,40     2,11,40
+Line:  649  FEC:  2  ASIC: 10  Chan:  785  row,col: 10,40     2,10,40
+Line:  650  FEC:  2  ASIC: 10  Chan:  777  row,col:  9,40     2,9,40
+Line:  651  FEC:  2  ASIC: 10  Chan:  771  row,col:  8,40     2,8,40
+Line:  652  FEC:  2  ASIC: 10  Chan:  765  row,col:  7,40     2,7,40
+Line:  653  FEC:  2  ASIC: 10  Chan:  753  row,col:  6,40     2,6,40
+Line:  654  FEC:  2  ASIC: 10  Chan:  743  row,col:  5,40     2,5,40
+Line:  655  FEC:  2  ASIC: 10  Chan:  733  row,col:  4,40     2,4,40
+Line:  656  FEC:  2  ASIC: 10  Chan:  721  row,col:  3,40     2,3,40
+Line:  657  FEC:  2  ASIC: 10  Chan:  735  row,col:  2,40     2,2,40
+Line:  658  FEC:  2  ASIC: 10  Chan:  737  row,col:  1,40     2,1,40
+Line:  659  FEC:  2  ASIC: 10  Chan:  739  row,col:  0,40     2,0,40
+Line:  660  FEC:  2  ASIC: 11  Chan:  861  row,col: 11,46     3,11,46
+Line:  661  FEC:  2  ASIC: 11  Chan:  855  row,col: 10,46     3,10,46
+Line:  662  FEC:  2  ASIC: 11  Chan:  849  row,col:  9,46     3,9,46
+Line:  663  FEC:  2  ASIC: 11  Chan:  843  row,col:  8,46     3,8,46
+Line:  664  FEC:  2  ASIC: 11  Chan:  837  row,col:  7,46     3,7,46
+Line:  665  FEC:  2  ASIC: 11  Chan:  831  row,col:  6,46     3,6,46
+Line:  666  FEC:  2  ASIC: 11  Chan:  825  row,col:  5,46     3,5,46
+Line:  667  FEC:  2  ASIC: 11  Chan:  817  row,col:  4,46     3,4,46
+Line:  668  FEC:  2  ASIC: 11  Chan:  805  row,col:  3,46     3,3,46
+Line:  669  FEC:  2  ASIC: 11  Chan:  803  row,col:  2,46     3,2,46
+Line:  670  FEC:  2  ASIC: 11  Chan:  801  row,col:  1,46     3,1,46
+Line:  671  FEC:  2  ASIC: 11  Chan:  799  row,col:  0,46     3,0,46
+Line:  672  FEC:  2  ASIC:  8  Chan:  624  row,col: 23,45     0,23,45
+Line:  673  FEC:  2  ASIC:  8  Chan:  622  row,col: 22,45     0,22,45
+Line:  674  FEC:  2  ASIC:  8  Chan:  618  row,col: 21,45     0,21,45
+Line:  675  FEC:  2  ASIC:  8  Chan:  645  row,col: 20,45     0,20,45
+Line:  676  FEC:  2  ASIC:  8  Chan:  627  row,col: 19,45     0,19,45
+Line:  677  FEC:  2  ASIC:  8  Chan:  617  row,col: 18,45     0,18,45
+Line:  678  FEC:  2  ASIC:  8  Chan:  609  row,col: 17,45     0,17,45
+Line:  679  FEC:  2  ASIC:  8  Chan:  605  row,col: 16,45     0,16,45
+Line:  680  FEC:  2  ASIC:  8  Chan:  598  row,col: 15,45     0,15,45
+Line:  681  FEC:  2  ASIC:  8  Chan:  592  row,col: 14,45     0,14,45
+Line:  682  FEC:  2  ASIC:  8  Chan:  586  row,col: 13,45     0,13,45
+Line:  683  FEC:  2  ASIC:  8  Chan:  581  row,col: 12,45     0,12,45
+Line:  684  FEC:  2  ASIC:  9  Chan:  711  row,col: 23,39     1,23,39
+Line:  685  FEC:  2  ASIC:  9  Chan:  715  row,col: 22,39     1,22,39
+Line:  686  FEC:  2  ASIC:  9  Chan:  714  row,col: 21,39     1,21,39
+Line:  687  FEC:  2  ASIC:  9  Chan:  716  row,col: 20,39     1,20,39
+Line:  688  FEC:  2  ASIC:  9  Chan:  709  row,col: 19,39     1,19,39
+Line:  689  FEC:  2  ASIC:  9  Chan:  699  row,col: 18,39     1,18,39
+Line:  690  FEC:  2  ASIC:  9  Chan:  683  row,col: 17,39     1,17,39
+Line:  691  FEC:  2  ASIC:  9  Chan:  675  row,col: 16,39     1,16,39
+Line:  692  FEC:  2  ASIC:  9  Chan:  669  row,col: 15,39     1,15,39
+Line:  693  FEC:  2  ASIC:  9  Chan:  661  row,col: 14,39     1,14,39
+Line:  694  FEC:  2  ASIC:  9  Chan:  657  row,col: 13,39     1,13,39
+Line:  695  FEC:  2  ASIC:  9  Chan:  649  row,col: 12,39     1,12,39
+Line:  696  FEC:  2  ASIC: 10  Chan:  791  row,col: 11,39     2,11,39
+Line:  697  FEC:  2  ASIC: 10  Chan:  783  row,col: 10,39     2,10,39
+Line:  698  FEC:  2  ASIC: 10  Chan:  779  row,col:  9,39     2,9,39
+Line:  699  FEC:  2  ASIC: 10  Chan:  769  row,col:  8,39     2,8,39
+Line:  700  FEC:  2  ASIC: 10  Chan:  763  row,col:  7,39     2,7,39
+Line:  701  FEC:  2  ASIC: 10  Chan:  757  row,col:  6,39     2,6,39
+Line:  702  FEC:  2  ASIC: 10  Chan:  741  row,col:  5,39     2,5,39
+Line:  703  FEC:  2  ASIC: 10  Chan:  731  row,col:  4,39     2,4,39
+Line:  704  FEC:  2  ASIC: 10  Chan:  722  row,col:  3,39     2,3,39
+Line:  705  FEC:  2  ASIC: 10  Chan:  724  row,col:  2,39     2,2,39
+Line:  706  FEC:  2  ASIC: 10  Chan:  725  row,col:  1,39     2,1,39
+Line:  707  FEC:  2  ASIC: 10  Chan:  729  row,col:  0,39     2,0,39
+Line:  708  FEC:  2  ASIC: 11  Chan:  859  row,col: 11,45     3,11,45
+Line:  709  FEC:  2  ASIC: 11  Chan:  857  row,col: 10,45     3,10,45
+Line:  710  FEC:  2  ASIC: 11  Chan:  853  row,col:  9,45     3,9,45
+Line:  711  FEC:  2  ASIC: 11  Chan:  845  row,col:  8,45     3,8,45
+Line:  712  FEC:  2  ASIC: 11  Chan:  835  row,col:  7,45     3,7,45
+Line:  713  FEC:  2  ASIC: 11  Chan:  829  row,col:  6,45     3,6,45
+Line:  714  FEC:  2  ASIC: 11  Chan:  823  row,col:  5,45     3,5,45
+Line:  715  FEC:  2  ASIC: 11  Chan:  815  row,col:  4,45     3,4,45
+Line:  716  FEC:  2  ASIC: 11  Chan:  812  row,col:  3,45     3,3,45
+Line:  717  FEC:  2  ASIC: 11  Chan:  793  row,col:  2,45     3,2,45
+Line:  718  FEC:  2  ASIC: 11  Chan:  795  row,col:  1,45     3,1,45
+Line:  719  FEC:  2  ASIC: 11  Chan:  797  row,col:  0,45     3,0,45
+Line:  720  FEC:  2  ASIC:  8  Chan:  636  row,col: 23,44     0,23,44
+Line:  721  FEC:  2  ASIC:  8  Chan:  642  row,col: 22,44     0,22,44
+Line:  722  FEC:  2  ASIC:  8  Chan:  640  row,col: 21,44     0,21,44
+Line:  723  FEC:  2  ASIC:  8  Chan:  614  row,col: 20,44     0,20,44
+Line:  724  FEC:  2  ASIC:  8  Chan:  635  row,col: 19,44     0,19,44
+Line:  725  FEC:  2  ASIC:  8  Chan:  623  row,col: 18,44     0,18,44
+Line:  726  FEC:  2  ASIC:  8  Chan:  611  row,col: 17,44     0,17,44
+Line:  727  FEC:  2  ASIC:  8  Chan:  601  row,col: 16,44     0,16,44
+Line:  728  FEC:  2  ASIC:  8  Chan:  595  row,col: 15,44     0,15,44
+Line:  729  FEC:  2  ASIC:  8  Chan:  589  row,col: 14,44     0,14,44
+Line:  730  FEC:  2  ASIC:  8  Chan:  583  row,col: 13,44     0,13,44
+Line:  731  FEC:  2  ASIC:  8  Chan:  580  row,col: 12,44     0,12,44
+Line:  732  FEC:  2  ASIC:  9  Chan:  713  row,col: 23,38     1,23,38
+Line:  733  FEC:  2  ASIC:  9  Chan:  704  row,col: 22,38     1,22,38
+Line:  734  FEC:  2  ASIC:  9  Chan:  712  row,col: 21,38     1,21,38
+Line:  735  FEC:  2  ASIC:  9  Chan:  718  row,col: 20,38     1,20,38
+Line:  736  FEC:  2  ASIC:  9  Chan:  708  row,col: 19,38     1,19,38
+Line:  737  FEC:  2  ASIC:  9  Chan:  696  row,col: 18,38     1,18,38
+Line:  738  FEC:  2  ASIC:  9  Chan:  682  row,col: 17,38     1,17,38
+Line:  739  FEC:  2  ASIC:  9  Chan:  676  row,col: 16,38     1,16,38
+Line:  740  FEC:  2  ASIC:  9  Chan:  666  row,col: 15,38     1,15,38
+Line:  741  FEC:  2  ASIC:  9  Chan:  660  row,col: 14,38     1,14,38
+Line:  742  FEC:  2  ASIC:  9  Chan:  656  row,col: 13,38     1,13,38
+Line:  743  FEC:  2  ASIC:  9  Chan:  648  row,col: 12,38     1,12,38
+Line:  744  FEC:  2  ASIC: 10  Chan:  790  row,col: 11,38     2,11,38
+Line:  745  FEC:  2  ASIC: 10  Chan:  782  row,col: 10,38     2,10,38
+Line:  746  FEC:  2  ASIC: 10  Chan:  778  row,col:  9,38     2,9,38
+Line:  747  FEC:  2  ASIC: 10  Chan:  772  row,col:  8,38     2,8,38
+Line:  748  FEC:  2  ASIC: 10  Chan:  762  row,col:  7,38     2,7,38
+Line:  749  FEC:  2  ASIC: 10  Chan:  756  row,col:  6,38     2,6,38
+Line:  750  FEC:  2  ASIC: 10  Chan:  742  row,col:  5,38     2,5,38
+Line:  751  FEC:  2  ASIC: 10  Chan:  730  row,col:  4,38     2,4,38
+Line:  752  FEC:  2  ASIC: 10  Chan:  720  row,col:  3,38     2,3,38
+Line:  753  FEC:  2  ASIC: 10  Chan:  726  row,col:  2,38     2,2,38
+Line:  754  FEC:  2  ASIC: 10  Chan:  734  row,col:  1,38     2,1,38
+Line:  755  FEC:  2  ASIC: 10  Chan:  723  row,col:  0,38     2,0,38
+Line:  756  FEC:  2  ASIC: 11  Chan:  858  row,col: 11,44     3,11,44
+Line:  757  FEC:  2  ASIC: 11  Chan:  852  row,col: 10,44     3,10,44
+Line:  758  FEC:  2  ASIC: 11  Chan:  846  row,col:  9,44     3,9,44
+Line:  759  FEC:  2  ASIC: 11  Chan:  847  row,col:  8,44     3,8,44
+Line:  760  FEC:  2  ASIC: 11  Chan:  838  row,col:  7,44     3,7,44
+Line:  761  FEC:  2  ASIC: 11  Chan:  832  row,col:  6,44     3,6,44
+Line:  762  FEC:  2  ASIC: 11  Chan:  821  row,col:  5,44     3,5,44
+Line:  763  FEC:  2  ASIC: 11  Chan:  822  row,col:  4,44     3,4,44
+Line:  764  FEC:  2  ASIC: 11  Chan:  810  row,col:  3,44     3,3,44
+Line:  765  FEC:  2  ASIC: 11  Chan:  804  row,col:  2,44     3,2,44
+Line:  766  FEC:  2  ASIC: 11  Chan:  802  row,col:  1,44     3,1,44
+Line:  767  FEC:  2  ASIC: 11  Chan:  800  row,col:  0,44     3,0,44
+Line:  768  FEC:  2  ASIC:  8  Chan:  630  row,col: 23,43     0,23,43
+Line:  769  FEC:  2  ASIC:  8  Chan:  632  row,col: 22,43     0,22,43
+Line:  770  FEC:  2  ASIC:  8  Chan:  644  row,col: 21,43     0,21,43
+Line:  771  FEC:  2  ASIC:  8  Chan:  616  row,col: 20,43     0,20,43
+Line:  772  FEC:  2  ASIC:  8  Chan:  637  row,col: 19,43     0,19,43
+Line:  773  FEC:  2  ASIC:  8  Chan:  625  row,col: 18,43     0,18,43
+Line:  774  FEC:  2  ASIC:  8  Chan:  608  row,col: 17,43     0,17,43
+Line:  775  FEC:  2  ASIC:  8  Chan:  602  row,col: 16,43     0,16,43
+Line:  776  FEC:  2  ASIC:  8  Chan:  593  row,col: 15,43     0,15,43
+Line:  777  FEC:  2  ASIC:  8  Chan:  587  row,col: 14,43     0,14,43
+Line:  778  FEC:  2  ASIC:  8  Chan:  584  row,col: 13,43     0,13,43
+Line:  779  FEC:  2  ASIC:  8  Chan:  578  row,col: 12,43     0,12,43
+Line:  780  FEC:  2  ASIC:  9  Chan:  717  row,col: 23,37     1,23,37
+Line:  781  FEC:  2  ASIC:  9  Chan:  700  row,col: 22,37     1,22,37
+Line:  782  FEC:  2  ASIC:  9  Chan:  706  row,col: 21,37     1,21,37
+Line:  783  FEC:  2  ASIC:  9  Chan:  710  row,col: 20,37     1,20,37
+Line:  784  FEC:  2  ASIC:  9  Chan:  702  row,col: 19,37     1,19,37
+Line:  785  FEC:  2  ASIC:  9  Chan:  698  row,col: 18,37     1,18,37
+Line:  786  FEC:  2  ASIC:  9  Chan:  680  row,col: 17,37     1,17,37
+Line:  787  FEC:  2  ASIC:  9  Chan:  674  row,col: 16,37     1,16,37
+Line:  788  FEC:  2  ASIC:  9  Chan:  668  row,col: 15,37     1,15,37
+Line:  789  FEC:  2  ASIC:  9  Chan:  662  row,col: 14,37     1,14,37
+Line:  790  FEC:  2  ASIC:  9  Chan:  654  row,col: 13,37     1,13,37
+Line:  791  FEC:  2  ASIC:  9  Chan:  650  row,col: 12,37     1,12,37
+Line:  792  FEC:  2  ASIC: 10  Chan:  788  row,col: 11,37     2,11,37
+Line:  793  FEC:  2  ASIC: 10  Chan:  784  row,col: 10,37     2,10,37
+Line:  794  FEC:  2  ASIC: 10  Chan:  776  row,col:  9,37     2,9,37
+Line:  795  FEC:  2  ASIC: 10  Chan:  770  row,col:  8,37     2,8,37
+Line:  796  FEC:  2  ASIC: 10  Chan:  764  row,col:  7,37     2,7,37
+Line:  797  FEC:  2  ASIC: 10  Chan:  758  row,col:  6,37     2,6,37
+Line:  798  FEC:  2  ASIC: 10  Chan:  740  row,col:  5,37     2,5,37
+Line:  799  FEC:  2  ASIC: 10  Chan:  736  row,col:  4,37     2,4,37
+Line:  800  FEC:  2  ASIC: 10  Chan:  728  row,col:  3,37     2,3,37
+Line:  801  FEC:  2  ASIC: 10  Chan:  732  row,col:  2,37     2,2,37
+Line:  802  FEC:  2  ASIC: 10  Chan:  738  row,col:  1,37     2,1,37
+Line:  803  FEC:  2  ASIC: 10  Chan:  727  row,col:  0,37     2,0,37
+Line:  804  FEC:  2  ASIC: 11  Chan:  860  row,col: 11,43     3,11,43
+Line:  805  FEC:  2  ASIC: 11  Chan:  854  row,col: 10,43     3,10,43
+Line:  806  FEC:  2  ASIC: 11  Chan:  850  row,col:  9,43     3,9,43
+Line:  807  FEC:  2  ASIC: 11  Chan:  840  row,col:  8,43     3,8,43
+Line:  808  FEC:  2  ASIC: 11  Chan:  836  row,col:  7,43     3,7,43
+Line:  809  FEC:  2  ASIC: 11  Chan:  830  row,col:  6,43     3,6,43
+Line:  810  FEC:  2  ASIC: 11  Chan:  824  row,col:  5,43     3,5,43
+Line:  811  FEC:  2  ASIC: 11  Chan:  820  row,col:  4,43     3,4,43
+Line:  812  FEC:  2  ASIC: 11  Chan:  808  row,col:  3,43     3,3,43
+Line:  813  FEC:  2  ASIC: 11  Chan:  792  row,col:  2,43     3,2,43
+Line:  814  FEC:  2  ASIC: 11  Chan:  794  row,col:  1,43     3,1,43
+Line:  815  FEC:  2  ASIC: 11  Chan:  796  row,col:  0,43     3,0,43
+Line:  816  FEC:  2  ASIC:  8  Chan:  626  row,col: 23,42     0,23,42
+Line:  817  FEC:  2  ASIC:  8  Chan:  628  row,col: 22,42     0,22,42
+Line:  818  FEC:  2  ASIC:  8  Chan:  638  row,col: 21,42     0,21,42
+Line:  819  FEC:  2  ASIC:  8  Chan:  646  row,col: 20,42     0,20,42
+Line:  820  FEC:  2  ASIC:  8  Chan:  634  row,col: 19,42     0,19,42
+Line:  821  FEC:  2  ASIC:  8  Chan:  612  row,col: 18,42     0,18,42
+Line:  822  FEC:  2  ASIC:  8  Chan:  610  row,col: 17,42     0,17,42
+Line:  823  FEC:  2  ASIC:  8  Chan:  604  row,col: 16,42     0,16,42
+Line:  824  FEC:  2  ASIC:  8  Chan:  596  row,col: 15,42     0,15,42
+Line:  825  FEC:  2  ASIC:  8  Chan:  590  row,col: 14,42     0,14,42
+Line:  826  FEC:  2  ASIC:  8  Chan:  582  row,col: 13,42     0,13,42
+Line:  827  FEC:  2  ASIC:  8  Chan:  576  row,col: 12,42     0,12,42
+Line:  828  FEC:  2  ASIC:  9  Chan:  694  row,col: 23,36     1,23,36
+Line:  829  FEC:  2  ASIC:  9  Chan:  692  row,col: 22,36     1,22,36
+Line:  830  FEC:  2  ASIC:  9  Chan:  690  row,col: 21,36     1,21,36
+Line:  831  FEC:  2  ASIC:  9  Chan:  688  row,col: 20,36     1,20,36
+Line:  832  FEC:  2  ASIC:  9  Chan:  686  row,col: 19,36     1,19,36
+Line:  833  FEC:  2  ASIC:  9  Chan:  684  row,col: 18,36     1,18,36
+Line:  834  FEC:  2  ASIC:  9  Chan:  678  row,col: 17,36     1,17,36
+Line:  835  FEC:  2  ASIC:  9  Chan:  672  row,col: 16,36     1,16,36
+Line:  836  FEC:  2  ASIC:  9  Chan:  670  row,col: 15,36     1,15,36
+Line:  837  FEC:  2  ASIC:  9  Chan:  664  row,col: 14,36     1,14,36
+Line:  838  FEC:  2  ASIC:  9  Chan:  658  row,col: 13,36     1,13,36
+Line:  839  FEC:  2  ASIC:  9  Chan:  652  row,col: 12,36     1,12,36
+Line:  840  FEC:  2  ASIC: 10  Chan:  786  row,col: 11,36     2,11,36
+Line:  841  FEC:  2  ASIC: 10  Chan:  780  row,col: 10,36     2,10,36
+Line:  842  FEC:  2  ASIC: 10  Chan:  774  row,col:  9,36     2,9,36
+Line:  843  FEC:  2  ASIC: 10  Chan:  768  row,col:  8,36     2,8,36
+Line:  844  FEC:  2  ASIC: 10  Chan:  766  row,col:  7,36     2,7,36
+Line:  845  FEC:  2  ASIC: 10  Chan:  760  row,col:  6,36     2,6,36
+Line:  846  FEC:  2  ASIC: 10  Chan:  754  row,col:  5,36     2,5,36
+Line:  847  FEC:  2  ASIC: 10  Chan:  752  row,col:  4,36     2,4,36
+Line:  848  FEC:  2  ASIC: 10  Chan:  750  row,col:  3,36     2,3,36
+Line:  849  FEC:  2  ASIC: 10  Chan:  748  row,col:  2,36     2,2,36
+Line:  850  FEC:  2  ASIC: 10  Chan:  746  row,col:  1,36     2,1,36
+Line:  851  FEC:  2  ASIC: 10  Chan:  744  row,col:  0,36     2,0,36
+Line:  852  FEC:  2  ASIC: 11  Chan:  862  row,col: 11,42     3,11,42
+Line:  853  FEC:  2  ASIC: 11  Chan:  856  row,col: 10,42     3,10,42
+Line:  854  FEC:  2  ASIC: 11  Chan:  848  row,col:  9,42     3,9,42
+Line:  855  FEC:  2  ASIC: 11  Chan:  842  row,col:  8,42     3,8,42
+Line:  856  FEC:  2  ASIC: 11  Chan:  834  row,col:  7,42     3,7,42
+Line:  857  FEC:  2  ASIC: 11  Chan:  828  row,col:  6,42     3,6,42
+Line:  858  FEC:  2  ASIC: 11  Chan:  826  row,col:  5,42     3,5,42
+Line:  859  FEC:  2  ASIC: 11  Chan:  818  row,col:  4,42     3,4,42
+Line:  860  FEC:  2  ASIC: 11  Chan:  806  row,col:  3,42     3,3,42
+Line:  861  FEC:  2  ASIC: 11  Chan:  798  row,col:  2,42     3,2,42
+Line:  862  FEC:  2  ASIC: 11  Chan:  814  row,col:  1,42     3,1,42
+Line:  863  FEC:  2  ASIC: 11  Chan:  816  row,col:  0,42     3,0,42
+Line:  864  FEC:  3  ASIC: 12  Chan:  911  row,col: 23,35     0,23,35
+Line:  865  FEC:  3  ASIC: 12  Chan:  909  row,col: 22,35     0,22,35
+Line:  866  FEC:  3  ASIC: 12  Chan:  907  row,col: 21,35     0,21,35
+Line:  867  FEC:  3  ASIC: 12  Chan:  905  row,col: 20,35     0,20,35
+Line:  868  FEC:  3  ASIC: 12  Chan:  903  row,col: 19,35     0,19,35
+Line:  869  FEC:  3  ASIC: 12  Chan:  901  row,col: 18,35     0,18,35
+Line:  870  FEC:  3  ASIC: 12  Chan:  895  row,col: 17,35     0,17,35
+Line:  871  FEC:  3  ASIC: 12  Chan:  889  row,col: 16,35     0,16,35
+Line:  872  FEC:  3  ASIC: 12  Chan:  887  row,col: 15,35     0,15,35
+Line:  873  FEC:  3  ASIC: 12  Chan:  881  row,col: 14,35     0,14,35
+Line:  874  FEC:  3  ASIC: 12  Chan:  875  row,col: 13,35     0,13,35
+Line:  875  FEC:  3  ASIC: 12  Chan:  869  row,col: 12,35     0,12,35
+Line:  876  FEC:  3  ASIC: 13  Chan:  987  row,col: 23,29     1,23,29
+Line:  877  FEC:  3  ASIC: 13  Chan:  989  row,col: 22,29     1,22,29
+Line:  878  FEC:  3  ASIC: 13  Chan:  999  row,col: 21,29     1,21,29
+Line:  879  FEC:  3  ASIC: 13  Chan: 1007  row,col: 20,29     1,20,29
+Line:  880  FEC:  3  ASIC: 13  Chan:  995  row,col: 19,29     1,19,29
+Line:  881  FEC:  3  ASIC: 13  Chan:  973  row,col: 18,29     1,18,29
+Line:  882  FEC:  3  ASIC: 13  Chan:  971  row,col: 17,29     1,17,29
+Line:  883  FEC:  3  ASIC: 13  Chan:  965  row,col: 16,29     1,16,29
+Line:  884  FEC:  3  ASIC: 13  Chan:  957  row,col: 15,29     1,15,29
+Line:  885  FEC:  3  ASIC: 13  Chan:  951  row,col: 14,29     1,14,29
+Line:  886  FEC:  3  ASIC: 13  Chan:  943  row,col: 13,29     1,13,29
+Line:  887  FEC:  3  ASIC: 13  Chan:  937  row,col: 12,29     1,12,29
+Line:  888  FEC:  3  ASIC: 14  Chan: 1079  row,col: 11,29     2,11,29
+Line:  889  FEC:  3  ASIC: 14  Chan: 1073  row,col: 10,29     2,10,29
+Line:  890  FEC:  3  ASIC: 14  Chan: 1065  row,col:  9,29     2,9,29
+Line:  891  FEC:  3  ASIC: 14  Chan: 1059  row,col:  8,29     2,8,29
+Line:  892  FEC:  3  ASIC: 14  Chan: 1051  row,col:  7,29     2,7,29
+Line:  893  FEC:  3  ASIC: 14  Chan: 1045  row,col:  6,29     2,6,29
+Line:  894  FEC:  3  ASIC: 14  Chan: 1043  row,col:  5,29     2,5,29
+Line:  895  FEC:  3  ASIC: 14  Chan: 1035  row,col:  4,29     2,4,29
+Line:  896  FEC:  3  ASIC: 14  Chan: 1023  row,col:  3,29     2,3,29
+Line:  897  FEC:  3  ASIC: 14  Chan: 1015  row,col:  2,29     2,2,29
+Line:  898  FEC:  3  ASIC: 14  Chan: 1031  row,col:  1,29     2,1,29
+Line:  899  FEC:  3  ASIC: 14  Chan: 1033  row,col:  0,29     2,0,29
+Line:  900  FEC:  3  ASIC: 15  Chan: 1147  row,col: 11,35     3,11,35
+Line:  901  FEC:  3  ASIC: 15  Chan: 1141  row,col: 10,35     3,10,35
+Line:  902  FEC:  3  ASIC: 15  Chan: 1135  row,col:  9,35     3,9,35
+Line:  903  FEC:  3  ASIC: 15  Chan: 1129  row,col:  8,35     3,8,35
+Line:  904  FEC:  3  ASIC: 15  Chan: 1127  row,col:  7,35     3,7,35
+Line:  905  FEC:  3  ASIC: 15  Chan: 1121  row,col:  6,35     3,6,35
+Line:  906  FEC:  3  ASIC: 15  Chan: 1115  row,col:  5,35     3,5,35
+Line:  907  FEC:  3  ASIC: 15  Chan: 1113  row,col:  4,35     3,4,35
+Line:  908  FEC:  3  ASIC: 15  Chan: 1111  row,col:  3,35     3,3,35
+Line:  909  FEC:  3  ASIC: 15  Chan: 1109  row,col:  2,35     3,2,35
+Line:  910  FEC:  3  ASIC: 15  Chan: 1107  row,col:  1,35     3,1,35
+Line:  911  FEC:  3  ASIC: 15  Chan: 1105  row,col:  0,35     3,0,35
+Line:  912  FEC:  3  ASIC: 12  Chan:  932  row,col: 23,34     0,23,34
+Line:  913  FEC:  3  ASIC: 12  Chan:  917  row,col: 22,34     0,22,34
+Line:  914  FEC:  3  ASIC: 12  Chan:  923  row,col: 21,34     0,21,34
+Line:  915  FEC:  3  ASIC: 12  Chan:  927  row,col: 20,34     0,20,34
+Line:  916  FEC:  3  ASIC: 12  Chan:  919  row,col: 19,34     0,19,34
+Line:  917  FEC:  3  ASIC: 12  Chan:  915  row,col: 18,34     0,18,34
+Line:  918  FEC:  3  ASIC: 12  Chan:  897  row,col: 17,34     0,17,34
+Line:  919  FEC:  3  ASIC: 12  Chan:  891  row,col: 16,34     0,16,34
+Line:  920  FEC:  3  ASIC: 12  Chan:  885  row,col: 15,34     0,15,34
+Line:  921  FEC:  3  ASIC: 12  Chan:  879  row,col: 14,34     0,14,34
+Line:  922  FEC:  3  ASIC: 12  Chan:  871  row,col: 13,34     0,13,34
+Line:  923  FEC:  3  ASIC: 12  Chan:  867  row,col: 12,34     0,12,34
+Line:  924  FEC:  3  ASIC: 13  Chan:  991  row,col: 23,28     1,23,28
+Line:  925  FEC:  3  ASIC: 13  Chan:  993  row,col: 22,28     1,22,28
+Line:  926  FEC:  3  ASIC: 13  Chan: 1005  row,col: 21,28     1,21,28
+Line:  927  FEC:  3  ASIC: 13  Chan:  977  row,col: 20,28     1,20,28
+Line:  928  FEC:  3  ASIC: 13  Chan:  996  row,col: 19,28     1,19,28
+Line:  929  FEC:  3  ASIC: 13  Chan:  984  row,col: 18,28     1,18,28
+Line:  930  FEC:  3  ASIC: 13  Chan:  969  row,col: 17,28     1,17,28
+Line:  931  FEC:  3  ASIC: 13  Chan:  963  row,col: 16,28     1,16,28
+Line:  932  FEC:  3  ASIC: 13  Chan:  952  row,col: 15,28     1,15,28
+Line:  933  FEC:  3  ASIC: 13  Chan:  946  row,col: 14,28     1,14,28
+Line:  934  FEC:  3  ASIC: 13  Chan:  945  row,col: 13,28     1,13,28
+Line:  935  FEC:  3  ASIC: 13  Chan:  939  row,col: 12,28     1,12,28
+Line:  936  FEC:  3  ASIC: 14  Chan: 1077  row,col: 11,28     2,11,28
+Line:  937  FEC:  3  ASIC: 14  Chan: 1071  row,col: 10,28     2,10,28
+Line:  938  FEC:  3  ASIC: 14  Chan: 1067  row,col:  9,28     2,9,28
+Line:  939  FEC:  3  ASIC: 14  Chan: 1057  row,col:  8,28     2,8,28
+Line:  940  FEC:  3  ASIC: 14  Chan: 1053  row,col:  7,28     2,7,28
+Line:  941  FEC:  3  ASIC: 14  Chan: 1047  row,col:  6,28     2,6,28
+Line:  942  FEC:  3  ASIC: 14  Chan: 1041  row,col:  5,28     2,5,28
+Line:  943  FEC:  3  ASIC: 14  Chan: 1037  row,col:  4,28     2,4,28
+Line:  944  FEC:  3  ASIC: 14  Chan: 1025  row,col:  3,28     2,3,28
+Line:  945  FEC:  3  ASIC: 14  Chan: 1009  row,col:  2,28     2,2,28
+Line:  946  FEC:  3  ASIC: 14  Chan: 1011  row,col:  1,28     2,1,28
+Line:  947  FEC:  3  ASIC: 14  Chan: 1013  row,col:  0,28     2,0,28
+Line:  948  FEC:  3  ASIC: 15  Chan: 1149  row,col: 11,34     3,11,34
+Line:  949  FEC:  3  ASIC: 15  Chan: 1145  row,col: 10,34     3,10,34
+Line:  950  FEC:  3  ASIC: 15  Chan: 1137  row,col:  9,34     3,9,34
+Line:  951  FEC:  3  ASIC: 15  Chan: 1131  row,col:  8,34     3,8,34
+Line:  952  FEC:  3  ASIC: 15  Chan: 1125  row,col:  7,34     3,7,34
+Line:  953  FEC:  3  ASIC: 15  Chan: 1119  row,col:  6,34     3,6,34
+Line:  954  FEC:  3  ASIC: 15  Chan: 1101  row,col:  5,34     3,5,34
+Line:  955  FEC:  3  ASIC: 15  Chan: 1097  row,col:  4,34     3,4,34
+Line:  956  FEC:  3  ASIC: 15  Chan: 1089  row,col:  3,34     3,3,34
+Line:  957  FEC:  3  ASIC: 15  Chan: 1093  row,col:  2,34     3,2,34
+Line:  958  FEC:  3  ASIC: 15  Chan: 1099  row,col:  1,34     3,1,34
+Line:  959  FEC:  3  ASIC: 15  Chan: 1086  row,col:  0,34     3,0,34
+Line:  960  FEC:  3  ASIC: 12  Chan:  928  row,col: 23,33     0,23,33
+Line:  961  FEC:  3  ASIC: 12  Chan:  921  row,col: 22,33     0,22,33
+Line:  962  FEC:  3  ASIC: 12  Chan:  929  row,col: 21,33     0,21,33
+Line:  963  FEC:  3  ASIC: 12  Chan:  935  row,col: 20,33     0,20,33
+Line:  964  FEC:  3  ASIC: 12  Chan:  925  row,col: 19,33     0,19,33
+Line:  965  FEC:  3  ASIC: 12  Chan:  913  row,col: 18,33     0,18,33
+Line:  966  FEC:  3  ASIC: 12  Chan:  899  row,col: 17,33     0,17,33
+Line:  967  FEC:  3  ASIC: 12  Chan:  893  row,col: 16,33     0,16,33
+Line:  968  FEC:  3  ASIC: 12  Chan:  883  row,col: 15,33     0,15,33
+Line:  969  FEC:  3  ASIC: 12  Chan:  877  row,col: 14,33     0,14,33
+Line:  970  FEC:  3  ASIC: 12  Chan:  873  row,col: 13,33     0,13,33
+Line:  971  FEC:  3  ASIC: 12  Chan:  865  row,col: 12,33     0,12,33
+Line:  972  FEC:  3  ASIC: 13  Chan:  997  row,col: 23,27     1,23,27
+Line:  973  FEC:  3  ASIC: 13  Chan: 1003  row,col: 22,27     1,22,27
+Line:  974  FEC:  3  ASIC: 13  Chan: 1001  row,col: 21,27     1,21,27
+Line:  975  FEC:  3  ASIC: 13  Chan:  975  row,col: 20,27     1,20,27
+Line:  976  FEC:  3  ASIC: 13  Chan:  994  row,col: 19,27     1,19,27
+Line:  977  FEC:  3  ASIC: 13  Chan:  982  row,col: 18,27     1,18,27
+Line:  978  FEC:  3  ASIC: 13  Chan:  970  row,col: 17,27     1,17,27
+Line:  979  FEC:  3  ASIC: 13  Chan:  960  row,col: 16,27     1,16,27
+Line:  980  FEC:  3  ASIC: 13  Chan:  954  row,col: 15,27     1,15,27
+Line:  981  FEC:  3  ASIC: 13  Chan:  948  row,col: 14,27     1,14,27
+Line:  982  FEC:  3  ASIC: 13  Chan:  942  row,col: 13,27     1,13,27
+Line:  983  FEC:  3  ASIC: 13  Chan:  941  row,col: 12,27     1,12,27
+Line:  984  FEC:  3  ASIC: 14  Chan: 1075  row,col: 11,27     2,11,27
+Line:  985  FEC:  3  ASIC: 14  Chan: 1069  row,col: 10,27     2,10,27
+Line:  986  FEC:  3  ASIC: 14  Chan: 1063  row,col:  9,27     2,9,27
+Line:  987  FEC:  3  ASIC: 14  Chan: 1062  row,col:  8,27     2,8,27
+Line:  988  FEC:  3  ASIC: 14  Chan: 1055  row,col:  7,27     2,7,27
+Line:  989  FEC:  3  ASIC: 14  Chan: 1049  row,col:  6,27     2,6,27
+Line:  990  FEC:  3  ASIC: 14  Chan: 1036  row,col:  5,27     2,5,27
+Line:  991  FEC:  3  ASIC: 14  Chan: 1039  row,col:  4,27     2,4,27
+Line:  992  FEC:  3  ASIC: 14  Chan: 1027  row,col:  3,27     2,3,27
+Line:  993  FEC:  3  ASIC: 14  Chan: 1021  row,col:  2,27     2,2,27
+Line:  994  FEC:  3  ASIC: 14  Chan: 1019  row,col:  1,27     2,1,27
+Line:  995  FEC:  3  ASIC: 14  Chan: 1017  row,col:  0,27     2,0,27
+Line:  996  FEC:  3  ASIC: 15  Chan: 1151  row,col: 11,33     3,11,33
+Line:  997  FEC:  3  ASIC: 15  Chan: 1143  row,col: 10,33     3,10,33
+Line:  998  FEC:  3  ASIC: 15  Chan: 1139  row,col:  9,33     3,9,33
+Line:  999  FEC:  3  ASIC: 15  Chan: 1133  row,col:  8,33     3,8,33
+Line: 1000  FEC:  3  ASIC: 15  Chan: 1123  row,col:  7,33     3,7,33
+Line: 1001  FEC:  3  ASIC: 15  Chan: 1117  row,col:  6,33     3,6,33
+Line: 1002  FEC:  3  ASIC: 15  Chan: 1103  row,col:  5,33     3,5,33
+Line: 1003  FEC:  3  ASIC: 15  Chan: 1091  row,col:  4,33     3,4,33
+Line: 1004  FEC:  3  ASIC: 15  Chan: 1081  row,col:  3,33     3,3,33
+Line: 1005  FEC:  3  ASIC: 15  Chan: 1087  row,col:  2,33     3,2,33
+Line: 1006  FEC:  3  ASIC: 15  Chan: 1095  row,col:  1,33     3,1,33
+Line: 1007  FEC:  3  ASIC: 15  Chan: 1082  row,col:  0,33     3,0,33
+Line: 1008  FEC:  3  ASIC: 12  Chan:  926  row,col: 23,32     0,23,32
+Line: 1009  FEC:  3  ASIC: 12  Chan:  930  row,col: 22,32     0,22,32
+Line: 1010  FEC:  3  ASIC: 12  Chan:  931  row,col: 21,32     0,21,32
+Line: 1011  FEC:  3  ASIC: 12  Chan:  933  row,col: 20,32     0,20,32
+Line: 1012  FEC:  3  ASIC: 12  Chan:  924  row,col: 19,32     0,19,32
+Line: 1013  FEC:  3  ASIC: 12  Chan:  914  row,col: 18,32     0,18,32
+Line: 1014  FEC:  3  ASIC: 12  Chan:  898  row,col: 17,32     0,17,32
+Line: 1015  FEC:  3  ASIC: 12  Chan:  892  row,col: 16,32     0,16,32
+Line: 1016  FEC:  3  ASIC: 12  Chan:  884  row,col: 15,32     0,15,32
+Line: 1017  FEC:  3  ASIC: 12  Chan:  876  row,col: 14,32     0,14,32
+Line: 1018  FEC:  3  ASIC: 12  Chan:  872  row,col: 13,32     0,13,32
+Line: 1019  FEC:  3  ASIC: 12  Chan:  864  row,col: 12,32     0,12,32
+Line: 1020  FEC:  3  ASIC: 13  Chan:  985  row,col: 23,26     1,23,26
+Line: 1021  FEC:  3  ASIC: 13  Chan:  983  row,col: 22,26     1,22,26
+Line: 1022  FEC:  3  ASIC: 13  Chan:  979  row,col: 21,26     1,21,26
+Line: 1023  FEC:  3  ASIC: 13  Chan: 1004  row,col: 20,26     1,20,26
+Line: 1024  FEC:  3  ASIC: 13  Chan:  986  row,col: 19,26     1,19,26
+Line: 1025  FEC:  3  ASIC: 13  Chan:  976  row,col: 18,26     1,18,26
+Line: 1026  FEC:  3  ASIC: 13  Chan:  968  row,col: 17,26     1,17,26
+Line: 1027  FEC:  3  ASIC: 13  Chan:  964  row,col: 16,26     1,16,26
+Line: 1028  FEC:  3  ASIC: 13  Chan:  959  row,col: 15,26     1,15,26
+Line: 1029  FEC:  3  ASIC: 13  Chan:  953  row,col: 14,26     1,14,26
+Line: 1030  FEC:  3  ASIC: 13  Chan:  947  row,col: 13,26     1,13,26
+Line: 1031  FEC:  3  ASIC: 13  Chan:  940  row,col: 12,26     1,12,26
+Line: 1032  FEC:  3  ASIC: 14  Chan: 1074  row,col: 11,26     2,11,26
+Line: 1033  FEC:  3  ASIC: 14  Chan: 1072  row,col: 10,26     2,10,26
+Line: 1034  FEC:  3  ASIC: 14  Chan: 1068  row,col:  9,26     2,9,26
+Line: 1035  FEC:  3  ASIC: 14  Chan: 1060  row,col:  8,26     2,8,26
+Line: 1036  FEC:  3  ASIC: 14  Chan: 1050  row,col:  7,26     2,7,26
+Line: 1037  FEC:  3  ASIC: 14  Chan: 1044  row,col:  6,26     2,6,26
+Line: 1038  FEC:  3  ASIC: 14  Chan: 1038  row,col:  5,26     2,5,26
+Line: 1039  FEC:  3  ASIC: 14  Chan: 1030  row,col:  4,26     2,4,26
+Line: 1040  FEC:  3  ASIC: 14  Chan: 1029  row,col:  3,26     2,3,26
+Line: 1041  FEC:  3  ASIC: 14  Chan: 1008  row,col:  2,26     2,2,26
+Line: 1042  FEC:  3  ASIC: 14  Chan: 1010  row,col:  1,26     2,1,26
+Line: 1043  FEC:  3  ASIC: 14  Chan: 1012  row,col:  0,26     2,0,26
+Line: 1044  FEC:  3  ASIC: 15  Chan: 1150  row,col: 11,32     3,11,32
+Line: 1045  FEC:  3  ASIC: 15  Chan: 1142  row,col: 10,32     3,10,32
+Line: 1046  FEC:  3  ASIC: 15  Chan: 1138  row,col:  9,32     3,9,32
+Line: 1047  FEC:  3  ASIC: 15  Chan: 1128  row,col:  8,32     3,8,32
+Line: 1048  FEC:  3  ASIC: 15  Chan: 1122  row,col:  7,32     3,7,32
+Line: 1049  FEC:  3  ASIC: 15  Chan: 1116  row,col:  6,32     3,6,32
+Line: 1050  FEC:  3  ASIC: 15  Chan: 1100  row,col:  5,32     3,5,32
+Line: 1051  FEC:  3  ASIC: 15  Chan: 1090  row,col:  4,32     3,4,32
+Line: 1052  FEC:  3  ASIC: 15  Chan: 1083  row,col:  3,32     3,3,32
+Line: 1053  FEC:  3  ASIC: 15  Chan: 1085  row,col:  2,32     3,2,32
+Line: 1054  FEC:  3  ASIC: 15  Chan: 1084  row,col:  1,32     3,1,32
+Line: 1055  FEC:  3  ASIC: 15  Chan: 1088  row,col:  0,32     3,0,32
+Line: 1056  FEC:  3  ASIC: 12  Chan:  916  row,col: 23,31     0,23,31
+Line: 1057  FEC:  3  ASIC: 12  Chan:  918  row,col: 22,31     0,22,31
+Line: 1058  FEC:  3  ASIC: 12  Chan:  920  row,col: 21,31     0,21,31
+Line: 1059  FEC:  3  ASIC: 12  Chan:  934  row,col: 20,31     0,20,31
+Line: 1060  FEC:  3  ASIC: 12  Chan:  922  row,col: 19,31     0,19,31
+Line: 1061  FEC:  3  ASIC: 12  Chan:  912  row,col: 18,31     0,18,31
+Line: 1062  FEC:  3  ASIC: 12  Chan:  902  row,col: 17,31     0,17,31
+Line: 1063  FEC:  3  ASIC: 12  Chan:  890  row,col: 16,31     0,16,31
+Line: 1064  FEC:  3  ASIC: 12  Chan:  886  row,col: 15,31     0,15,31
+Line: 1065  FEC:  3  ASIC: 12  Chan:  878  row,col: 14,31     0,14,31
+Line: 1066  FEC:  3  ASIC: 12  Chan:  870  row,col: 13,31     0,13,31
+Line: 1067  FEC:  3  ASIC: 12  Chan:  866  row,col: 12,31     0,12,31
+Line: 1068  FEC:  3  ASIC: 13  Chan:  981  row,col: 23,25     1,23,25
+Line: 1069  FEC:  3  ASIC: 13  Chan: 1006  row,col: 22,25     1,22,25
+Line: 1070  FEC:  3  ASIC: 13  Chan:  998  row,col: 21,25     1,21,25
+Line: 1071  FEC:  3  ASIC: 13  Chan:  990  row,col: 20,25     1,20,25
+Line: 1072  FEC:  3  ASIC: 13  Chan:  980  row,col: 19,25     1,19,25
+Line: 1073  FEC:  3  ASIC: 13  Chan:  974  row,col: 18,25     1,18,25
+Line: 1074  FEC:  3  ASIC: 13  Chan:  967  row,col: 17,25     1,17,25
+Line: 1075  FEC:  3  ASIC: 13  Chan:  962  row,col: 16,25     1,16,25
+Line: 1076  FEC:  3  ASIC: 13  Chan:  956  row,col: 15,25     1,15,25
+Line: 1077  FEC:  3  ASIC: 13  Chan:  950  row,col: 14,25     1,14,25
+Line: 1078  FEC:  3  ASIC: 13  Chan:  944  row,col: 13,25     1,13,25
+Line: 1079  FEC:  3  ASIC: 13  Chan:  938  row,col: 12,25     1,12,25
+Line: 1080  FEC:  3  ASIC: 14  Chan: 1076  row,col: 11,25     2,11,25
+Line: 1081  FEC:  3  ASIC: 14  Chan: 1070  row,col: 10,25     2,10,25
+Line: 1082  FEC:  3  ASIC: 14  Chan: 1064  row,col:  9,25     2,9,25
+Line: 1083  FEC:  3  ASIC: 14  Chan: 1058  row,col:  8,25     2,8,25
+Line: 1084  FEC:  3  ASIC: 14  Chan: 1052  row,col:  7,25     2,7,25
+Line: 1085  FEC:  3  ASIC: 14  Chan: 1046  row,col:  6,25     2,6,25
+Line: 1086  FEC:  3  ASIC: 14  Chan: 1040  row,col:  5,25     2,5,25
+Line: 1087  FEC:  3  ASIC: 14  Chan: 1032  row,col:  4,25     2,4,25
+Line: 1088  FEC:  3  ASIC: 14  Chan: 1020  row,col:  3,25     2,3,25
+Line: 1089  FEC:  3  ASIC: 14  Chan: 1018  row,col:  2,25     2,2,25
+Line: 1090  FEC:  3  ASIC: 14  Chan: 1016  row,col:  1,25     2,1,25
+Line: 1091  FEC:  3  ASIC: 14  Chan: 1014  row,col:  0,25     2,0,25
+Line: 1092  FEC:  3  ASIC: 15  Chan: 1148  row,col: 11,31     3,11,31
+Line: 1093  FEC:  3  ASIC: 15  Chan: 1144  row,col: 10,31     3,10,31
+Line: 1094  FEC:  3  ASIC: 15  Chan: 1136  row,col:  9,31     3,9,31
+Line: 1095  FEC:  3  ASIC: 15  Chan: 1130  row,col:  8,31     3,8,31
+Line: 1096  FEC:  3  ASIC: 15  Chan: 1124  row,col:  7,31     3,7,31
+Line: 1097  FEC:  3  ASIC: 15  Chan: 1112  row,col:  6,31     3,6,31
+Line: 1098  FEC:  3  ASIC: 15  Chan: 1102  row,col:  5,31     3,5,31
+Line: 1099  FEC:  3  ASIC: 15  Chan: 1092  row,col:  4,31     3,4,31
+Line: 1100  FEC:  3  ASIC: 15  Chan: 1080  row,col:  3,31     3,3,31
+Line: 1101  FEC:  3  ASIC: 15  Chan: 1094  row,col:  2,31     3,2,31
+Line: 1102  FEC:  3  ASIC: 15  Chan: 1096  row,col:  1,31     3,1,31
+Line: 1103  FEC:  3  ASIC: 15  Chan: 1098  row,col:  0,31     3,0,31
+Line: 1104  FEC:  3  ASIC: 12  Chan:  910  row,col: 23,30     0,23,30
+Line: 1105  FEC:  3  ASIC: 12  Chan:  908  row,col: 22,30     0,22,30
+Line: 1106  FEC:  3  ASIC: 12  Chan:  906  row,col: 21,30     0,21,30
+Line: 1107  FEC:  3  ASIC: 12  Chan:  904  row,col: 20,30     0,20,30
+Line: 1108  FEC:  3  ASIC: 12  Chan:  900  row,col: 19,30     0,19,30
+Line: 1109  FEC:  3  ASIC: 12  Chan:  896  row,col: 18,30     0,18,30
+Line: 1110  FEC:  3  ASIC: 12  Chan:  894  row,col: 17,30     0,17,30
+Line: 1111  FEC:  3  ASIC: 12  Chan:  888  row,col: 16,30     0,16,30
+Line: 1112  FEC:  3  ASIC: 12  Chan:  882  row,col: 15,30     0,15,30
+Line: 1113  FEC:  3  ASIC: 12  Chan:  880  row,col: 14,30     0,14,30
+Line: 1114  FEC:  3  ASIC: 12  Chan:  874  row,col: 13,30     0,13,30
+Line: 1115  FEC:  3  ASIC: 12  Chan:  868  row,col: 12,30     0,12,30
+Line: 1116  FEC:  3  ASIC: 13  Chan: 1002  row,col: 23,24     1,23,24
+Line: 1117  FEC:  3  ASIC: 13  Chan: 1000  row,col: 22,24     1,22,24
+Line: 1118  FEC:  3  ASIC: 13  Chan:  992  row,col: 21,24     1,21,24
+Line: 1119  FEC:  3  ASIC: 13  Chan:  988  row,col: 20,24     1,20,24
+Line: 1120  FEC:  3  ASIC: 13  Chan:  978  row,col: 19,24     1,19,24
+Line: 1121  FEC:  3  ASIC: 13  Chan:  972  row,col: 18,24     1,18,24
+Line: 1122  FEC:  3  ASIC: 13  Chan:  966  row,col: 17,24     1,17,24
+Line: 1123  FEC:  3  ASIC: 13  Chan:  958  row,col: 16,24     1,16,24
+Line: 1124  FEC:  3  ASIC: 13  Chan:  961  row,col: 15,24     1,15,24
+Line: 1125  FEC:  3  ASIC: 13  Chan:  955  row,col: 14,24     1,14,24
+Line: 1126  FEC:  3  ASIC: 13  Chan:  949  row,col: 13,24     1,13,24
+Line: 1127  FEC:  3  ASIC: 13  Chan:  936  row,col: 12,24     1,12,24
+Line: 1128  FEC:  3  ASIC: 14  Chan: 1078  row,col: 11,24     2,11,24
+Line: 1129  FEC:  3  ASIC: 14  Chan: 1066  row,col: 10,24     2,10,24
+Line: 1130  FEC:  3  ASIC: 14  Chan: 1061  row,col:  9,24     2,9,24
+Line: 1131  FEC:  3  ASIC: 14  Chan: 1056  row,col:  8,24     2,8,24
+Line: 1132  FEC:  3  ASIC: 14  Chan: 1054  row,col:  7,24     2,7,24
+Line: 1133  FEC:  3  ASIC: 14  Chan: 1048  row,col:  6,24     2,6,24
+Line: 1134  FEC:  3  ASIC: 14  Chan: 1042  row,col:  5,24     2,5,24
+Line: 1135  FEC:  3  ASIC: 14  Chan: 1034  row,col:  4,24     2,4,24
+Line: 1136  FEC:  3  ASIC: 14  Chan: 1028  row,col:  3,24     2,3,24
+Line: 1137  FEC:  3  ASIC: 14  Chan: 1026  row,col:  2,24     2,2,24
+Line: 1138  FEC:  3  ASIC: 14  Chan: 1024  row,col:  1,24     2,1,24
+Line: 1139  FEC:  3  ASIC: 14  Chan: 1022  row,col:  0,24     2,0,24
+Line: 1140  FEC:  3  ASIC: 15  Chan: 1146  row,col: 11,30     3,11,30
+Line: 1141  FEC:  3  ASIC: 15  Chan: 1140  row,col: 10,30     3,10,30
+Line: 1142  FEC:  3  ASIC: 15  Chan: 1134  row,col:  9,30     3,9,30
+Line: 1143  FEC:  3  ASIC: 15  Chan: 1132  row,col:  8,30     3,8,30
+Line: 1144  FEC:  3  ASIC: 15  Chan: 1126  row,col:  7,30     3,7,30
+Line: 1145  FEC:  3  ASIC: 15  Chan: 1120  row,col:  6,30     3,6,30
+Line: 1146  FEC:  3  ASIC: 15  Chan: 1118  row,col:  5,30     3,5,30
+Line: 1147  FEC:  3  ASIC: 15  Chan: 1110  row,col:  4,30     3,4,30
+Line: 1148  FEC:  3  ASIC: 15  Chan: 1114  row,col:  3,30     3,3,30
+Line: 1149  FEC:  3  ASIC: 15  Chan: 1108  row,col:  2,30     3,2,30
+Line: 1150  FEC:  3  ASIC: 15  Chan: 1106  row,col:  1,30     3,1,30
+Line: 1151  FEC:  3  ASIC: 15  Chan: 1104  row,col:  0,30     3,0,30
+Line: 1152  FEC:  4  ASIC: 16  Chan: 1201  row,col: 23,23     0,23,23
+Line: 1153  FEC:  4  ASIC: 16  Chan: 1207  row,col: 22,23     0,22,23
+Line: 1154  FEC:  4  ASIC: 16  Chan: 1219  row,col: 21,23     0,21,23
+Line: 1155  FEC:  4  ASIC: 16  Chan: 1220  row,col: 20,23     0,20,23
+Line: 1156  FEC:  4  ASIC: 16  Chan: 1210  row,col: 19,23     0,19,23
+Line: 1157  FEC:  4  ASIC: 16  Chan: 1197  row,col: 18,23     0,18,23
+Line: 1158  FEC:  4  ASIC: 16  Chan: 1187  row,col: 17,23     0,17,23
+Line: 1159  FEC:  4  ASIC: 16  Chan: 1181  row,col: 16,23     0,16,23
+Line: 1160  FEC:  4  ASIC: 16  Chan: 1171  row,col: 15,23     0,15,23
+Line: 1161  FEC:  4  ASIC: 16  Chan: 1165  row,col: 14,23     0,14,23
+Line: 1162  FEC:  4  ASIC: 16  Chan: 1155  row,col: 13,23     0,13,23
+Line: 1163  FEC:  4  ASIC: 16  Chan: 1153  row,col: 12,23     0,12,23
+Line: 1164  FEC:  4  ASIC: 17  Chan: 1287  row,col: 23,17     1,23,17
+Line: 1165  FEC:  4  ASIC: 17  Chan: 1283  row,col: 22,17     1,22,17
+Line: 1166  FEC:  4  ASIC: 17  Chan: 1271  row,col: 21,17     1,21,17
+Line: 1167  FEC:  4  ASIC: 17  Chan: 1288  row,col: 20,17     1,20,17
+Line: 1168  FEC:  4  ASIC: 17  Chan: 1276  row,col: 19,17     1,19,17
+Line: 1169  FEC:  4  ASIC: 17  Chan: 1265  row,col: 18,17     1,18,17
+Line: 1170  FEC:  4  ASIC: 17  Chan: 1259  row,col: 17,17     1,17,17
+Line: 1171  FEC:  4  ASIC: 17  Chan: 1249  row,col: 16,17     1,16,17
+Line: 1172  FEC:  4  ASIC: 17  Chan: 1243  row,col: 15,17     1,15,17
+Line: 1173  FEC:  4  ASIC: 17  Chan: 1236  row,col: 14,17     1,14,17
+Line: 1174  FEC:  4  ASIC: 17  Chan: 1231  row,col: 13,17     1,13,17
+Line: 1175  FEC:  4  ASIC: 17  Chan: 1225  row,col: 12,17     1,12,17
+Line: 1176  FEC:  4  ASIC: 18  Chan: 1367  row,col: 11,17     2,11,17
+Line: 1177  FEC:  4  ASIC: 18  Chan: 1361  row,col: 10,17     2,10,17
+Line: 1178  FEC:  4  ASIC: 18  Chan: 1355  row,col:  9,17     2,9,17
+Line: 1179  FEC:  4  ASIC: 18  Chan: 1349  row,col:  8,17     2,8,17
+Line: 1180  FEC:  4  ASIC: 18  Chan: 1343  row,col:  7,17     2,7,17
+Line: 1181  FEC:  4  ASIC: 18  Chan: 1333  row,col:  6,17     2,6,17
+Line: 1182  FEC:  4  ASIC: 18  Chan: 1327  row,col:  5,17     2,5,17
+Line: 1183  FEC:  4  ASIC: 18  Chan: 1316  row,col:  4,17     2,4,17
+Line: 1184  FEC:  4  ASIC: 18  Chan: 1321  row,col:  3,17     2,3,17
+Line: 1185  FEC:  4  ASIC: 18  Chan: 1323  row,col:  2,17     2,2,17
+Line: 1186  FEC:  4  ASIC: 18  Chan: 1309  row,col:  1,17     2,1,17
+Line: 1187  FEC:  4  ASIC: 18  Chan: 1305  row,col:  0,17     2,0,17
+Line: 1188  FEC:  4  ASIC: 19  Chan: 1439  row,col: 11,23     3,11,23
+Line: 1189  FEC:  4  ASIC: 19  Chan: 1437  row,col: 10,23     3,10,23
+Line: 1190  FEC:  4  ASIC: 19  Chan: 1427  row,col:  9,23     3,9,23
+Line: 1191  FEC:  4  ASIC: 19  Chan: 1421  row,col:  8,23     3,8,23
+Line: 1192  FEC:  4  ASIC: 19  Chan: 1411  row,col:  7,23     3,7,23
+Line: 1193  FEC:  4  ASIC: 19  Chan: 1405  row,col:  6,23     3,6,23
+Line: 1194  FEC:  4  ASIC: 19  Chan: 1399  row,col:  5,23     3,5,23
+Line: 1195  FEC:  4  ASIC: 19  Chan: 1395  row,col:  4,23     3,4,23
+Line: 1196  FEC:  4  ASIC: 19  Chan: 1381  row,col:  3,23     3,3,23
+Line: 1197  FEC:  4  ASIC: 19  Chan: 1368  row,col:  2,23     3,2,23
+Line: 1198  FEC:  4  ASIC: 19  Chan: 1379  row,col:  1,23     3,1,23
+Line: 1199  FEC:  4  ASIC: 19  Chan: 1393  row,col:  0,23     3,0,23
+Line: 1200  FEC:  4  ASIC: 16  Chan: 1199  row,col: 23,22     0,23,22
+Line: 1201  FEC:  4  ASIC: 16  Chan: 1209  row,col: 22,22     0,22,22
+Line: 1202  FEC:  4  ASIC: 16  Chan: 1218  row,col: 21,22     0,21,22
+Line: 1203  FEC:  4  ASIC: 16  Chan: 1214  row,col: 20,22     0,20,22
+Line: 1204  FEC:  4  ASIC: 16  Chan: 1202  row,col: 19,22     0,19,22
+Line: 1205  FEC:  4  ASIC: 16  Chan: 1192  row,col: 18,22     0,18,22
+Line: 1206  FEC:  4  ASIC: 16  Chan: 1186  row,col: 17,22     0,17,22
+Line: 1207  FEC:  4  ASIC: 16  Chan: 1180  row,col: 16,22     0,16,22
+Line: 1208  FEC:  4  ASIC: 16  Chan: 1170  row,col: 15,22     0,15,22
+Line: 1209  FEC:  4  ASIC: 16  Chan: 1164  row,col: 14,22     0,14,22
+Line: 1210  FEC:  4  ASIC: 16  Chan: 1154  row,col: 13,22     0,13,22
+Line: 1211  FEC:  4  ASIC: 16  Chan: 1152  row,col: 12,22     0,12,22
+Line: 1212  FEC:  4  ASIC: 17  Chan: 1289  row,col: 23,16     1,23,16
+Line: 1213  FEC:  4  ASIC: 17  Chan: 1281  row,col: 22,16     1,22,16
+Line: 1214  FEC:  4  ASIC: 17  Chan: 1269  row,col: 21,16     1,21,16
+Line: 1215  FEC:  4  ASIC: 17  Chan: 1286  row,col: 20,16     1,20,16
+Line: 1216  FEC:  4  ASIC: 17  Chan: 1274  row,col: 19,16     1,19,16
+Line: 1217  FEC:  4  ASIC: 17  Chan: 1264  row,col: 18,16     1,18,16
+Line: 1218  FEC:  4  ASIC: 17  Chan: 1258  row,col: 17,16     1,17,16
+Line: 1219  FEC:  4  ASIC: 17  Chan: 1248  row,col: 16,16     1,16,16
+Line: 1220  FEC:  4  ASIC: 17  Chan: 1242  row,col: 15,16     1,15,16
+Line: 1221  FEC:  4  ASIC: 17  Chan: 1237  row,col: 14,16     1,14,16
+Line: 1222  FEC:  4  ASIC: 17  Chan: 1230  row,col: 13,16     1,13,16
+Line: 1223  FEC:  4  ASIC: 17  Chan: 1227  row,col: 12,16     1,12,16
+Line: 1224  FEC:  4  ASIC: 18  Chan: 1365  row,col: 11,16     2,11,16
+Line: 1225  FEC:  4  ASIC: 18  Chan: 1360  row,col: 10,16     2,10,16
+Line: 1226  FEC:  4  ASIC: 18  Chan: 1354  row,col:  9,16     2,9,16
+Line: 1227  FEC:  4  ASIC: 18  Chan: 1348  row,col:  8,16     2,8,16
+Line: 1228  FEC:  4  ASIC: 18  Chan: 1342  row,col:  7,16     2,7,16
+Line: 1229  FEC:  4  ASIC: 18  Chan: 1332  row,col:  6,16     2,6,16
+Line: 1230  FEC:  4  ASIC: 18  Chan: 1329  row,col:  5,16     2,5,16
+Line: 1231  FEC:  4  ASIC: 18  Chan: 1314  row,col:  4,16     2,4,16
+Line: 1232  FEC:  4  ASIC: 18  Chan: 1296  row,col:  3,16     2,3,16
+Line: 1233  FEC:  4  ASIC: 18  Chan: 1325  row,col:  2,16     2,2,16
+Line: 1234  FEC:  4  ASIC: 18  Chan: 1311  row,col:  1,16     2,1,16
+Line: 1235  FEC:  4  ASIC: 18  Chan: 1303  row,col:  0,16     2,0,16
+Line: 1236  FEC:  4  ASIC: 19  Chan: 1438  row,col: 11,22     3,11,22
+Line: 1237  FEC:  4  ASIC: 19  Chan: 1436  row,col: 10,22     3,10,22
+Line: 1238  FEC:  4  ASIC: 19  Chan: 1426  row,col:  9,22     3,9,22
+Line: 1239  FEC:  4  ASIC: 19  Chan: 1420  row,col:  8,22     3,8,22
+Line: 1240  FEC:  4  ASIC: 19  Chan: 1410  row,col:  7,22     3,7,22
+Line: 1241  FEC:  4  ASIC: 19  Chan: 1404  row,col:  6,22     3,6,22
+Line: 1242  FEC:  4  ASIC: 19  Chan: 1398  row,col:  5,22     3,5,22
+Line: 1243  FEC:  4  ASIC: 19  Chan: 1390  row,col:  4,22     3,4,22
+Line: 1244  FEC:  4  ASIC: 19  Chan: 1380  row,col:  3,22     3,3,22
+Line: 1245  FEC:  4  ASIC: 19  Chan: 1370  row,col:  2,22     3,2,22
+Line: 1246  FEC:  4  ASIC: 19  Chan: 1377  row,col:  1,22     3,1,22
+Line: 1247  FEC:  4  ASIC: 19  Chan: 1391  row,col:  0,22     3,0,22
+Line: 1248  FEC:  4  ASIC: 16  Chan: 1203  row,col: 23,21     0,23,21
+Line: 1249  FEC:  4  ASIC: 16  Chan: 1211  row,col: 22,21     0,22,21
+Line: 1250  FEC:  4  ASIC: 16  Chan: 1217  row,col: 21,21     0,21,21
+Line: 1251  FEC:  4  ASIC: 16  Chan: 1212  row,col: 20,21     0,20,21
+Line: 1252  FEC:  4  ASIC: 16  Chan: 1196  row,col: 19,21     0,19,21
+Line: 1253  FEC:  4  ASIC: 16  Chan: 1191  row,col: 18,21     0,18,21
+Line: 1254  FEC:  4  ASIC: 16  Chan: 1184  row,col: 17,21     0,17,21
+Line: 1255  FEC:  4  ASIC: 16  Chan: 1178  row,col: 16,21     0,16,21
+Line: 1256  FEC:  4  ASIC: 16  Chan: 1173  row,col: 15,21     0,15,21
+Line: 1257  FEC:  4  ASIC: 16  Chan: 1167  row,col: 14,21     0,14,21
+Line: 1258  FEC:  4  ASIC: 16  Chan: 1156  row,col: 13,21     0,13,21
+Line: 1259  FEC:  4  ASIC: 16  Chan: 1157  row,col: 12,21     0,12,21
+Line: 1260  FEC:  4  ASIC: 17  Chan: 1291  row,col: 23,15     1,23,15
+Line: 1261  FEC:  4  ASIC: 17  Chan: 1279  row,col: 22,15     1,22,15
+Line: 1262  FEC:  4  ASIC: 17  Chan: 1267  row,col: 21,15     1,21,15
+Line: 1263  FEC:  4  ASIC: 17  Chan: 1284  row,col: 20,15     1,20,15
+Line: 1264  FEC:  4  ASIC: 17  Chan: 1272  row,col: 19,15     1,19,15
+Line: 1265  FEC:  4  ASIC: 17  Chan: 1263  row,col: 18,15     1,18,15
+Line: 1266  FEC:  4  ASIC: 17  Chan: 1257  row,col: 17,15     1,17,15
+Line: 1267  FEC:  4  ASIC: 17  Chan: 1250  row,col: 16,15     1,16,15
+Line: 1268  FEC:  4  ASIC: 17  Chan: 1245  row,col: 15,15     1,15,15
+Line: 1269  FEC:  4  ASIC: 17  Chan: 1239  row,col: 14,15     1,14,15
+Line: 1270  FEC:  4  ASIC: 17  Chan: 1233  row,col: 13,15     1,13,15
+Line: 1271  FEC:  4  ASIC: 17  Chan: 1229  row,col: 12,15     1,12,15
+Line: 1272  FEC:  4  ASIC: 18  Chan: 1363  row,col: 11,15     2,11,15
+Line: 1273  FEC:  4  ASIC: 18  Chan: 1359  row,col: 10,15     2,10,15
+Line: 1274  FEC:  4  ASIC: 18  Chan: 1353  row,col:  9,15     2,9,15
+Line: 1275  FEC:  4  ASIC: 18  Chan: 1347  row,col:  8,15     2,8,15
+Line: 1276  FEC:  4  ASIC: 18  Chan: 1340  row,col:  7,15     2,7,15
+Line: 1277  FEC:  4  ASIC: 18  Chan: 1335  row,col:  6,15     2,6,15
+Line: 1278  FEC:  4  ASIC: 18  Chan: 1326  row,col:  5,15     2,5,15
+Line: 1279  FEC:  4  ASIC: 18  Chan: 1318  row,col:  4,15     2,4,15
+Line: 1280  FEC:  4  ASIC: 18  Chan: 1302  row,col:  3,15     2,3,15
+Line: 1281  FEC:  4  ASIC: 18  Chan: 1298  row,col:  2,15     2,2,15
+Line: 1282  FEC:  4  ASIC: 18  Chan: 1313  row,col:  1,15     2,1,15
+Line: 1283  FEC:  4  ASIC: 18  Chan: 1301  row,col:  0,15     2,0,15
+Line: 1284  FEC:  4  ASIC: 19  Chan: 1435  row,col: 11,21     3,11,21
+Line: 1285  FEC:  4  ASIC: 19  Chan: 1434  row,col: 10,21     3,10,21
+Line: 1286  FEC:  4  ASIC: 19  Chan: 1425  row,col:  9,21     3,9,21
+Line: 1287  FEC:  4  ASIC: 19  Chan: 1419  row,col:  8,21     3,8,21
+Line: 1288  FEC:  4  ASIC: 19  Chan: 1412  row,col:  7,21     3,7,21
+Line: 1289  FEC:  4  ASIC: 19  Chan: 1406  row,col:  6,21     3,6,21
+Line: 1290  FEC:  4  ASIC: 19  Chan: 1401  row,col:  5,21     3,5,21
+Line: 1291  FEC:  4  ASIC: 19  Chan: 1397  row,col:  4,21     3,4,21
+Line: 1292  FEC:  4  ASIC: 19  Chan: 1382  row,col:  3,21     3,3,21
+Line: 1293  FEC:  4  ASIC: 19  Chan: 1372  row,col:  2,21     3,2,21
+Line: 1294  FEC:  4  ASIC: 19  Chan: 1375  row,col:  1,21     3,1,21
+Line: 1295  FEC:  4  ASIC: 19  Chan: 1389  row,col:  0,21     3,0,21
+Line: 1296  FEC:  4  ASIC: 16  Chan: 1198  row,col: 23,20     0,23,20
+Line: 1297  FEC:  4  ASIC: 16  Chan: 1223  row,col: 22,20     0,22,20
+Line: 1298  FEC:  4  ASIC: 16  Chan: 1216  row,col: 21,20     0,21,20
+Line: 1299  FEC:  4  ASIC: 16  Chan: 1208  row,col: 20,20     0,20,20
+Line: 1300  FEC:  4  ASIC: 16  Chan: 1195  row,col: 19,20     0,19,20
+Line: 1301  FEC:  4  ASIC: 16  Chan: 1190  row,col: 18,20     0,18,20
+Line: 1302  FEC:  4  ASIC: 16  Chan: 1185  row,col: 17,20     0,17,20
+Line: 1303  FEC:  4  ASIC: 16  Chan: 1179  row,col: 16,20     0,16,20
+Line: 1304  FEC:  4  ASIC: 16  Chan: 1172  row,col: 15,20     0,15,20
+Line: 1305  FEC:  4  ASIC: 16  Chan: 1166  row,col: 14,20     0,14,20
+Line: 1306  FEC:  4  ASIC: 16  Chan: 1158  row,col: 13,20     0,13,20
+Line: 1307  FEC:  4  ASIC: 16  Chan: 1159  row,col: 12,20     0,12,20
+Line: 1308  FEC:  4  ASIC: 17  Chan: 1293  row,col: 23,14     1,23,14
+Line: 1309  FEC:  4  ASIC: 17  Chan: 1277  row,col: 22,14     1,22,14
+Line: 1310  FEC:  4  ASIC: 17  Chan: 1294  row,col: 21,14     1,21,14
+Line: 1311  FEC:  4  ASIC: 17  Chan: 1282  row,col: 20,14     1,20,14
+Line: 1312  FEC:  4  ASIC: 17  Chan: 1270  row,col: 19,14     1,19,14
+Line: 1313  FEC:  4  ASIC: 17  Chan: 1262  row,col: 18,14     1,18,14
+Line: 1314  FEC:  4  ASIC: 17  Chan: 1256  row,col: 17,14     1,17,14
+Line: 1315  FEC:  4  ASIC: 17  Chan: 1251  row,col: 16,14     1,16,14
+Line: 1316  FEC:  4  ASIC: 17  Chan: 1244  row,col: 15,14     1,15,14
+Line: 1317  FEC:  4  ASIC: 17  Chan: 1238  row,col: 14,14     1,14,14
+Line: 1318  FEC:  4  ASIC: 17  Chan: 1232  row,col: 13,14     1,13,14
+Line: 1319  FEC:  4  ASIC: 17  Chan: 1228  row,col: 12,14     1,12,14
+Line: 1320  FEC:  4  ASIC: 18  Chan: 1362  row,col: 11,14     2,11,14
+Line: 1321  FEC:  4  ASIC: 18  Chan: 1358  row,col: 10,14     2,10,14
+Line: 1322  FEC:  4  ASIC: 18  Chan: 1352  row,col:  9,14     2,9,14
+Line: 1323  FEC:  4  ASIC: 18  Chan: 1346  row,col:  8,14     2,8,14
+Line: 1324  FEC:  4  ASIC: 18  Chan: 1341  row,col:  7,14     2,7,14
+Line: 1325  FEC:  4  ASIC: 18  Chan: 1334  row,col:  6,14     2,6,14
+Line: 1326  FEC:  4  ASIC: 18  Chan: 1328  row,col:  5,14     2,5,14
+Line: 1327  FEC:  4  ASIC: 18  Chan: 1320  row,col:  4,14     2,4,14
+Line: 1328  FEC:  4  ASIC: 18  Chan: 1304  row,col:  3,14     2,3,14
+Line: 1329  FEC:  4  ASIC: 18  Chan: 1300  row,col:  2,14     2,2,14
+Line: 1330  FEC:  4  ASIC: 18  Chan: 1315  row,col:  1,14     2,1,14
+Line: 1331  FEC:  4  ASIC: 18  Chan: 1299  row,col:  0,14     2,0,14
+Line: 1332  FEC:  4  ASIC: 19  Chan: 1433  row,col: 11,20     3,11,20
+Line: 1333  FEC:  4  ASIC: 19  Chan: 1432  row,col: 10,20     3,10,20
+Line: 1334  FEC:  4  ASIC: 19  Chan: 1424  row,col:  9,20     3,9,20
+Line: 1335  FEC:  4  ASIC: 19  Chan: 1418  row,col:  8,20     3,8,20
+Line: 1336  FEC:  4  ASIC: 19  Chan: 1413  row,col:  7,20     3,7,20
+Line: 1337  FEC:  4  ASIC: 19  Chan: 1407  row,col:  6,20     3,6,20
+Line: 1338  FEC:  4  ASIC: 19  Chan: 1400  row,col:  5,20     3,5,20
+Line: 1339  FEC:  4  ASIC: 19  Chan: 1392  row,col:  4,20     3,4,20
+Line: 1340  FEC:  4  ASIC: 19  Chan: 1384  row,col:  3,20     3,3,20
+Line: 1341  FEC:  4  ASIC: 19  Chan: 1374  row,col:  2,20     3,2,20
+Line: 1342  FEC:  4  ASIC: 19  Chan: 1373  row,col:  1,20     3,1,20
+Line: 1343  FEC:  4  ASIC: 19  Chan: 1387  row,col:  0,20     3,0,20
+Line: 1344  FEC:  4  ASIC: 16  Chan: 1205  row,col: 23,19     0,23,19
+Line: 1345  FEC:  4  ASIC: 16  Chan: 1221  row,col: 22,19     0,22,19
+Line: 1346  FEC:  4  ASIC: 16  Chan: 1215  row,col: 21,19     0,21,19
+Line: 1347  FEC:  4  ASIC: 16  Chan: 1206  row,col: 20,19     0,20,19
+Line: 1348  FEC:  4  ASIC: 16  Chan: 1194  row,col: 19,19     0,19,19
+Line: 1349  FEC:  4  ASIC: 16  Chan: 1189  row,col: 18,19     0,18,19
+Line: 1350  FEC:  4  ASIC: 16  Chan: 1182  row,col: 17,19     0,17,19
+Line: 1351  FEC:  4  ASIC: 16  Chan: 1176  row,col: 16,19     0,16,19
+Line: 1352  FEC:  4  ASIC: 16  Chan: 1175  row,col: 15,19     0,15,19
+Line: 1353  FEC:  4  ASIC: 16  Chan: 1169  row,col: 14,19     0,14,19
+Line: 1354  FEC:  4  ASIC: 16  Chan: 1160  row,col: 13,19     0,13,19
+Line: 1355  FEC:  4  ASIC: 16  Chan: 1161  row,col: 12,19     0,12,19
+Line: 1356  FEC:  4  ASIC: 17  Chan: 1295  row,col: 23,13     1,23,13
+Line: 1357  FEC:  4  ASIC: 17  Chan: 1275  row,col: 22,13     1,22,13
+Line: 1358  FEC:  4  ASIC: 17  Chan: 1292  row,col: 21,13     1,21,13
+Line: 1359  FEC:  4  ASIC: 17  Chan: 1280  row,col: 20,13     1,20,13
+Line: 1360  FEC:  4  ASIC: 17  Chan: 1268  row,col: 19,13     1,19,13
+Line: 1361  FEC:  4  ASIC: 17  Chan: 1261  row,col: 18,13     1,18,13
+Line: 1362  FEC:  4  ASIC: 17  Chan: 1255  row,col: 17,13     1,17,13
+Line: 1363  FEC:  4  ASIC: 17  Chan: 1252  row,col: 16,13     1,16,13
+Line: 1364  FEC:  4  ASIC: 17  Chan: 1247  row,col: 15,13     1,15,13
+Line: 1365  FEC:  4  ASIC: 17  Chan: 1241  row,col: 14,13     1,14,13
+Line: 1366  FEC:  4  ASIC: 17  Chan: 1235  row,col: 13,13     1,13,13
+Line: 1367  FEC:  4  ASIC: 17  Chan: 1226  row,col: 12,13     1,12,13
+Line: 1368  FEC:  4  ASIC: 18  Chan: 1364  row,col: 11,13     2,11,13
+Line: 1369  FEC:  4  ASIC: 18  Chan: 1357  row,col: 10,13     2,10,13
+Line: 1370  FEC:  4  ASIC: 18  Chan: 1351  row,col:  9,13     2,9,13
+Line: 1371  FEC:  4  ASIC: 18  Chan: 1345  row,col:  8,13     2,8,13
+Line: 1372  FEC:  4  ASIC: 18  Chan: 1338  row,col:  7,13     2,7,13
+Line: 1373  FEC:  4  ASIC: 18  Chan: 1337  row,col:  6,13     2,6,13
+Line: 1374  FEC:  4  ASIC: 18  Chan: 1331  row,col:  5,13     2,5,13
+Line: 1375  FEC:  4  ASIC: 18  Chan: 1322  row,col:  4,13     2,4,13
+Line: 1376  FEC:  4  ASIC: 18  Chan: 1310  row,col:  3,13     2,3,13
+Line: 1377  FEC:  4  ASIC: 18  Chan: 1306  row,col:  2,13     2,2,13
+Line: 1378  FEC:  4  ASIC: 18  Chan: 1317  row,col:  1,13     2,1,13
+Line: 1379  FEC:  4  ASIC: 18  Chan: 1297  row,col:  0,13     2,0,13
+Line: 1380  FEC:  4  ASIC: 19  Chan: 1431  row,col: 11,19     3,11,19
+Line: 1381  FEC:  4  ASIC: 19  Chan: 1430  row,col: 10,19     3,10,19
+Line: 1382  FEC:  4  ASIC: 19  Chan: 1423  row,col:  9,19     3,9,19
+Line: 1383  FEC:  4  ASIC: 19  Chan: 1417  row,col:  8,19     3,8,19
+Line: 1384  FEC:  4  ASIC: 19  Chan: 1414  row,col:  7,19     3,7,19
+Line: 1385  FEC:  4  ASIC: 19  Chan: 1408  row,col:  6,19     3,6,19
+Line: 1386  FEC:  4  ASIC: 19  Chan: 1403  row,col:  5,19     3,5,19
+Line: 1387  FEC:  4  ASIC: 19  Chan: 1394  row,col:  4,19     3,4,19
+Line: 1388  FEC:  4  ASIC: 19  Chan: 1386  row,col:  3,19     3,3,19
+Line: 1389  FEC:  4  ASIC: 19  Chan: 1376  row,col:  2,19     3,2,19
+Line: 1390  FEC:  4  ASIC: 19  Chan: 1371  row,col:  1,19     3,1,19
+Line: 1391  FEC:  4  ASIC: 19  Chan: 1385  row,col:  0,19     3,0,19
+Line: 1392  FEC:  4  ASIC: 16  Chan: 1200  row,col: 23,18     0,23,18
+Line: 1393  FEC:  4  ASIC: 16  Chan: 1222  row,col: 22,18     0,22,18
+Line: 1394  FEC:  4  ASIC: 16  Chan: 1213  row,col: 21,18     0,21,18
+Line: 1395  FEC:  4  ASIC: 16  Chan: 1204  row,col: 20,18     0,20,18
+Line: 1396  FEC:  4  ASIC: 16  Chan: 1193  row,col: 19,18     0,19,18
+Line: 1397  FEC:  4  ASIC: 16  Chan: 1188  row,col: 18,18     0,18,18
+Line: 1398  FEC:  4  ASIC: 16  Chan: 1183  row,col: 17,18     0,17,18
+Line: 1399  FEC:  4  ASIC: 16  Chan: 1177  row,col: 16,18     0,16,18
+Line: 1400  FEC:  4  ASIC: 16  Chan: 1174  row,col: 15,18     0,15,18
+Line: 1401  FEC:  4  ASIC: 16  Chan: 1168  row,col: 14,18     0,14,18
+Line: 1402  FEC:  4  ASIC: 16  Chan: 1162  row,col: 13,18     0,13,18
+Line: 1403  FEC:  4  ASIC: 16  Chan: 1163  row,col: 12,18     0,12,18
+Line: 1404  FEC:  4  ASIC: 17  Chan: 1285  row,col: 23,12     1,23,12
+Line: 1405  FEC:  4  ASIC: 17  Chan: 1273  row,col: 22,12     1,22,12
+Line: 1406  FEC:  4  ASIC: 17  Chan: 1290  row,col: 21,12     1,21,12
+Line: 1407  FEC:  4  ASIC: 17  Chan: 1278  row,col: 20,12     1,20,12
+Line: 1408  FEC:  4  ASIC: 17  Chan: 1266  row,col: 19,12     1,19,12
+Line: 1409  FEC:  4  ASIC: 17  Chan: 1260  row,col: 18,12     1,18,12
+Line: 1410  FEC:  4  ASIC: 17  Chan: 1254  row,col: 17,12     1,17,12
+Line: 1411  FEC:  4  ASIC: 17  Chan: 1253  row,col: 16,12     1,16,12
+Line: 1412  FEC:  4  ASIC: 17  Chan: 1246  row,col: 15,12     1,15,12
+Line: 1413  FEC:  4  ASIC: 17  Chan: 1240  row,col: 14,12     1,14,12
+Line: 1414  FEC:  4  ASIC: 17  Chan: 1234  row,col: 13,12     1,13,12
+Line: 1415  FEC:  4  ASIC: 17  Chan: 1224  row,col: 12,12     1,12,12
+Line: 1416  FEC:  4  ASIC: 18  Chan: 1366  row,col: 11,12     2,11,12
+Line: 1417  FEC:  4  ASIC: 18  Chan: 1356  row,col: 10,12     2,10,12
+Line: 1418  FEC:  4  ASIC: 18  Chan: 1350  row,col:  9,12     2,9,12
+Line: 1419  FEC:  4  ASIC: 18  Chan: 1344  row,col:  8,12     2,8,12
+Line: 1420  FEC:  4  ASIC: 18  Chan: 1339  row,col:  7,12     2,7,12
+Line: 1421  FEC:  4  ASIC: 18  Chan: 1336  row,col:  6,12     2,6,12
+Line: 1422  FEC:  4  ASIC: 18  Chan: 1330  row,col:  5,12     2,5,12
+Line: 1423  FEC:  4  ASIC: 18  Chan: 1324  row,col:  4,12     2,4,12
+Line: 1424  FEC:  4  ASIC: 18  Chan: 1312  row,col:  3,12     2,3,12
+Line: 1425  FEC:  4  ASIC: 18  Chan: 1308  row,col:  2,12     2,2,12
+Line: 1426  FEC:  4  ASIC: 18  Chan: 1319  row,col:  1,12     2,1,12
+Line: 1427  FEC:  4  ASIC: 18  Chan: 1307  row,col:  0,12     2,0,12
+Line: 1428  FEC:  4  ASIC: 19  Chan: 1429  row,col: 11,18     3,11,18
+Line: 1429  FEC:  4  ASIC: 19  Chan: 1428  row,col: 10,18     3,10,18
+Line: 1430  FEC:  4  ASIC: 19  Chan: 1422  row,col:  9,18     3,9,18
+Line: 1431  FEC:  4  ASIC: 19  Chan: 1416  row,col:  8,18     3,8,18
+Line: 1432  FEC:  4  ASIC: 19  Chan: 1415  row,col:  7,18     3,7,18
+Line: 1433  FEC:  4  ASIC: 19  Chan: 1409  row,col:  6,18     3,6,18
+Line: 1434  FEC:  4  ASIC: 19  Chan: 1402  row,col:  5,18     3,5,18
+Line: 1435  FEC:  4  ASIC: 19  Chan: 1396  row,col:  4,18     3,4,18
+Line: 1436  FEC:  4  ASIC: 19  Chan: 1388  row,col:  3,18     3,3,18
+Line: 1437  FEC:  4  ASIC: 19  Chan: 1378  row,col:  2,18     3,2,18
+Line: 1438  FEC:  4  ASIC: 19  Chan: 1369  row,col:  1,18     3,1,18
+Line: 1439  FEC:  4  ASIC: 19  Chan: 1383  row,col:  0,18     3,0,18
+Line: 1440  FEC:  5  ASIC: 20  Chan: 1507  row,col: 23,11     0,23,11
+Line: 1441  FEC:  5  ASIC: 20  Chan: 1504  row,col: 22,11     0,22,11
+Line: 1442  FEC:  5  ASIC: 20  Chan: 1498  row,col: 21,11     0,21,11
+Line: 1443  FEC:  5  ASIC: 20  Chan: 1492  row,col: 20,11     0,20,11
+Line: 1444  FEC:  5  ASIC: 20  Chan: 1488  row,col: 19,11     0,19,11
+Line: 1445  FEC:  5  ASIC: 20  Chan: 1482  row,col: 18,11     0,18,11
+Line: 1446  FEC:  5  ASIC: 20  Chan: 1475  row,col: 17,11     0,17,11
+Line: 1447  FEC:  5  ASIC: 20  Chan: 1465  row,col: 16,11     0,16,11
+Line: 1448  FEC:  5  ASIC: 20  Chan: 1459  row,col: 15,11     0,15,11
+Line: 1449  FEC:  5  ASIC: 20  Chan: 1453  row,col: 14,11     0,14,11
+Line: 1450  FEC:  5  ASIC: 20  Chan: 1447  row,col: 13,11     0,13,11
+Line: 1451  FEC:  5  ASIC: 20  Chan: 1441  row,col: 12,11     0,12,11
+Line: 1452  FEC:  5  ASIC: 21  Chan: 1583  row,col: 23, 5     1,23,5
+Line: 1453  FEC:  5  ASIC: 21  Chan: 1577  row,col: 22, 5     1,22,5
+Line: 1454  FEC:  5  ASIC: 21  Chan: 1571  row,col: 21, 5     1,21,5
+Line: 1455  FEC:  5  ASIC: 21  Chan: 1565  row,col: 20, 5     1,20,5
+Line: 1456  FEC:  5  ASIC: 21  Chan: 1559  row,col: 19, 5     1,19,5
+Line: 1457  FEC:  5  ASIC: 21  Chan: 1553  row,col: 18, 5     1,18,5
+Line: 1458  FEC:  5  ASIC: 21  Chan: 1542  row,col: 17, 5     1,17,5
+Line: 1459  FEC:  5  ASIC: 21  Chan: 1536  row,col: 16, 5     1,16,5
+Line: 1460  FEC:  5  ASIC: 21  Chan: 1530  row,col: 15, 5     1,15,5
+Line: 1461  FEC:  5  ASIC: 21  Chan: 1524  row,col: 14, 5     1,14,5
+Line: 1462  FEC:  5  ASIC: 21  Chan: 1518  row,col: 13, 5     1,13,5
+Line: 1463  FEC:  5  ASIC: 21  Chan: 1512  row,col: 12, 5     1,12,5
+Line: 1464  FEC:  5  ASIC: 22  Chan: 1654  row,col: 11, 5     2,11,5
+Line: 1465  FEC:  5  ASIC: 22  Chan: 1648  row,col: 10, 5     2,10,5
+Line: 1466  FEC:  5  ASIC: 22  Chan: 1642  row,col:  9, 5     2,9,5
+Line: 1467  FEC:  5  ASIC: 22  Chan: 1636  row,col:  8, 5     2,8,5
+Line: 1468  FEC:  5  ASIC: 22  Chan: 1630  row,col:  7, 5     2,7,5
+Line: 1469  FEC:  5  ASIC: 22  Chan: 1621  row,col:  6, 5     2,6,5
+Line: 1470  FEC:  5  ASIC: 22  Chan: 1613  row,col:  5, 5     2,5,5
+Line: 1471  FEC:  5  ASIC: 22  Chan: 1603  row,col:  4, 5     2,4,5
+Line: 1472  FEC:  5  ASIC: 22  Chan: 1602  row,col:  3, 5     2,3,5
+Line: 1473  FEC:  5  ASIC: 22  Chan: 1597  row,col:  2, 5     2,2,5
+Line: 1474  FEC:  5  ASIC: 22  Chan: 1594  row,col:  1, 5     2,1,5
+Line: 1475  FEC:  5  ASIC: 22  Chan: 1585  row,col:  0, 5     2,0,5
+Line: 1476  FEC:  5  ASIC: 23  Chan: 1727  row,col: 11,11     3,11,11
+Line: 1477  FEC:  5  ASIC: 23  Chan: 1721  row,col: 10,11     3,10,11
+Line: 1478  FEC:  5  ASIC: 23  Chan: 1715  row,col:  9,11     3,9,11
+Line: 1479  FEC:  5  ASIC: 23  Chan: 1709  row,col:  8,11     3,8,11
+Line: 1480  FEC:  5  ASIC: 23  Chan: 1698  row,col:  7,11     3,7,11
+Line: 1481  FEC:  5  ASIC: 23  Chan: 1692  row,col:  6,11     3,6,11
+Line: 1482  FEC:  5  ASIC: 23  Chan: 1679  row,col:  5,11     3,5,11
+Line: 1483  FEC:  5  ASIC: 23  Chan: 1672  row,col:  4,11     3,4,11
+Line: 1484  FEC:  5  ASIC: 23  Chan: 1671  row,col:  3,11     3,3,11
+Line: 1485  FEC:  5  ASIC: 23  Chan: 1668  row,col:  2,11     3,2,11
+Line: 1486  FEC:  5  ASIC: 23  Chan: 1666  row,col:  1,11     3,1,11
+Line: 1487  FEC:  5  ASIC: 23  Chan: 1667  row,col:  0,11     3,0,11
+Line: 1488  FEC:  5  ASIC: 20  Chan: 1506  row,col: 23,10     0,23,10
+Line: 1489  FEC:  5  ASIC: 20  Chan: 1505  row,col: 22,10     0,22,10
+Line: 1490  FEC:  5  ASIC: 20  Chan: 1499  row,col: 21,10     0,21,10
+Line: 1491  FEC:  5  ASIC: 20  Chan: 1493  row,col: 20,10     0,20,10
+Line: 1492  FEC:  5  ASIC: 20  Chan: 1489  row,col: 19,10     0,19,10
+Line: 1493  FEC:  5  ASIC: 20  Chan: 1483  row,col: 18,10     0,18,10
+Line: 1494  FEC:  5  ASIC: 20  Chan: 1472  row,col: 17,10     0,17,10
+Line: 1495  FEC:  5  ASIC: 20  Chan: 1464  row,col: 16,10     0,16,10
+Line: 1496  FEC:  5  ASIC: 20  Chan: 1458  row,col: 15,10     0,15,10
+Line: 1497  FEC:  5  ASIC: 20  Chan: 1450  row,col: 14,10     0,14,10
+Line: 1498  FEC:  5  ASIC: 20  Chan: 1446  row,col: 13,10     0,13,10
+Line: 1499  FEC:  5  ASIC: 20  Chan: 1440  row,col: 12,10     0,12,10
+Line: 1500  FEC:  5  ASIC: 21  Chan: 1582  row,col: 23, 4     1,23,4
+Line: 1501  FEC:  5  ASIC: 21  Chan: 1576  row,col: 22, 4     1,22,4
+Line: 1502  FEC:  5  ASIC: 21  Chan: 1570  row,col: 21, 4     1,21,4
+Line: 1503  FEC:  5  ASIC: 21  Chan: 1564  row,col: 20, 4     1,20,4
+Line: 1504  FEC:  5  ASIC: 21  Chan: 1558  row,col: 19, 4     1,19,4
+Line: 1505  FEC:  5  ASIC: 21  Chan: 1552  row,col: 18, 4     1,18,4
+Line: 1506  FEC:  5  ASIC: 21  Chan: 1543  row,col: 17, 4     1,17,4
+Line: 1507  FEC:  5  ASIC: 21  Chan: 1537  row,col: 16, 4     1,16,4
+Line: 1508  FEC:  5  ASIC: 21  Chan: 1531  row,col: 15, 4     1,15,4
+Line: 1509  FEC:  5  ASIC: 21  Chan: 1525  row,col: 14, 4     1,14,4
+Line: 1510  FEC:  5  ASIC: 21  Chan: 1519  row,col: 13, 4     1,13,4
+Line: 1511  FEC:  5  ASIC: 21  Chan: 1513  row,col: 12, 4     1,12,4
+Line: 1512  FEC:  5  ASIC: 22  Chan: 1655  row,col: 11, 4     2,11,4
+Line: 1513  FEC:  5  ASIC: 22  Chan: 1649  row,col: 10, 4     2,10,4
+Line: 1514  FEC:  5  ASIC: 22  Chan: 1643  row,col:  9, 4     2,9,4
+Line: 1515  FEC:  5  ASIC: 22  Chan: 1637  row,col:  8, 4     2,8,4
+Line: 1516  FEC:  5  ASIC: 22  Chan: 1631  row,col:  7, 4     2,7,4
+Line: 1517  FEC:  5  ASIC: 22  Chan: 1620  row,col:  6, 4     2,6,4
+Line: 1518  FEC:  5  ASIC: 22  Chan: 1614  row,col:  5, 4     2,5,4
+Line: 1519  FEC:  5  ASIC: 22  Chan: 1608  row,col:  4, 4     2,4,4
+Line: 1520  FEC:  5  ASIC: 22  Chan: 1605  row,col:  3, 4     2,3,4
+Line: 1521  FEC:  5  ASIC: 22  Chan: 1596  row,col:  2, 4     2,2,4
+Line: 1522  FEC:  5  ASIC: 22  Chan: 1592  row,col:  1, 4     2,1,4
+Line: 1523  FEC:  5  ASIC: 22  Chan: 1587  row,col:  0, 4     2,0,4
+Line: 1524  FEC:  5  ASIC: 23  Chan: 1726  row,col: 11,10     3,11,10
+Line: 1525  FEC:  5  ASIC: 23  Chan: 1720  row,col: 10,10     3,10,10
+Line: 1526  FEC:  5  ASIC: 23  Chan: 1714  row,col:  9,10     3,9,10
+Line: 1527  FEC:  5  ASIC: 23  Chan: 1708  row,col:  8,10     3,8,10
+Line: 1528  FEC:  5  ASIC: 23  Chan: 1699  row,col:  7,10     3,7,10
+Line: 1529  FEC:  5  ASIC: 23  Chan: 1693  row,col:  6,10     3,6,10
+Line: 1530  FEC:  5  ASIC: 23  Chan: 1680  row,col:  5,10     3,5,10
+Line: 1531  FEC:  5  ASIC: 23  Chan: 1673  row,col:  4,10     3,4,10
+Line: 1532  FEC:  5  ASIC: 23  Chan: 1677  row,col:  3,10     3,3,10
+Line: 1533  FEC:  5  ASIC: 23  Chan: 1669  row,col:  2,10     3,2,10
+Line: 1534  FEC:  5  ASIC: 23  Chan: 1664  row,col:  1,10     3,1,10
+Line: 1535  FEC:  5  ASIC: 23  Chan: 1665  row,col:  0,10     3,0,10
+Line: 1536  FEC:  5  ASIC: 20  Chan: 1509  row,col: 23, 9     0,23,9
+Line: 1537  FEC:  5  ASIC: 20  Chan: 1502  row,col: 22, 9     0,22,9
+Line: 1538  FEC:  5  ASIC: 20  Chan: 1496  row,col: 21, 9     0,21,9
+Line: 1539  FEC:  5  ASIC: 20  Chan: 1486  row,col: 20, 9     0,20,9
+Line: 1540  FEC:  5  ASIC: 20  Chan: 1484  row,col: 19, 9     0,19,9
+Line: 1541  FEC:  5  ASIC: 20  Chan: 1478  row,col: 18, 9     0,18,9
+Line: 1542  FEC:  5  ASIC: 20  Chan: 1473  row,col: 17, 9     0,17,9
+Line: 1543  FEC:  5  ASIC: 20  Chan: 1467  row,col: 16, 9     0,16,9
+Line: 1544  FEC:  5  ASIC: 20  Chan: 1461  row,col: 15, 9     0,15,9
+Line: 1545  FEC:  5  ASIC: 20  Chan: 1455  row,col: 14, 9     0,14,9
+Line: 1546  FEC:  5  ASIC: 20  Chan: 1449  row,col: 13, 9     0,13,9
+Line: 1547  FEC:  5  ASIC: 20  Chan: 1443  row,col: 12, 9     0,12,9
+Line: 1548  FEC:  5  ASIC: 21  Chan: 1581  row,col: 23, 3     1,23,3
+Line: 1549  FEC:  5  ASIC: 21  Chan: 1575  row,col: 22, 3     1,22,3
+Line: 1550  FEC:  5  ASIC: 21  Chan: 1569  row,col: 21, 3     1,21,3
+Line: 1551  FEC:  5  ASIC: 21  Chan: 1563  row,col: 20, 3     1,20,3
+Line: 1552  FEC:  5  ASIC: 21  Chan: 1557  row,col: 19, 3     1,19,3
+Line: 1553  FEC:  5  ASIC: 21  Chan: 1551  row,col: 18, 3     1,18,3
+Line: 1554  FEC:  5  ASIC: 21  Chan: 1544  row,col: 17, 3     1,17,3
+Line: 1555  FEC:  5  ASIC: 21  Chan: 1538  row,col: 16, 3     1,16,3
+Line: 1556  FEC:  5  ASIC: 21  Chan: 1532  row,col: 15, 3     1,15,3
+Line: 1557  FEC:  5  ASIC: 21  Chan: 1526  row,col: 14, 3     1,14,3
+Line: 1558  FEC:  5  ASIC: 21  Chan: 1520  row,col: 13, 3     1,13,3
+Line: 1559  FEC:  5  ASIC: 21  Chan: 1514  row,col: 12, 3     1,12,3
+Line: 1560  FEC:  5  ASIC: 22  Chan: 1652  row,col: 11, 3     2,11,3
+Line: 1561  FEC:  5  ASIC: 22  Chan: 1646  row,col: 10, 3     2,10,3
+Line: 1562  FEC:  5  ASIC: 22  Chan: 1640  row,col:  9, 3     2,9,3
+Line: 1563  FEC:  5  ASIC: 22  Chan: 1634  row,col:  8, 3     2,8,3
+Line: 1564  FEC:  5  ASIC: 22  Chan: 1628  row,col:  7, 3     2,7,3
+Line: 1565  FEC:  5  ASIC: 22  Chan: 1623  row,col:  6, 3     2,6,3
+Line: 1566  FEC:  5  ASIC: 22  Chan: 1617  row,col:  5, 3     2,5,3
+Line: 1567  FEC:  5  ASIC: 22  Chan: 1611  row,col:  4, 3     2,4,3
+Line: 1568  FEC:  5  ASIC: 22  Chan: 1604  row,col:  3, 3     2,3,3
+Line: 1569  FEC:  5  ASIC: 22  Chan: 1599  row,col:  2, 3     2,2,3
+Line: 1570  FEC:  5  ASIC: 22  Chan: 1590  row,col:  1, 3     2,1,3
+Line: 1571  FEC:  5  ASIC: 22  Chan: 1589  row,col:  0, 3     2,0,3
+Line: 1572  FEC:  5  ASIC: 23  Chan: 1725  row,col: 11, 9     3,11,9
+Line: 1573  FEC:  5  ASIC: 23  Chan: 1719  row,col: 10, 9     3,10,9
+Line: 1574  FEC:  5  ASIC: 23  Chan: 1713  row,col:  9, 9     3,9,9
+Line: 1575  FEC:  5  ASIC: 23  Chan: 1707  row,col:  8, 9     3,8,9
+Line: 1576  FEC:  5  ASIC: 23  Chan: 1700  row,col:  7, 9     3,7,9
+Line: 1577  FEC:  5  ASIC: 23  Chan: 1694  row,col:  6, 9     3,6,9
+Line: 1578  FEC:  5  ASIC: 23  Chan: 1681  row,col:  5, 9     3,5,9
+Line: 1579  FEC:  5  ASIC: 23  Chan: 1682  row,col:  4, 9     3,4,9
+Line: 1580  FEC:  5  ASIC: 23  Chan: 1678  row,col:  3, 9     3,3,9
+Line: 1581  FEC:  5  ASIC: 23  Chan: 1670  row,col:  2, 9     3,2,9
+Line: 1582  FEC:  5  ASIC: 23  Chan: 1662  row,col:  1, 9     3,1,9
+Line: 1583  FEC:  5  ASIC: 23  Chan: 1663  row,col:  0, 9     3,0,9
+Line: 1584  FEC:  5  ASIC: 20  Chan: 1508  row,col: 23, 8     0,23,8
+Line: 1585  FEC:  5  ASIC: 20  Chan: 1503  row,col: 22, 8     0,22,8
+Line: 1586  FEC:  5  ASIC: 20  Chan: 1497  row,col: 21, 8     0,21,8
+Line: 1587  FEC:  5  ASIC: 20  Chan: 1487  row,col: 20, 8     0,20,8
+Line: 1588  FEC:  5  ASIC: 20  Chan: 1485  row,col: 19, 8     0,19,8
+Line: 1589  FEC:  5  ASIC: 20  Chan: 1479  row,col: 18, 8     0,18,8
+Line: 1590  FEC:  5  ASIC: 20  Chan: 1474  row,col: 17, 8     0,17,8
+Line: 1591  FEC:  5  ASIC: 20  Chan: 1466  row,col: 16, 8     0,16,8
+Line: 1592  FEC:  5  ASIC: 20  Chan: 1460  row,col: 15, 8     0,15,8
+Line: 1593  FEC:  5  ASIC: 20  Chan: 1454  row,col: 14, 8     0,14,8
+Line: 1594  FEC:  5  ASIC: 20  Chan: 1448  row,col: 13, 8     0,13,8
+Line: 1595  FEC:  5  ASIC: 20  Chan: 1442  row,col: 12, 8     0,12,8
+Line: 1596  FEC:  5  ASIC: 21  Chan: 1580  row,col: 23, 2     1,23,2
+Line: 1597  FEC:  5  ASIC: 21  Chan: 1574  row,col: 22, 2     1,22,2
+Line: 1598  FEC:  5  ASIC: 21  Chan: 1568  row,col: 21, 2     1,21,2
+Line: 1599  FEC:  5  ASIC: 21  Chan: 1562  row,col: 20, 2     1,20,2
+Line: 1600  FEC:  5  ASIC: 21  Chan: 1556  row,col: 19, 2     1,19,2
+Line: 1601  FEC:  5  ASIC: 21  Chan: 1550  row,col: 18, 2     1,18,2
+Line: 1602  FEC:  5  ASIC: 21  Chan: 1545  row,col: 17, 2     1,17,2
+Line: 1603  FEC:  5  ASIC: 21  Chan: 1539  row,col: 16, 2     1,16,2
+Line: 1604  FEC:  5  ASIC: 21  Chan: 1533  row,col: 15, 2     1,15,2
+Line: 1605  FEC:  5  ASIC: 21  Chan: 1527  row,col: 14, 2     1,14,2
+Line: 1606  FEC:  5  ASIC: 21  Chan: 1521  row,col: 13, 2     1,13,2
+Line: 1607  FEC:  5  ASIC: 21  Chan: 1515  row,col: 12, 2     1,12,2
+Line: 1608  FEC:  5  ASIC: 22  Chan: 1653  row,col: 11, 2     2,11,2
+Line: 1609  FEC:  5  ASIC: 22  Chan: 1647  row,col: 10, 2     2,10,2
+Line: 1610  FEC:  5  ASIC: 22  Chan: 1641  row,col:  9, 2     2,9,2
+Line: 1611  FEC:  5  ASIC: 22  Chan: 1635  row,col:  8, 2     2,8,2
+Line: 1612  FEC:  5  ASIC: 22  Chan: 1629  row,col:  7, 2     2,7,2
+Line: 1613  FEC:  5  ASIC: 22  Chan: 1622  row,col:  6, 2     2,6,2
+Line: 1614  FEC:  5  ASIC: 22  Chan: 1616  row,col:  5, 2     2,5,2
+Line: 1615  FEC:  5  ASIC: 22  Chan: 1610  row,col:  4, 2     2,4,2
+Line: 1616  FEC:  5  ASIC: 22  Chan: 1607  row,col:  3, 2     2,3,2
+Line: 1617  FEC:  5  ASIC: 22  Chan: 1598  row,col:  2, 2     2,2,2
+Line: 1618  FEC:  5  ASIC: 22  Chan: 1588  row,col:  1, 2     2,1,2
+Line: 1619  FEC:  5  ASIC: 22  Chan: 1591  row,col:  0, 2     2,0,2
+Line: 1620  FEC:  5  ASIC: 23  Chan: 1724  row,col: 11, 8     3,11,8
+Line: 1621  FEC:  5  ASIC: 23  Chan: 1718  row,col: 10, 8     3,10,8
+Line: 1622  FEC:  5  ASIC: 23  Chan: 1712  row,col:  9, 8     3,9,8
+Line: 1623  FEC:  5  ASIC: 23  Chan: 1706  row,col:  8, 8     3,8,8
+Line: 1624  FEC:  5  ASIC: 23  Chan: 1701  row,col:  7, 8     3,7,8
+Line: 1625  FEC:  5  ASIC: 23  Chan: 1695  row,col:  6, 8     3,6,8
+Line: 1626  FEC:  5  ASIC: 23  Chan: 1685  row,col:  5, 8     3,5,8
+Line: 1627  FEC:  5  ASIC: 23  Chan: 1684  row,col:  4, 8     3,4,8
+Line: 1628  FEC:  5  ASIC: 23  Chan: 1683  row,col:  3, 8     3,3,8
+Line: 1629  FEC:  5  ASIC: 23  Chan: 1674  row,col:  2, 8     3,2,8
+Line: 1630  FEC:  5  ASIC: 23  Chan: 1660  row,col:  1, 8     3,1,8
+Line: 1631  FEC:  5  ASIC: 23  Chan: 1661  row,col:  0, 8     3,0,8
+Line: 1632  FEC:  5  ASIC: 20  Chan: 1511  row,col: 23, 7     0,23,7
+Line: 1633  FEC:  5  ASIC: 20  Chan: 1500  row,col: 22, 7     0,22,7
+Line: 1634  FEC:  5  ASIC: 20  Chan: 1494  row,col: 21, 7     0,21,7
+Line: 1635  FEC:  5  ASIC: 20  Chan: 1491  row,col: 20, 7     0,20,7
+Line: 1636  FEC:  5  ASIC: 20  Chan: 1480  row,col: 19, 7     0,19,7
+Line: 1637  FEC:  5  ASIC: 20  Chan: 1476  row,col: 18, 7     0,18,7
+Line: 1638  FEC:  5  ASIC: 20  Chan: 1470  row,col: 17, 7     0,17,7
+Line: 1639  FEC:  5  ASIC: 20  Chan: 1469  row,col: 16, 7     0,16,7
+Line: 1640  FEC:  5  ASIC: 20  Chan: 1463  row,col: 15, 7     0,15,7
+Line: 1641  FEC:  5  ASIC: 20  Chan: 1457  row,col: 14, 7     0,14,7
+Line: 1642  FEC:  5  ASIC: 20  Chan: 1451  row,col: 13, 7     0,13,7
+Line: 1643  FEC:  5  ASIC: 20  Chan: 1445  row,col: 12, 7     0,12,7
+Line: 1644  FEC:  5  ASIC: 21  Chan: 1579  row,col: 23, 1     1,23,1
+Line: 1645  FEC:  5  ASIC: 21  Chan: 1573  row,col: 22, 1     1,22,1
+Line: 1646  FEC:  5  ASIC: 21  Chan: 1567  row,col: 21, 1     1,21,1
+Line: 1647  FEC:  5  ASIC: 21  Chan: 1561  row,col: 20, 1     1,20,1
+Line: 1648  FEC:  5  ASIC: 21  Chan: 1555  row,col: 19, 1     1,19,1
+Line: 1649  FEC:  5  ASIC: 21  Chan: 1549  row,col: 18, 1     1,18,1
+Line: 1650  FEC:  5  ASIC: 21  Chan: 1546  row,col: 17, 1     1,17,1
+Line: 1651  FEC:  5  ASIC: 21  Chan: 1540  row,col: 16, 1     1,16,1
+Line: 1652  FEC:  5  ASIC: 21  Chan: 1534  row,col: 15, 1     1,15,1
+Line: 1653  FEC:  5  ASIC: 21  Chan: 1528  row,col: 14, 1     1,14,1
+Line: 1654  FEC:  5  ASIC: 21  Chan: 1522  row,col: 13, 1     1,13,1
+Line: 1655  FEC:  5  ASIC: 21  Chan: 1516  row,col: 12, 1     1,12,1
+Line: 1656  FEC:  5  ASIC: 22  Chan: 1650  row,col: 11, 1     2,11,1
+Line: 1657  FEC:  5  ASIC: 22  Chan: 1644  row,col: 10, 1     2,10,1
+Line: 1658  FEC:  5  ASIC: 22  Chan: 1638  row,col:  9, 1     2,9,1
+Line: 1659  FEC:  5  ASIC: 22  Chan: 1632  row,col:  8, 1     2,8,1
+Line: 1660  FEC:  5  ASIC: 22  Chan: 1626  row,col:  7, 1     2,7,1
+Line: 1661  FEC:  5  ASIC: 22  Chan: 1625  row,col:  6, 1     2,6,1
+Line: 1662  FEC:  5  ASIC: 22  Chan: 1619  row,col:  5, 1     2,5,1
+Line: 1663  FEC:  5  ASIC: 22  Chan: 1612  row,col:  4, 1     2,4,1
+Line: 1664  FEC:  5  ASIC: 22  Chan: 1606  row,col:  3, 1     2,3,1
+Line: 1665  FEC:  5  ASIC: 22  Chan: 1601  row,col:  2, 1     2,2,1
+Line: 1666  FEC:  5  ASIC: 22  Chan: 1586  row,col:  1, 1     2,1,1
+Line: 1667  FEC:  5  ASIC: 22  Chan: 1593  row,col:  0, 1     2,0,1
+Line: 1668  FEC:  5  ASIC: 23  Chan: 1723  row,col: 11, 7     3,11,7
+Line: 1669  FEC:  5  ASIC: 23  Chan: 1717  row,col: 10, 7     3,10,7
+Line: 1670  FEC:  5  ASIC: 23  Chan: 1711  row,col:  9, 7     3,9,7
+Line: 1671  FEC:  5  ASIC: 23  Chan: 1705  row,col:  8, 7     3,8,7
+Line: 1672  FEC:  5  ASIC: 23  Chan: 1702  row,col:  7, 7     3,7,7
+Line: 1673  FEC:  5  ASIC: 23  Chan: 1696  row,col:  6, 7     3,6,7
+Line: 1674  FEC:  5  ASIC: 23  Chan: 1688  row,col:  5, 7     3,5,7
+Line: 1675  FEC:  5  ASIC: 23  Chan: 1687  row,col:  4, 7     3,4,7
+Line: 1676  FEC:  5  ASIC: 23  Chan: 1686  row,col:  3, 7     3,3,7
+Line: 1677  FEC:  5  ASIC: 23  Chan: 1675  row,col:  2, 7     3,2,7
+Line: 1678  FEC:  5  ASIC: 23  Chan: 1658  row,col:  1, 7     3,1,7
+Line: 1679  FEC:  5  ASIC: 23  Chan: 1659  row,col:  0, 7     3,0,7
+Line: 1680  FEC:  5  ASIC: 20  Chan: 1510  row,col: 23, 6     0,23,6
+Line: 1681  FEC:  5  ASIC: 20  Chan: 1501  row,col: 22, 6     0,22,6
+Line: 1682  FEC:  5  ASIC: 20  Chan: 1495  row,col: 21, 6     0,21,6
+Line: 1683  FEC:  5  ASIC: 20  Chan: 1490  row,col: 20, 6     0,20,6
+Line: 1684  FEC:  5  ASIC: 20  Chan: 1481  row,col: 19, 6     0,19,6
+Line: 1685  FEC:  5  ASIC: 20  Chan: 1477  row,col: 18, 6     0,18,6
+Line: 1686  FEC:  5  ASIC: 20  Chan: 1471  row,col: 17, 6     0,17,6
+Line: 1687  FEC:  5  ASIC: 20  Chan: 1468  row,col: 16, 6     0,16,6
+Line: 1688  FEC:  5  ASIC: 20  Chan: 1462  row,col: 15, 6     0,15,6
+Line: 1689  FEC:  5  ASIC: 20  Chan: 1456  row,col: 14, 6     0,14,6
+Line: 1690  FEC:  5  ASIC: 20  Chan: 1452  row,col: 13, 6     0,13,6
+Line: 1691  FEC:  5  ASIC: 20  Chan: 1444  row,col: 12, 6     0,12,6
+Line: 1692  FEC:  5  ASIC: 21  Chan: 1578  row,col: 23, 0     1,23,0
+Line: 1693  FEC:  5  ASIC: 21  Chan: 1572  row,col: 22, 0     1,22,0
+Line: 1694  FEC:  5  ASIC: 21  Chan: 1566  row,col: 21, 0     1,21,0
+Line: 1695  FEC:  5  ASIC: 21  Chan: 1560  row,col: 20, 0     1,20,0
+Line: 1696  FEC:  5  ASIC: 21  Chan: 1554  row,col: 19, 0     1,19,0
+Line: 1697  FEC:  5  ASIC: 21  Chan: 1548  row,col: 18, 0     1,18,0
+Line: 1698  FEC:  5  ASIC: 21  Chan: 1547  row,col: 17, 0     1,17,0
+Line: 1699  FEC:  5  ASIC: 21  Chan: 1541  row,col: 16, 0     1,16,0
+Line: 1700  FEC:  5  ASIC: 21  Chan: 1535  row,col: 15, 0     1,15,0
+Line: 1701  FEC:  5  ASIC: 21  Chan: 1529  row,col: 14, 0     1,14,0
+Line: 1702  FEC:  5  ASIC: 21  Chan: 1523  row,col: 13, 0     1,13,0
+Line: 1703  FEC:  5  ASIC: 21  Chan: 1517  row,col: 12, 0     1,12,0
+Line: 1704  FEC:  5  ASIC: 22  Chan: 1651  row,col: 11, 0     2,11,0
+Line: 1705  FEC:  5  ASIC: 22  Chan: 1645  row,col: 10, 0     2,10,0
+Line: 1706  FEC:  5  ASIC: 22  Chan: 1639  row,col:  9, 0     2,9,0
+Line: 1707  FEC:  5  ASIC: 22  Chan: 1633  row,col:  8, 0     2,8,0
+Line: 1708  FEC:  5  ASIC: 22  Chan: 1627  row,col:  7, 0     2,7,0
+Line: 1709  FEC:  5  ASIC: 22  Chan: 1624  row,col:  6, 0     2,6,0
+Line: 1710  FEC:  5  ASIC: 22  Chan: 1618  row,col:  5, 0     2,5,0
+Line: 1711  FEC:  5  ASIC: 22  Chan: 1615  row,col:  4, 0     2,4,0
+Line: 1712  FEC:  5  ASIC: 22  Chan: 1609  row,col:  3, 0     2,3,0
+Line: 1713  FEC:  5  ASIC: 22  Chan: 1600  row,col:  2, 0     2,2,0
+Line: 1714  FEC:  5  ASIC: 22  Chan: 1584  row,col:  1, 0     2,1,0
+Line: 1715  FEC:  5  ASIC: 22  Chan: 1595  row,col:  0, 0     2,0,0
+Line: 1716  FEC:  5  ASIC: 23  Chan: 1722  row,col: 11, 6     3,11,6
+Line: 1717  FEC:  5  ASIC: 23  Chan: 1716  row,col: 10, 6     3,10,6
+Line: 1718  FEC:  5  ASIC: 23  Chan: 1710  row,col:  9, 6     3,9,6
+Line: 1719  FEC:  5  ASIC: 23  Chan: 1704  row,col:  8, 6     3,8,6
+Line: 1720  FEC:  5  ASIC: 23  Chan: 1703  row,col:  7, 6     3,7,6
+Line: 1721  FEC:  5  ASIC: 23  Chan: 1697  row,col:  6, 6     3,6,6
+Line: 1722  FEC:  5  ASIC: 23  Chan: 1691  row,col:  5, 6     3,5,6
+Line: 1723  FEC:  5  ASIC: 23  Chan: 1690  row,col:  4, 6     3,4,6
+Line: 1724  FEC:  5  ASIC: 23  Chan: 1689  row,col:  3, 6     3,3,6
+Line: 1725  FEC:  5  ASIC: 23  Chan: 1676  row,col:  2, 6     3,2,6
+Line: 1726  FEC:  5  ASIC: 23  Chan: 1656  row,col:  1, 6     3,1,6
+Line: 1727  FEC:  5  ASIC: 23  Chan: 1657  row,col:  0, 6     3,0,6
+
+NOTE: 
+  Pad at row,col: 20,65 is for HV :  Channel ID is assinged to 73
+  Pad at row,col: 20,64 is for HV :  Channel ID is assinged to 72
+  --> Modify this when mapping is changed <---
+
+--------------------------------
+Reading geomtry info ...
+Pad Panel: w,ymin,ymax = 116.97, 1426.67, 1599.5
+--------------------------------
+Opening acquisition file ...
+OomonAcqReader OpenFile opening file RUN_00130.00000.acq 
+File UID is R2008.10.03-12:38:31 
+--------------------------------
