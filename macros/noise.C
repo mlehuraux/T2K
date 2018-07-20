@@ -47,6 +47,10 @@ void noise() {
     sigma_adc[z].resize(47+1, 0);
   }
 
+  TH2F* PadDisplay=new TH2F("PadDisplay","Maximum adc",38,-1.,37.,50,-1.,49.);
+  TH2F* MeanDisplay=new TH2F("MeanDisplay","Mean noise",38,-1.,37.,50,-1.,49.);
+  TH2F* SigmaDisplay=new TH2F("SigmaDisplay","Sigma noise",38,-1.,37.,50,-1.,49.);
+
   //************************************************************
   //****************** LOOP OVER FILES  ************************
   //************************************************************
@@ -130,19 +134,28 @@ void noise() {
       t->GetEntry(ievt);
       ++total_events;
 
+      PadDisplay->Reset();
+      MeanDisplay->Reset();
+      MeanDisplay->Reset();
+
       //************************************************************
       //*****************LOOP OVER CHANNELS ************************
       //************************************************************
       bool event = false;
       for (uint ic=0; ic< listOfChannels->size(); ic++){
+        int chan= (*listOfChannels)[ic];
+        int adc_max = -1;
         for (uint it = 0; it < 511; it++){
           int adc= (*listOfSamples)[ic][it];
           if (adc > 400) {
             event = true;
             break;
           }
+          if (adc > adc_max)
+            adc_max = adc;
         }
         if (event) break;
+        PadDisplay->Fill((*iPad)[chan], (*jPad)[chan], adc_max);
       } //loop over channels
 
       if (event)
@@ -172,9 +185,30 @@ void noise() {
         mean_adc[(*iPad)[chan]][(*jPad)[chan]] += m;
         sigma_adc[(*iPad)[chan]][(*jPad)[chan]] += s;
 
+        MeanDisplay->Fill((*iPad)[chan], (*jPad)[chan], m);
+        SigmaDisplay->Fill((*iPad)[chan], (*jPad)[chan], s);
+
         histo->Reset();
         delete histo;
       } // 2nd loop over channel
+
+      /*{
+        c1->cd();
+        PadDisplay->Draw("colz");
+        gPad->Update();
+        TCanvas *c2 = new TCanvas("c2","evadc",900,700);
+        c2->cd();
+        MeanDisplay->GetZaxis()->SetRangeUser(240., 265.);
+        MeanDisplay->Draw("colz");
+        gPad->Update();
+        TCanvas *c3 = new TCanvas("c3","evadc",900,700);
+        c3->cd();
+        SigmaDisplay->GetZaxis()->SetRangeUser(4., 10.);
+        SigmaDisplay->Draw("colz");
+        gPad->Update();
+        char k[67];
+        cin >> k;
+      }*/
     } // loop over events
   } // loop over files
   cout << endl;
@@ -185,17 +219,24 @@ void noise() {
       sigma->Fill(it_i, it_j, sigma_adc[it_i][it_j] / sel_events);
     }
   }
+  TFile* output = new TFile("data/pedestals.root", "recreate");
+  output->cd();
+  mean->Write();
+  output->Close();
 
   gStyle->SetOptStat(0);
-  mean->GetZaxis()->SetRangeUser(240., 260.);
+  mean->GetZaxis()->SetRangeUser(248., 258.);
   mean->Draw("colz");
   c1->Print((prefix+"MeannNoise.pdf").Data());
 
+  sigma->GetZaxis()->SetRangeUser(2., 10.);
   sigma->Draw("colz");
   c1->Print((prefix+"SigmaNoise.pdf").Data());
 
   cout << "Total events number     : " << total_events << endl;
   cout << "Sel events number       : " << sel_events << endl;
+
+
 
   return;
 }

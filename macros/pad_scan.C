@@ -28,7 +28,7 @@ void  pad_scan(){
 
   bool DEBUG = false;
 
-  int thr=0.;     //seuil
+  int thr=100.;     //seuil
   int nbins=100;
   int Ndefaultevents=0;
   // int cut_adc=400000;
@@ -257,13 +257,13 @@ void  pad_scan(){
       c1->cd();
       PadDisplay->Draw("colz");
       gPad->Update();
-      //TCanvas* c2 = new TCanvas("can2", "can2");
+      TCanvas* c2 = new TCanvas("can2", "can2");
       PadDisplayGeo->Fit("pol1");
       TF1* fit = PadDisplayGeo->GetFunction("pol1");
       if(fit)
         cout << "Chi1/NDOF                 = " << fit->GetChisquare() / fit->GetNDF() << endl;
-      //PadDisplayGeo->Draw("colz");
-      //gPad->Update();
+      PadDisplayGeo->Draw("colz");
+      gPad->Update();
       /*cout << "Draw ADC?" << endl;
       char res;
       cin >> res;

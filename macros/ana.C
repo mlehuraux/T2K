@@ -41,8 +41,12 @@ void ana() {
   TH1F* TimeMaximum       = new TH1F("time_max", "time of the maximum", 530, 0., 530.);
   TH1F* TimeMaximumL      = new TH1F("time_maxL", "time of the maximum", 100, 0., 530.);
 
-  TH2F* PadDisplayHIT=new TH2F("PadDisplay","I vs J of hits",38,-1.,37.,50,-1.,49.);
-  TH2F* PadDisplayMAX=new TH2F("PadDisplay","I vs J of hits",38,-1.,37.,50,-1.,49.);
+  TH2F* PadDisplayHIT     = new TH2F("PadDisplay","I vs J of hits",38,-1.,37.,50,-1.,49.);
+  TH2F* PadDisplayMAX     = new TH2F("PadDisplay","I vs J of hits",38,-1.,37.,50,-1.,49.);
+
+  TH1F* TriggerX          = new TH1F("triggerX", "Trigger X", 40, -20., 20.);
+
+  TH1F* PadsPerCluster    = new TH1F("PadsPerCluster", "ppc", 6, 0., 6.);
 
   Int_t total_events = 0;
   Int_t sel_events = 0;
@@ -179,6 +183,8 @@ void ana() {
       TF1* fit = PadDisplayGeo->GetFunction("pol1");
 
       double quality = fit->GetChisquare() / fit->GetNDF();
+      double k = fit->GetParameter(1);
+      double b = fit->GetParameter(0);
 
       // track-like
       if (quality > 150.)
@@ -186,16 +192,28 @@ void ana() {
 
       ++sel_events;
 
+      // trigger position study
+      TriggerX->Fill(-16.45*k + b);
+
+      // detector uniformity study
+
+      // charge per cluster study
       vector<Float_t > cluster_charge;
       cluster_charge.clear();
       for (Int_t it_j = 0; it_j < Jmax; ++it_j) {
         Int_t cluster = 0;
+        Int_t pads_per_cluster = 0;
         for (Int_t it_i = 0; it_i < Imax; ++it_i) {
           cluster += PadDisplay[it_j][it_i];
-          if (PadDisplay[it_j][it_i] > 0)
+          if (PadDisplay[it_j][it_i] > 0) {
+            ++pads_per_cluster;
             PadDisplayHIT->Fill(it_i, it_j, 1);
+          }
           PadDisplayMAX->Fill(it_i, it_j, PadDisplay[it_j][it_i]);
         }
+
+        PadsPerCluster->Fill(pads_per_cluster);
+
         if (cluster != 0) {
           ClusterCharge->Fill(cluster);
           cluster_charge.push_back(cluster);
@@ -238,11 +256,22 @@ void ana() {
   TimeMaximumL->Draw();
   c1->Print((prefix+"TimeMaximumL.pdf").Data());
 
+  gStyle->SetOptStat(0);
+
   PadDisplayHIT->Draw("colz");
   c1->Print((prefix+"pad_scan_hit_track.pdf").Data());
   PadDisplayMAX->Draw("colz");
   c1->Print((prefix+"pad_scan_max_track.pdf").Data());
 
+  TriggerX->Draw();
+  c1->Print((prefix+"TriggerX.pdf").Data());
+
+  PadsPerCluster->Draw();
+  c1->Print((prefix+"PadsPerCluster.pdf").Data());
+
+  PadDisplayMAX->Divide(PadDisplayHIT);
+  PadDisplayMAX->Draw("colz");
+  c1->Print((prefix+"AvChargePerHit.pdf").Data());
 
   cout << "Total events number     : " << total_events << endl;
   cout << "Not empty events number : " << filled_events << endl;
