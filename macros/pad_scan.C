@@ -315,11 +315,9 @@ void  pad_scan(){
         }
       }*/
 
-      PadDisplay->Reset();
+      c2->WaitPrimitive();
 
-      cout << " enter to go on" <<endl;
-      char k[25];
-      cin >> k;
+      PadDisplay->Reset();
     }
   }
   if (ExitAtEnd) {getchar(); exit(0);}
