@@ -11,7 +11,7 @@ acq-->root converter (DataWriter_devel) is provided from the ILC team (Boris)
 1) ROOT
 2) BOOST for acq-->root
 
-## COMPILATION
+## Compilation
 
 To work with this package you need to compile the ROOT dictionary in order to be able to store c++ vectors
 and vectors of vectors in the ROOT file.
@@ -20,7 +20,7 @@ To do this in the macros/ilc folder run
 rootcint -f  mydict.C -c LinkDef.h
 ```
 
-This will generate mydict.C and mydict.h the name can be changed.
+This will generate mydict.C and mydict.h the name can NOT be changed as the Makefile uses mydict.C notation. This operation shoud be done once and then you can forgot about the dictionary generation.
 
 1) In the DataWriter_devel folder the RootConverter should be compiled. Simply run
 ```
@@ -30,15 +30,14 @@ make
 to build DataWriter_devel/bin/RootConverter.exe
 
 2) To compile the macro you need run make command and specify
-the macro code, the path to dictionary and the executable. In the macro folder:
+the macro code, that you are compiling. In the macro folder:
 ```
 make SRC=your_macro.C
 ```
 This will produce executable your_macro.exe
 
 
-
-## RUN
+## Running
 
 1) To run acq-->root converter in the run
 ```
