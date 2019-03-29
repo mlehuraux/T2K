@@ -26,13 +26,13 @@ What we need to study:
 
 void  pad_scan(){
 
-  bool DEBUG = false;
+  bool debug = false;
 
   int thr=100.;     //seuil
   int nbins=100;
   int Ndefaultevents=0;
   // int cut_adc=400000;
-  int adc_min = 200;
+  //int adc_min = 200;
   bool ExitAtEnd=0;
   bool Eweight=0;
   bool doFit=0;
@@ -53,7 +53,7 @@ void  pad_scan(){
     else if (string( gApplication->Argv(iarg))=="-w"){
       Eweight=1;
     }else if (string( gApplication->Argv(iarg))=="-d"){
-      DEBUG=true;
+      debug=true;
     } else if (string( gApplication->Argv(iarg))=="--fit"){
      doFit=1;
     }
@@ -159,7 +159,7 @@ void  pad_scan(){
       }
     }
 
-    if (DEBUG) {
+    if (debug) {
       cout << "Imax = " << Imax << " Imin = " << Imin << " Jmax = " << Jmax << " Jmin = " << Jmin << endl;
       cout << "ImaxI = " << Imax << " IminI = " << Imin << " JmaxI = " << Jmax << " JminI = " << Jmin << endl;
     }
@@ -191,16 +191,22 @@ void  pad_scan(){
     //************************************************************
     //************************************************************
 
+    TH2F* PadDisplay=new TH2F("PadDisplay","I vs J of hits",38,-1.,37.,50,-1.,49.);
+    TH2F* PadDisplayGeo=new TH2F("PadDisplayGeo","X vs Y of hits", 38,-18.13,18.13, 50,-17.15,17.15);
+
+    TCanvas *c1 = new TCanvas("c1","evadc1",0, 0, 400,300);
+    TCanvas *c2 = new TCanvas("c2","evadc2",400, 0, 400,300);
+
     for (int ievt=0; ievt < Nevents ; ievt++){
       if (ievt%(Nevents/10)==0)
         cout <<"."<<flush;
 
-      if (DEBUG)
+      if (debug)
         cout << "event i " << ievt << endl;
       t->GetEntry(ievt);
 
-      TH2F* PadDisplay=new TH2F("PadDisplay","I vs J of hits",38,-1.,37.,50,-1.,49.);
-      TH2F* PadDisplayGeo=new TH2F("PadDisplayGeo","X vs Y of hits",50,-17.15,17.15, 38,-18.13,18.13);
+      PadDisplay->Reset();
+      PadDisplayGeo->Reset();
 
       for (int i = 0; i < 24; i++)
         listofRow[i]=0;
@@ -210,7 +216,7 @@ void  pad_scan(){
       cout << "channel size " << listOfChannels->size() << endl;
       for (uint ic=0; ic< listOfChannels->size(); ic++){
         int chan= (*listOfChannels)[ic];
-        if (DEBUG) {
+        if (debug) {
           cout << "channel " << chan << endl;
           cout << "i = " << (*iPad)[chan] << "   j = " << (*jPad)[chan] << endl;
         }
@@ -218,7 +224,7 @@ void  pad_scan(){
         float adcmax=-1;
         int itmax=-1;
 
-        if (DEBUG)
+        if (debug)
           cout << "ADC size " << (*listOfSamples)[ic].size() <<endl;
 
         // one maximum per channel
@@ -243,7 +249,7 @@ void  pad_scan(){
         if ((*iPad)[chan] == Imin || (*iPad)[chan] == Imax ||
             (*jPad)[chan] == Jmin || (*jPad)[chan] == Jmax)
             continue;
-        PadDisplayGeo->Fill((*xPad)[chan],(*yPad)[chan], adcmax);
+        PadDisplayGeo->Fill((*yPad)[chan], (*xPad)[chan], adcmax);
       } //loop over channels
 
       //determine number of rows:
@@ -253,69 +259,21 @@ void  pad_scan(){
 
       RowNumber->Fill(Nrow);
 
-      TCanvas *c1 = new TCanvas("c1","evadc1",0, 0, 400,300);
-      TCanvas *c2 = new TCanvas("c2","evadc2",400, 0, 400,300);
       c1->cd();
+      PadDisplay->SetTitle("Event display J vs. I");
       PadDisplay->Draw("colz");
       gPad->Update();
       //TCanvas* c2 = new TCanvas("can2", "can2");
       c2->cd();
-      PadDisplayGeo->Fit("pol1");
-      TF1* fit = PadDisplayGeo->GetFunction("pol1");
-      if(fit)
-        cout << "Chi1/NDOF                 = " << fit->GetChisquare() / fit->GetNDF() << endl;
+      //PadDisplayGeo->Fit("pol1");
+      //TF1* fit = PadDisplayGeo->GetFunction("pol1");
+      //if(fit)
+      //  cout << "Chi1/NDOF                 = " << fit->GetChisquare() / fit->GetNDF() << endl;
+      PadDisplayGeo->SetTitle("Event display X vs. Y");
+      PadDisplayGeo->GetXaxis()->SetTitle("Y");
+      PadDisplayGeo->GetYaxis()->SetTitle("X");
       PadDisplayGeo->Draw("colz");
       gPad->Update();
-      /*cout << "Draw ADC?" << endl;
-      char res;
-      cin >> res;
-      if (res == 'y') {
-        bool cont_B = true;
-        while (cont_B) {
-          int j_int = 0;
-          int i_int = 0;
-          cout << "Enter j" << endl;
-          cin >> j_int;
-          cout << "Enter i" << endl;
-          cin >> i_int;
-
-          cout << j_int <<  "     " << i_int << endl;
-          int channel = -1;
-          for (unsigned long i = 0; i < iPad->size(); ++ i) {
-            if ((*iPad)[i] == i_int && (*jPad)[i] == j_int) {
-              channel = i;
-              break;
-            }
-          }
-
-          int it = -1;
-          for (uint ic=0; ic< listOfChannels->size(); ic++){
-            if (channel == (*listOfChannels)[ic])
-              it = ic;
-          }
-          cout << "channel " << channel << endl;
-          cout << "channel number " << (*listOfSamples)[it].size() << endl;
-
-          TH1F* adc1=new TH1F("adc1","adc",(*listOfSamples)[it].size(),0,(*listOfSamples)[it].size());
-
-          for (unsigned long i = 0; i < (*listOfSamples)[it].size(); ++i) {
-            adc1->SetBinContent(i, 0);
-            if ((*listOfSamples)[it][i] > 0){
-              Double_t content = (*listOfSamples)[it][i];
-              cout << it << "   " <<  i << "  from "  << (*listOfSamples)[it].size() << "    " << content << endl;
-              adc1->SetBinContent(i, content);
-            }
-          }
-          adc1->Draw();
-          gPad->Update();
-
-          cout << "Continue?" << endl;
-          char cont;
-          cin >> cont;
-          if (cont == 'n')
-            cont_B = false;
-        }
-      }*/
 
       c2->WaitPrimitive();
 
