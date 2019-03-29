@@ -61,25 +61,30 @@ This will produce all histos and output root files you requested in the macros c
 In order to be able to create your own macros here it is the data structure of the RootConverter
 output file.
 
-/output_root_file.root
-/-- TTree padData      # contains the pad data
-/-- -- PadphysChannels # vector<short>          # vector of phys.l channels for the pads
-/-- -- PadADCvsTime    # vector<vector<short> > # ADC vs. time
-/-- TTree femGeomTree  # contains geometry
-/-- -- iPad            # vector<int>            # i position of the physical channel
-/-- -- jPad            # vector<int>            # j position of the physical channel
-/-- -- xPad            # vector<double>         # x position of the physical channel
-/-- -- yPad            # vector<double>         # y position of the physical channel
-/-- -- dxPad           # vector<double>         # x size of a pad
-/-- -- dyPad           # vector<double>         # y size of a pad
+output_root_file.root:
+
+    |-- TTree padData      # contains the pad data
+        |-- PadphysChannels # vector<short>          # vector of phys.l channels for the pads
+        |-- PadADCvsTime    # vector<vector<short> > # ADC vs. time
+    |-- TTree femGeomTree  # contains geometry
+        |-- iPad            # vector<int>            # i position of the physical channel
+        |-- jPad            # vector<int>            # j position of the physical channel
+        |-- xPad            # vector<double>         # x position of the physical channel
+        |-- yPad            # vector<double>         # y position of the physical channel
+        |-- dxPad           # vector<double>         # x size of a pad
+        |-- dyPad           # vector<double>         # y size of a pad
 
 So to look at the data:
+```
 loop over i in PadphysChannels[i] --> loop over hit pads
 loop over j in PadADCvsTime[i][j] --> loop over ADC for pad i
+```
 
 Geometry:
+```
 Physical channels go from 0 to 1727
 j corresponds to columns goes from 0 to 47
 i corresponds to rows    goes from 0 to 35
 x corresponds to colums
 y corresponds to rows
+```
