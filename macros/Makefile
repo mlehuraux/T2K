@@ -24,35 +24,26 @@ endif
 ##CXX           =
 ObjSuf        = o
 SrcSuf        = C
-##ExeSuf        =
-DllSuf        = so
 OutPutOpt     = -o
+OutPutSuf   	= exe
+
 
 ##turning on debuging 6/11/13
 CXXFLAGS += -g
 
-.SUFFIXES: .$(SrcSuf) .$(ObjSuf) .$(DllSuf)
-
-.$(SrcSuf).$(ObjSuf):
-	$(CXX) $(CXXFLAGS) -c $<  $(OutPutOpt) $@
-
-EXE =  exe
-
-OBJS= $(SRC:.$(SrcSuf)=.$(ObjSuf))
+OBJS= $(SRC:.$(SrcSuf)=.$(ObjSuf)) ilc/mydict.o
+MCR=  $(SRC:.$(SrcSuf)=)
 RLXX=$(LFLAGS) $(ROOTLIBS) -lMinuit -lTreePlayer
 
 ##turning on debuging 9/26/2016
 RLXX +=  -g
 
-all: $(EXE)
-$(EXE) :  $(OBJS)
-##	  $(LD) $(RLXX) $^ $(OutPutOpt) $@   For some reason in ubuntu 12.04 the order matters.................
-	  $(LD) $^ $(OutPutOpt) $@ $(RLXX)
-	rm $(OBJS)
+all: $(MCR)
+
+$(MCR): $(OBJS)
+	$(LD) $^ $(OutPutOpt) $@.$(OutPutSuf) $(RLXX)
+	rm *.$(ObjSuf)
 
 clean:
-		rm -f $(OBJS) core *.so *.o
-
-
-##arroabas to mask the command
+	rm -f *.$(ObjSuf) ilc/*.$(ObjSuf) *.exe
 

@@ -32,7 +32,7 @@ to build DataWriter_devel/bin/RootConverter.exe
 2) To compile the macro you need run make command and specify
 the macro code, the path to dictionary and the executable. In the macro folder:
 ```
-make SRC="ilc/mydict.C your_macro.C" EXE="your_macro.exe"
+make SRC=your_macro.C
 ```
 This will produce executable your_macro.exe
 
