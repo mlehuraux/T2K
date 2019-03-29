@@ -253,11 +253,13 @@ void  pad_scan(){
 
       RowNumber->Fill(Nrow);
 
-      TCanvas* c1 = new TCanvas("can1", "can1");
+      TCanvas *c1 = new TCanvas("c1","evadc1",0, 0, 400,300);
+      TCanvas *c2 = new TCanvas("c2","evadc2",400, 0, 400,300);
       c1->cd();
       PadDisplay->Draw("colz");
       gPad->Update();
-      TCanvas* c2 = new TCanvas("can2", "can2");
+      //TCanvas* c2 = new TCanvas("can2", "can2");
+      c2->cd();
       PadDisplayGeo->Fit("pol1");
       TF1* fit = PadDisplayGeo->GetFunction("pol1");
       if(fit)

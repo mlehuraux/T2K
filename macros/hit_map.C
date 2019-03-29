@@ -30,7 +30,7 @@ void hit_map() {
   }
 
   TCanvas *c1 = new TCanvas("c1","evadc",900,700);
-  TString prefix = "~/T2K/figure/T2KTPC/";
+  TString prefix = "~/";
 
   // define output
   TH2F* PadDisplayHIT=new TH2F("PadDisplay","I vs J of hits",38,-1.,37.,50,-1.,49.);
@@ -128,7 +128,7 @@ void hit_map() {
           int adc= (*listOfSamples)[ic][it];
           if (adc>adcmax) {
             adcmax=adc;
-            itmax=it;
+            //itmax=it;
           }
         }
 
