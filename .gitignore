@@ -5,6 +5,9 @@ bin/
 lib/
 *.o
 *.d
-*pcm
+*.pcm
+*.exe
+*.acq
+*.root
 /DataWriter_devel/interface/dict_interface.cc
 /DataWriter_devel/interface/dict_interface.h

@@ -1,91 +1,85 @@
+# T2K TPC  analysis package
 
 
-132.166.10.174
-ilctpc  ilctpctest
+The package allow to convert data from ILC DAQ format (.acq) to ROOT format,
+saving all the information about the ADC vs. time for each pad.
+The included macros can be used for the data analysis.
 
-################
-##### event display
-##############"
-/home/ilctpc/Wenxin_spcl/LPMon/LPMon_7modules_wwx/LPDisplay -f /media/ILC-7M_DATA_04/data/RUN_05206.00000.acq
-#### event display of  test beam data
+acq-->root converter (DataWriter_devel) is provided from the ILC team (Boris)
 
+## Requierments:
+1) ROOT
+2) BOOST for acq-->root
 
-cd  /home/ilctpc/Wenxin_spcl/LPMon/LPMon_7modules_wwx
-./LPDisplay -f  /media/ILC-7M_DATA_04/data/RUN_05206.00000.acq
-Then l
+## COMPILATION
 
-
-#################
-#######File location
-############
-/media/ILC-7M_DATA_04  -> excel file with data description
-/media/ILC-7M_DATA_04/data  -> all acq files
-
-acq file raw data  DAQ system
-acq -> lcio    ILC software     ilc tpc software.
-
-################################
-###########Plan   ######
-########################
-1. Run a test example without modification
-2. Modify the acq to root file converter to have all 7 modules
-3. modify the test command to analyze the root files.
-
-
-Details
-1. Working test
-###
-link the file to the directory ~/INSTALLFCC/DataWriter_devel ;
-cd ~//INSTALLFCC/DataWriter_devel ;   bin/acqToRootConverterExe -t 0 -m 1 -f  RUN_05206.00000.acq -n 10  --noxml
-
-
-## An example which is working on 25/10/2017
-
-cd ~/INSTALLFCC/macros
-./script_convert_one_acq.tcsh /media/ILC-7M_DATA_04/data/RUN_05206.00000.acq
-#This create a local root files.. (note that the script only converts the first events of the acq
-
-##the root files can be analyzed with a local test exectuable
-##compile executable
-cd ~/INSTALLFCC/macros
+To work with this package you need to compile the ROOT dictionary in order to be able to store c++ vectors
+and vectors of vectors in the ROOT file.
+To do this in the macros/ilc folder run
+```
 rootcint -f  mydict.C -c LinkDef.h
-make SRC="mydict.C tpc_gain_study.C"  EXE=test.exe
-./test.exe -f RUN_05206.00000.root
+```
+
+This will generate mydict.C and mydict.h the name can be changed.
+
+1) In the DataWriter_devel folder the RootConverter should be compiled. Simply run
+```
+make clean
+make
+```
+to build DataWriter_devel/bin/RootConverter.exe
+
+2) To compile the macro you need run make command and specify
+the macro code, the path to dictionary and the executable. In the macro folder:
+```
+make SRC="ilc/mydict.C your_macro.C" EXE="your_macro.exe"
+```
+This will produce executable your_macro.exe
 
 
 
-2. 
-##############
-Make acq to root converter running
-convert  acq file -> root file
-Install root 6 .... Cannot be done on this computer. Too old, not right version of gcc!!!
-Hopefully everything will work anyway...
+## RUN
 
-to store all the 7 FEM  from the beam test data femid 0 to 1 2 3 4 5 6 modify
-~/INSTALLFCC/DataWriter_devel/src/acqToRootConverterExe.cc
-~/INSTALLFCC/DataWriter_devel/src/dataDecoder.cc
+1) To run acq-->root converter in the run
+```
+./bin/acqToRootConverterExe -t 0 -m 1 -f  "run_XXX.acq" --noxml
+```
+It will unpack the data in run_XXX.acq into run_XXX.root
 
-## right now Boris is using this piece of code with the option -t 0 -m 1  --noxml
-## to say that   FEM 0 has to be decoded as a  TPC-Pad
-## while FEM 1 is attached to the  Multigen detector
-## noxml option:  do not look for CFG_XXXX.xml where some information about run is stored.
-### in particular the information about the sampling frequency=the width of a time bin and the peaking time
-###  divideScaClockBy>0x4  (in xml file)  ->    100 MhZ/4 = 25 MhZ    in other word 10 ns * 4=40 ns
-### if --noxml is removed  then you need a CFG_xxxx.xml in the directory to be present
-
-
-3. Analyze the root files
-##################
-cd ~/INSTALLFCC/macros
-There is the working examples based on the source code   tpc_gain_study.C
-cd ~/INSTALLFCC/macros
-rootcint -f  mydict.C -c LinkDef.h
-make SRC="mydict.C tpc_gain_study.C"  EXE=test.exe
-./test.exe -f RUN_05206.00000.root
-
-
-So you can just create your own executable using same kind of instruction
+2) To run the macro call
+```
+./your_macro.exe -f output_root_file.root -o output_dir
+```
+This will produce all histos and output root files you requested in the macros code.
 
 
 
+## DATA FORMAT
 
+** IMPORTANT! Geometry could be rotated by 90 degrees **
+
+In order to be able to create your own macros here it is the data structure of the RootConverter
+output file.
+
+/output_root_file.root
+/-- TTree padData      # contains the pad data
+/-- -- PadphysChannels # vector<short>          # vector of phys.l channels for the pads
+/-- -- PadADCvsTime    # vector<vector<short> > # ADC vs. time
+/-- TTree femGeomTree  # contains geometry
+/-- -- iPad            # vector<int>            # i position of the physical channel
+/-- -- jPad            # vector<int>            # j position of the physical channel
+/-- -- xPad            # vector<double>         # x position of the physical channel
+/-- -- yPad            # vector<double>         # y position of the physical channel
+/-- -- dxPad           # vector<double>         # x size of a pad
+/-- -- dyPad           # vector<double>         # y size of a pad
+
+So to look at the data:
+loop over i in PadphysChannels[i] --> loop over hit pads
+loop over j in PadADCvsTime[i][j] --> loop over ADC for pad i
+
+Geometry:
+Physical channels go from 0 to 1727
+j corresponds to columns goes from 0 to 47
+i corresponds to rows    goes from 0 to 35
+x corresponds to colums
+y corresponds to rows

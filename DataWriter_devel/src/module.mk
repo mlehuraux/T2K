@@ -7,6 +7,6 @@ FILES := xmlReader geomManager dataDecoder tpcPadDataFormats tpcDataAnalyzer tpc
 DICTFILES :=
 
 # Executable files
-PROGRAMS := xmlReaderExe acqToRootConverterExe rootAnalyzerExe rootHodoAnalyzerExe
+PROGRAMS := xmlReaderExe acqToRootConverterExe
 NEEDS_ROOT  := yes
 NEEDS_BOOST := yes
