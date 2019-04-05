@@ -32,7 +32,7 @@ OutPutSuf   	= exe
 CXXFLAGS += -g
 
 OBJS= $(SRC:.$(SrcSuf)=.$(ObjSuf)) ilc/mydict.o
-MCR=  $(SRC:.$(SrcSuf)=)
+MCR=  ../app/$(SRC:.$(SrcSuf)=)
 RLXX=$(LFLAGS) $(ROOTLIBS) -lMinuit -lTreePlayer
 
 ##turning on debuging 9/26/2016
