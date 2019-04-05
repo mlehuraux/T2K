@@ -1,4 +1,4 @@
-#ifndef MGStripataFormats_hh__
+#ifndef MGStripDataFormats_hh__
 #define MGStripDataFormats_hh__
 
 #include  "interface/MicroMegasChannelDataFormats.hh"

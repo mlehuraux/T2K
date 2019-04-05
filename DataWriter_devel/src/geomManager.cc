@@ -64,7 +64,7 @@ void femGeomManager::readElectronic() {
   _jPadMin = -1;
   _jPadMax = -1;
 
-  int kPhysChanPerAsic = 72;
+  //int kPhysChanPerAsic = 72;
 
  /// tmp variables
   map<int,int> iPad, jPad;
@@ -216,11 +216,15 @@ int femGeomManager::padInAsic( int iPhysCh ) const {
 
 ////// Geometry file
 double femGeomManager::xPad(int i, int j) const {
+  (void)i;
+  (void)j;
   return 0.;//0.25 *( _x0Pad[i][j] + _x1Pad[i][j] + _x2Pad[i][j] + _x3Pad[i][j] );
 }
 
 ////// Geometry file
 double femGeomManager::yPad(int i, int j) const {
+  (void)i;
+  (void)j;
   return 0.;//0.25 *( _y0Pad[i][j] + _y1Pad[i][j] + _y2Pad[i][j] + _y3Pad[i][j] );
 }
 
@@ -273,6 +277,9 @@ int femGeomManager::readGeometry() {
   return 0;
 }
 double femGeomManager::xPadCoord( int i, int j, int k ) const {
+  (void)i;
+  (void)j;
+  (void)k;
 /*
   if( k == 0 ) return _x0Pad[i][j];
   if( k == 1 ) return _x1Pad[i][j];
@@ -283,6 +290,9 @@ double femGeomManager::xPadCoord( int i, int j, int k ) const {
 }
 
 double femGeomManager::yPadCoord( int i, int j, int k) const {
+  (void)i;
+  (void)j;
+  (void)k;
 /*
   if( k == 0 ) return _y0Pad[i][j];
   if( k == 1 ) return _y1Pad[i][j];
@@ -326,6 +336,7 @@ void femGeomManager::dumpToRootFile(TFile *f, const std::string &treeName ) {
 
 
 void femGeomManager::initFromRootFile(std::string rootFileName, const std::string &treeName ) {
+  (void)treeName;
   TFile f(rootFileName.c_str(),"read");
   if( !f.IsOpen() || f.IsZombie() ) {
     cerr << " ERROR[ femGeomManager::initFromRootFile ] input root file is not opened properly... " << endl;
@@ -380,6 +391,8 @@ void femGeomManager::initFromRootFile(std::string rootFileName, const std::strin
 
 #include <TH2Poly.h>
 bool femGeomViewer::init(string rootName, const femGeomManager &geo )  {
+  (void)rootName;
+  (void)geo;
   /*reset();
   if( _XYviewer.get() ) return false;
 
