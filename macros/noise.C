@@ -7,6 +7,7 @@
 void noise() {
   vector<TString> listOfFiles;
   TString file="default.root";
+  TString prefix = "data/";
   for (int iarg=0; iarg<gApplication->Argc(); iarg++){
     if (string( gApplication->Argv(iarg))=="-f" || string( gApplication->Argv(iarg))=="--file" ){
       iarg++;
@@ -26,17 +27,21 @@ void noise() {
           }
         }
       }
+    } else if (string( gApplication->Argv(iarg))=="-o" || string( gApplication->Argv(iarg))=="--output" ){
+      iarg++;
+      prefix = gApplication->Argv(iarg);
     }
   }
 
   TH2D* mean = new TH2D("mean_n", "Mean noise", 38,-1.,37.,50,-1.,49.);
   TH2D* sigma = new TH2D("sigma_n", "Sigma noise", 38,-1.,37.,50,-1.,49.);
 
+  TH1D* mean_1d = new TH1D("mean_1d", "", 1728, 0., 1728);
+  TH1D* sigma_1d = new TH1D("sigma_1d", "", 1728, 0., 1728);
+
   TCanvas *c1 = new TCanvas("c1","evadc",900,700);
-  TString prefix = "~/T2K/figure/T2KTPC/";
 
   Int_t total_events = 0;
-  Int_t sel_events = 0;
 
   vector< vector<float> > mean_adc;
   vector< vector<float> > sigma_adc;
@@ -48,15 +53,14 @@ void noise() {
   }
 
   TH2F* PadDisplay=new TH2F("PadDisplay","Maximum adc",38,-1.,37.,50,-1.,49.);
-  TH2F* MeanDisplay=new TH2F("MeanDisplay","Mean noise",38,-1.,37.,50,-1.,49.);
-  TH2F* SigmaDisplay=new TH2F("SigmaDisplay","Sigma noise",38,-1.,37.,50,-1.,49.);
 
   //************************************************************
   //****************** LOOP OVER FILES  ************************
   //************************************************************
 
   TFile*f=0;
-  for (uint ifile=0;ifile< listOfFiles.size();ifile++){
+  //for (uint ifile=0;ifile< listOfFiles.size();ifile++){
+  int ifile = 0;
     file = listOfFiles[ifile];
     if (f!=0) f->Close();
     cout << "opening file " << file <<  endl;
@@ -124,6 +128,14 @@ void noise() {
 
     cout << "[          ] Nev="<<Nevents<<"\r[";
 
+    // create histoes for noise storing
+    t->GetEntry(0);
+    TH1D* histo[1728];
+    for (uint ic=0; ic< listOfChannels->size(); ic++){
+      histo[ic] =  new TH1D(Form("noise_%i", ic), Form("noise%i_%i", (*iPad)[ic], (*jPad)[ic]),
+          500, 0., 500.);
+    }
+
     //************************************************************
     //****************** LOOP OVER EVENTS ************************
     //************************************************************
@@ -135,108 +147,117 @@ void noise() {
       ++total_events;
 
       PadDisplay->Reset();
-      MeanDisplay->Reset();
-      MeanDisplay->Reset();
 
       //************************************************************
       //*****************LOOP OVER CHANNELS ************************
       //************************************************************
-      bool event = false;
       for (uint ic=0; ic< listOfChannels->size(); ic++){
         int chan= (*listOfChannels)[ic];
-        int adc_max = -1;
         for (uint it = 0; it < 511; it++){
           int adc= (*listOfSamples)[ic][it];
-          if (adc > 400) {
-            event = true;
-            break;
-          }
-          if (adc > adc_max)
-            adc_max = adc;
+          histo[chan]->Fill(adc);
+          //cout << adc << endl;
         }
-        if (event) break;
-        PadDisplay->Fill((*iPad)[chan], (*jPad)[chan], adc_max);
       } //loop over channels
-
-      if (event)
-        continue;
-      ++sel_events;
-
-      //************************************************************
-      //*****************LOOP OVER CHANNELS ************************
-      //************************************************************
-      for (uint ic=0; ic< listOfChannels->size(); ic++){
-        int chan= (*listOfChannels)[ic];
-
-        TH1D* histo =  new TH1D(Form("noise%i_%i", ievt, ic), Form("noise%i_%i", (*iPad)[chan], (*jPad)[chan]),
-          120, 200., 320.);
-        for (uint it = 0; it < listOfChannels->size(); it++){
-          int adc= (*listOfSamples)[ic][it];
-          histo->Fill(adc);
-        }
-        histo->Fit("gaus", "Q");
-        TF1 *fit = histo->GetFunction("gaus");
-        Float_t m     = fit->GetParameter(1);
-        Float_t s     = fit->GetParameter(2);
-        /*histo->Draw();
-        gPad->Update();
-        char k[20];
-        cin >> k;*/
-        mean_adc[(*iPad)[chan]][(*jPad)[chan]] += m;
-        sigma_adc[(*iPad)[chan]][(*jPad)[chan]] += s;
-
-        MeanDisplay->Fill((*iPad)[chan], (*jPad)[chan], m);
-        SigmaDisplay->Fill((*iPad)[chan], (*jPad)[chan], s);
-
-        histo->Reset();
-        delete histo;
-      } // 2nd loop over channel
-
-      /*{
-        c1->cd();
-        PadDisplay->Draw("colz");
-        gPad->Update();
-        TCanvas *c2 = new TCanvas("c2","evadc",900,700);
-        c2->cd();
-        MeanDisplay->GetZaxis()->SetRangeUser(240., 265.);
-        MeanDisplay->Draw("colz");
-        gPad->Update();
-        TCanvas *c3 = new TCanvas("c3","evadc",900,700);
-        c3->cd();
-        SigmaDisplay->GetZaxis()->SetRangeUser(4., 10.);
-        SigmaDisplay->Draw("colz");
-        gPad->Update();
-        char k[67];
-        cin >> k;
-      }*/
     } // loop over events
-  } // loop over files
+  //} // loop over files
   cout << endl;
 
-  for (int it_j = 0; it_j <= 47; ++it_j) {
-    for (int it_i = 0; it_i <= 35; ++it_i) {
-      mean->Fill(it_i, it_j, mean_adc[it_i][it_j] / sel_events);
-      sigma->Fill(it_i, it_j, sigma_adc[it_i][it_j] / sel_events);
-    }
-  }
-  TFile* output = new TFile("data/pedestals.root", "recreate");
+  ofstream ped_file;
+  ped_file.open((prefix + "pedestals.txt").Data());
+
+  TFile* output = new TFile((prefix + "pedestals.root").Data(), "recreate");
   output->cd();
+
+  for (uint ic=0; ic< listOfChannels->size(); ic++){
+    Float_t max = histo[ic]->GetMaximum();
+    Float_t x_max = histo[ic]->GetBinCenter(histo[ic]->GetMaximumBin());
+    Int_t start_bin = histo[ic]->FindFirstBinAbove(max / 2.);
+    Int_t end_bin = histo[ic]->FindLastBinAbove(max / 2.);
+    Float_t hwhm = histo[ic]->GetBinCenter(end_bin) - histo[ic]->GetBinCenter(start_bin);
+    hwhm *= 0.5;
+
+    histo[ic]->Fit("gaus", "Q", "", x_max - 2*hwhm, x_max + 2*hwhm);
+    TF1* fit = histo[ic]->GetFunction("gaus");
+
+    Float_t mean_t  = 0.;
+    Float_t sigma_t = 0.;
+    if (!fit)
+      cout << "ALARM! No fit fuction for channel " << ic << endl;
+    else {
+      mean_t  = fit->GetParameter(1);
+      sigma_t = fit->GetParameter(2);
+
+      if (mean_t < 0 || sigma_t < 1 || mean_t > 1000 || sigma_t > 20) {
+        histo[ic]->Fit("gaus", "Q", "", x_max - 2*hwhm, x_max + 2*hwhm);
+        fit = histo[ic]->GetFunction("gaus");
+        mean_t  = fit->GetParameter(1);
+        sigma_t = fit->GetParameter(2);
+      }
+      if (mean_t < 0 || sigma_t < 1 || mean_t > 1000 || sigma_t > 20) {
+        histo[ic]->Fit("gaus", "Q", "", x_max - 2*hwhm, x_max + 2*hwhm);
+        fit = histo[ic]->GetFunction("gaus");
+        mean_t  = fit->GetParameter(1);
+        sigma_t = fit->GetParameter(2);
+      }
+      if (mean_t < 0 || sigma_t < 1 || mean_t > 1000 || sigma_t > 20) {
+        histo[ic]->Fit("gaus", "Q", "", x_max - 2*hwhm, x_max + 2*hwhm);
+        fit = histo[ic]->GetFunction("gaus");
+        mean_t  = fit->GetParameter(1);
+        sigma_t = fit->GetParameter(2);
+      }
+      if (mean_t < 0 || sigma_t < 1 || mean_t > 1000 || sigma_t > 20) {
+        histo[ic]->Fit("gaus", "Q", "", x_max - 2*hwhm, x_max + 2*hwhm);
+        fit = histo[ic]->GetFunction("gaus");
+        mean_t  = fit->GetParameter(1);
+        sigma_t = fit->GetParameter(2);
+      }
+    }
+
+    mean->Fill((*iPad)[ic], (*jPad)[ic], mean_t);
+    sigma->Fill((*iPad)[ic], (*jPad)[ic], sigma_t);
+
+    mean_1d->Fill(ic, mean_t);
+    sigma_1d->Fill(ic, sigma_t);
+
+    ped_file << ic << "\t" << mean_t << "\t" << sigma_t  << "\t" << mean_t + 4 * sigma_t << endl;
+
+    //cout << ic << "\t" << (*iPad)[ic] << "\t" << (*jPad)[ic] << "\t" << mean_t << "\t" << sigma_t << endl;
+  }
+  ped_file.close();
+  output->cd();
+
+  mean->SetDrawOption("colz");
+  sigma->SetDrawOption("colz");
   mean->Write();
+  sigma->Write();
+
+  mean_1d->SetDrawOption("hist");
+  sigma_1d->SetDrawOption("hist");
+  mean_1d->Write();
+  sigma_1d->Write();
+
+  for (uint chan=0; chan< listOfChannels->size(); chan++){
+    histo[chan]->Write();
+  }
+
   output->Close();
 
   gStyle->SetOptStat(0);
-  mean->GetZaxis()->SetRangeUser(248., 258.);
+  //mean->GetZaxis()->SetRangeUser(248., 258.);
   mean->Draw("colz");
-  c1->Print((prefix+"MeannNoise.pdf").Data());
+  c1->Print((prefix+"Meann2D.pdf").Data());
 
-  sigma->GetZaxis()->SetRangeUser(2., 10.);
+  mean_1d->Draw("hist");
+  c1->Print((prefix+"Meann1D.pdf").Data());
+
+  //sigma->GetZaxis()->SetRangeUser(2., 10.);
   sigma->Draw("colz");
-  c1->Print((prefix+"SigmaNoise.pdf").Data());
+  c1->Print((prefix+"Sigma2D.pdf").Data());
+  sigma_1d->Draw("hist");
+  c1->Print((prefix+"Sigma1D.pdf").Data());
 
-  cout << "Total events number     : " << total_events << endl;
-  cout << "Sel events number       : " << sel_events << endl;
-
-
+  exit(0);
 
   return;
 }

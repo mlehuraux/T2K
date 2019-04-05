@@ -22,9 +22,6 @@
 
 using namespace std;
 
-/*
-TODO:    multigen/TPC geometry read from cmd line -> should it be switched ??
-*/
 void rootStyle(void);
 
 int main( int nargc, char **argv ) {
@@ -32,6 +29,8 @@ int main( int nargc, char **argv ) {
   string dataFile = "unknown";
   string electronicMap = "etc/geom/MapLayoutFile.txt";
   string geometryMap   = "etc/geom/keystonePadGeom.txt";
+  string pedestals_file_name = "";
+  bool DoZeroSuppression = false;
 
   int tpcfem=1;
   int multigenfem=0;
@@ -45,13 +44,14 @@ int main( int nargc, char **argv ) {
     ("xmlFile" , po::value<string>(&xmlFile),"xmlFile" )
     ("elecMap" , po::value<string>(&electronicMap)->default_value("etc/geom/MapLayoutFile.txt"  ),"file with the electronic map layout" )
     ("geomMap" , po::value<string>(&geometryMap  )->default_value("etc/geom/keystonePadGeom.txt"),"file with the geometry map layout" )
-    ("f,file"  , po::value<string>(&dataFile)->required(),"data file" )
+    ("file,f"  , po::value<string>(&dataFile)->required(),"data file" )
     ("interactive,i","interactive mode" )
     ("noxml","force to run without existing xml file" )
     ("tpcfem,t" , po::value<int>(&tpcfem  )->default_value(1),"FEM number for TPC pad (default 1)")
     ("multigenfem,m" , po::value<int>(&multigenfem  )->default_value(0),"FEM number for multigen (default 0)")
-    ("Nevents,n" , po::value<int>(&Nevents)->default_value(0),"Max number of events (default 0 to process all)");
-    ;
+    ("Nevents,n" , po::value<int>(&Nevents)->default_value(0),"Max number of events (default 0 to process all)")
+    ("pedestals,p", po::value<string>(&pedestals_file_name)->default_value(""),"file with pedestal information" );
+  ;
 
 
   po::variables_map vm;
@@ -59,18 +59,48 @@ int main( int nargc, char **argv ) {
 	    options(config).run(), vm);
   po::notify(vm);
 
+  if (pedestals_file_name != "")
+    DoZeroSuppression = true;
+
   if( vm.count("help") ) {
     cout << config << endl;
     cout << "Usage: ./bin/xmlReaderExe [options]" << endl;
     return 1;
   }
 
-   if(    vm.count("interactive")  ) interactive = 1;
-   else                              interactive = 0;
+  if(    vm.count("interactive")  ) interactive = 1;
+  else                              interactive = 0;
 
-   if(    vm.count("noxml")  ) noxml = 1;
+  if(    vm.count("noxml")  ) noxml = 1;
 
 
+  vector<float>          mean_v;
+  vector<float>          sigma_v;
+  vector<float>          zero_v;
+
+  mean_v.resize(1728);
+  sigma_v.resize(1728);
+  zero_v.resize(1728);
+
+  if (DoZeroSuppression) {
+    ifstream ped_file(pedestals_file_name.c_str());
+
+    if ( !ped_file ) {
+      cerr << "ERROR acqToRootConverterExe.cc: Can't open pedestal file : " << pedestals_file_name << endl;
+      return -1;
+    }
+
+    int ch;
+    float mean, sigma, zero;
+    while ( ped_file.good() && !ped_file.eof() ) {
+      ped_file >> ch >> mean >> sigma >> zero;
+      mean_v[ch] = mean;
+      sigma_v[ch] = sigma;
+      zero_v[ch] = zero;
+    }
+
+    ped_file.close();
+  }
 
 
   TRint *theApp   = 0;
@@ -163,29 +193,36 @@ int main( int nargc, char **argv ) {
 
     for( unsigned ipad = 0; ipad < pads.size(); ipad++ ) {
       listOfPadChannels.push_back( pads[ipad].getPhysChannel() );
-      //conversion to short //FIXME once interface are changed
 
       //    vector<int> tmp;
-	 vector<short> tmp_short;
-	  tmp_short=pads[ipad].getADCvsTime() ;
-	  //	  for (unsigned i=0; i<tmp.size(); i++){
-	  // tmp_short.push_back(tmp[i]);
-	  // } //interface changed on april 2017. no conversion needed
-	  listOfPadSamples.push_back( tmp_short);
-	  //      listOfPadSamples.push_back(  pads[ipad].getADCvsTime() );
+	   vector<short> tmp_short;
+	   tmp_short=pads[ipad].getADCvsTime() ;
+	   //	  for (unsigned i=0; i<tmp.size(); i++){
+	   // tmp_short.push_back(tmp[i]);
+	   // } //interface changed on april 2017. no conversion needed
+	   listOfPadSamples.push_back( tmp_short);
+	   //      listOfPadSamples.push_back(  pads[ipad].getADCvsTime() );
     }
 
- for( unsigned img = 0; img < multigens.size(); img++ ) {
-      listOfMGChannels.push_back( multigens[img].getPhysChannel() );
+    // INFO probably not the best place but avoids pedestal file opening in the decoder
+    // Apply zero suppression
+    if (DoZeroSuppression) {
+      for (uint ipad = 0; ipad < pads.size(); ++ipad) {
+      // DEFINE ZERO LEVEL HERE
+      // could be defined with precomputed zero or calc mean+N*sigma here;
+      // TODO add check mean != 0 and sigma != 0
+        Int_t zero_level = zero_v[listOfPadChannels[ipad]];
+        //zero_level = int(mean_v[listOfPadChannels[ipad]] + 4. * sigma_v[listOfPadChannels[ipad]] + 0.5);
+        for (uint itime = 0; itime < listOfPadSamples[ipad].size(); ++itime)
+          listOfPadSamples[ipad][itime] -= zero_level;
+      }
+    }
+    // zero suppression done
 
-      //   vector<int> tmp;
-      vector<short>tmp_short;
-      tmp_short=  multigens[img].getADCvsTime() ;
-      //     for (unsigned i=0; i<tmp.size(); i++){
-      //	tmp_short.push_back(tmp[i]);
-      //      }
-	 listOfMGSamples.push_back( tmp_short);
-      //listOfMGSamples.push_back(  multigens[img].getADCvsTime() );
+
+    for( unsigned img = 0; img < multigens.size(); img++ ) {
+      listOfMGChannels.push_back( multigens[img].getPhysChannel() );
+      listOfMGSamples.push_back(  multigens[img].getADCvsTime() );
     }
 
 
@@ -194,11 +231,11 @@ int main( int nargc, char **argv ) {
 
 
     //// if monitoring mode - plot max charge
-    if( interactive ) {
-  	canvas->cd();
-	ana.fillPadsWithMaxCharge( pads );
-	ana.drawEvt2D();
-	canvas->Update();
+    if (interactive) {
+      canvas->cd();
+      ana.fillPadsWithMaxCharge( pads );
+      ana.drawEvt2D();
+      canvas->Update();
     }
   }
   cout << " ----> Closing output file: " << fOut->GetName() << endl;
