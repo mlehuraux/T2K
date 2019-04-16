@@ -187,7 +187,7 @@ int main(int argc, char **argv)
 	int done;
 	
 	// Default parameters
-	sprintf(param.inp_file, "C:\\users\\calvet\\projects\\bin\\pandax\\data\\R2018_11_27-15_24_07-000.aqs");
+	sprintf(param.inp_file, "C:\\users\\calvet\\projects\\bin\\pandax\\data\\R2018_11_27-15_24_07-000.aqs"); //Change default file path 
 	param.sample_index_offset_zs = 4;
 	param.vflag                  = 0;
 	param.has_no_run             = 0;
