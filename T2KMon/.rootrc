@@ -1,0 +1,4 @@
+# Path used by dynamic loader to find shared libraries
+*.Root.DynamicPath:    .:$ROOTDIR/lib:$LCIO/lib
+*.Root.IncludePath:    .:$ROOTDIR/incude:$LCIO/include
+

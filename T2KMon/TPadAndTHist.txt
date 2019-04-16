@@ -1,0 +1,124 @@
+Q: We want to combine hist and pad so that change in hist will be transfered to
+   the pad so that we ca ...
+
+
+A: Used h->AppendPad( option ).
+
+   'option' will be added to current pad's primitives list.
+
+    void TObject::AppendPad(Option_t *option)
+    {
+      ...
+      gPad->GetListOfPrimitives()->Add(this,option);
+      ...
+    }
+
+    For example, if "col" is provided, pad will fill its region with color.
+
+
+Pattern: Order is important.
+
+   1. Create a TPad                                : TPad *p = new TPad(...)
+   2. Create a Histogram (TH1, TH2, ...)           : TH1F *h = new TH1F(...)
+   3. Call AppendPad(opt) for the histogram object : h->AppendPad(opt)
+
+   Now we made a link between TPad and THist.
+   Here is how to use the connection.
+
+   4. Fill/Update histogram                        : h->Fill(...)
+   5. Call Modified() to emit a signal             : p->Modified()
+
+      Canvas will catch the signal and redraw it.
+      See a descrition in TPad.html.
+
+       "The effective drawing is performed when
+        the canvas receives a signal to be painted.
+        This signal is generally sent when ... or
+        when a graphical operation has been performed
+        on one of the pads of this canvas."
+
+   6. Call Update() to force to redraw the hist    : h->Update() 
+
+
+Q: How to handle mouse event.
+
+A: Connect signal emitted by TCanvas - TPad does NOT emit signal - to
+   the required handler.
+ 
+   Some useful signatures of the signals:
+     (Signature of the slots should be the same as the signal)
+ 
+    - ProcessedEvent(Event_t *) 
+ 
+        To do simple task such as resize window, get pixel coordinate, ...
+      
+    - Selected(TVirtualPad*, TObject *, Int_t)
+
+        To get id of the graphic object.
+        We can get the name of the graphic object by using TVirtualPad object.
+      
+          TVirtualPad->GetName()
+
+        Need to encode object's ID to the name.
+
+
+   Graphic object such as TPad has no ability to catch mouse event.
+   It is the TCanvas who catches mouse event such as motion and click,
+   and raises signal.  
+
+   Strictly speaking, TPad will invoke ExecuteEven() method/slot when 
+   mouse is moved in.  But we can NOT overload this method in classes 
+   derived from TPad.
+
+
+Pattern:
+   
+   
+
+/**** TPad.html ************************************************************/
+
+  A Pad is contained in a Canvas.
+
+  A pad is a linked list of primitives of any type (graphics objects,
+  histograms, detectors, tracks, etc.).
+
+* Adding a new element into a pad is in general performed by the Draw
+  member function of the object classes.
+
+* It is important to realize that the pad is a linked list of references
+  to the original object.
+
+  For example, in case of a histogram, the histogram->Draw() operation
+  only stores a reference to the histogram object and not a graphical
+  representation of this histogram.
+
+  When the mouse is used to change (say the bin content), the bin content
+  of the original histogram is changed !!
+
+  The convention used in ROOT is that a Draw operation only adds
+  a reference to the object. 
+
+* The effective drawing is performed when the canvas receives a signal
+  to be painted.  This signal is generally sent when typing carriage return
+  in the command input or when a graphical operation has been performed on 
+  one of the pads of this canvas.
+
+  When a Canvas/Pad is repainted, the member function Paint for all
+  objects in the Pad linked list is invoked.
+
+  When the mouse is moved on the Pad, The member function DistancetoPrimitive
+  is called for all the elements in the pad. DistancetoPrimitive returns
+  the distance in pixels to this object.
+  When the object is within the distance window, the member function
+  ExecuteEvent is called for this object.
+  in ExecuteEvent, move, changes can be performed on the object.
+
+  For examples of DistancetoPrimitive and ExecuteEvent functions,
+  see classes TLine::DistancetoPrimitive, TLine::ExecuteEvent
+              TBox::DistancetoPrimitive,  TBox::ExecuteEvent
+              TH1::DistancetoPrimitive,   TH1::ExecuteEvent
+
+  A Pad supports linear and log scales coordinate systems.
+  The transformation coefficients are explained in TPad::ResizePad.
+  An example of pads hierarchy is shown below:
+
