@@ -14,7 +14,7 @@
 #include <cmath>
 
 using namespace std;
-void fit(string data_file, int order)
+void fit(string data_file, int order )
 {
 
   TH1 *data = new TH1("data", "", 100, 0, 100);
