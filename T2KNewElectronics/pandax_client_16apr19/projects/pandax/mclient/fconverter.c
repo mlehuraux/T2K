@@ -16,6 +16,7 @@ April 2019    : created from mreader.c
 *******************************************************************************/
 #include <stdio.h>
 #include <string.h>
+#include <fcntl.h>
 
 #include "fdecoder.h"
 #include "datum_decoder.h"
@@ -23,6 +24,7 @@ April 2019    : created from mreader.c
 #include "frame.h"
 
 typedef struct _Param {
+	char inp_dir[120];
 	char inp_file[120];
 	FILE *fsrc;
 	int  has_no_run;
@@ -69,21 +71,25 @@ parse_cmd_args() to parse command line arguments
 int parse_cmd_args(int argc, char **argv, Param* p)
 {
 	int i;
-	int match;
+	int match=0;
 	int err = 0;
 
 	for (i = 1; i<argc; i++)
 	{
-		match = 0;
 
 		// Input file name
 		if (strncmp(argv[i], "-i", 2) == 0)
 		{
 			match = 1;
-			if ((i + 1) < argc)
+			if ((i + 2) < argc)
 			{
 				i++;
-				strcpy(&(p->inp_file[0]), argv[i]);
+				strcpy(&(p->inp_dir[0]), argv[i]);
+				strcpy(&(p->inp_file[0]), argv[i+1]);
+				printf("Input directory : %s", p->inp_dir);
+				printf("\n");
+				printf("Input file : %s", p->inp_file);
+				printf("\n");
 			}
 			else
 			{
@@ -92,6 +98,7 @@ int parse_cmd_args(int argc, char **argv, Param* p)
 			}
 		}
 
+/*
 		// vflag
 		else if (strncmp(argv[i], "-vflag", 6) == 0)
 		{
@@ -171,6 +178,7 @@ int parse_cmd_args(int argc, char **argv, Param* p)
 		{
 			printf("Warning: unsupported option %s\n", argv[i]);
 		}
+*/
 	}
 	return (0);
 
@@ -185,9 +193,9 @@ int main(int argc, char **argv)
 	int i;
 	int err;
 	int done;
-	
+
 	// Default parameters
-	sprintf(param.inp_file, "C:\\users\\calvet\\projects\\bin\\pandax\\data\\R2018_11_27-15_24_07-000.aqs"); //Change default file path 
+	//sprintf(param.inp_file, "C:\\users\\calvet\\projects\\bin\\pandax\\data\\R2018_11_27-15_24_07-000.aqs"); //Change default file path
 	param.sample_index_offset_zs = 4;
 	param.vflag                  = 0;
 	param.has_no_run             = 0;
@@ -201,7 +209,11 @@ int main(int argc, char **argv)
 	}
 
 	// Open input file
-	if (!(param.fsrc = fopen(param.inp_file, "rb")))
+	char filename[140];
+	strcpy(filename, param.inp_dir);
+	strcat(filename, param.inp_file);
+	//printf("%s", filename);
+	if (!(param.fsrc = fopen(filename, "rb")))
 	{
 		printf("could not open file %s.\n", param.inp_file);
 		return(-1);
@@ -216,16 +228,59 @@ int main(int argc, char **argv)
 		printf("Input file : %s\n", param.inp_file);
 	}
 
+	// Create .txt file to write in
+	// Find length of directory name
+	int ldir;
+	for (int i=1; i<sizeof(param.inp_dir); i++)
+	{
+		if ((param.inp_dir[i]=='/') && (param.inp_dir[i+1]==' '))
+		{
+			ldir=i+1;
+			break;
+		}
+	}
+	char output_dir[ldir];
+	// write the reduced string
+	strncpy(output_dir, param.inp_dir, ldir-1);
+	output_dir[ldir-1]='\0';
+	strcat(output_dir, "../txt/");
+	printf("Output directory : %s", output_dir);
+	printf("\n");
+
+	// Find length of filename
+	int l;
+	for (int i=1; i<sizeof(param.inp_file); i++)
+	{
+		if ((param.inp_file[i]=='.') && (param.inp_file[i+1]=='a') && (param.inp_file[i+2]=='q') && (param.inp_file[i+3]=='s'))
+		{
+			l=i+1;
+			break;
+		}
+	}
+	char name[l];
+	// write the reduced string
+	strncpy(name, param.inp_file, l-1); // name without extension
+	name[l-1]='\0';
+	strcat(name, ".txt");
+	printf("Output .txt file : %s", name);
+	printf("\n");
+
+	strcat(output_dir, name);
+	FILE * output;
+	output = fopen(output_dir, "w");
+
 	// Scan the file
 	done = 0;
 	i    = 0;
+	int current = 0;
+	int prev = 0;
 	while (!done)
 	{
 		// Read one short word
 		if (fread(&datum, sizeof(unsigned short), 1, param.fsrc) != 1)
 		{
-			printf("\n"); 
-			printf("*** End of file reached.\n");
+			printf("\n");
+			printf("*** End of file reached ***\n");
 			done = 1;
 		}
 		else
@@ -241,8 +296,16 @@ int main(int argc, char **argv)
 
 			// Print item
 			Item_Print(stdout, &dc, param.vflag);
+			current = dc.StartOfEventBeCount;
+			if (current-prev != 0)
+			{
+				fprintf(output, "%i\t%i\t%i\t%i\t%i\t%i\n", dc.EventNumber, dc.CardIndex, dc.ChipIndex, dc.ChannelIndex, dc.TimeBinIndex, dc.AdcSample);
+			}
+			prev = dc.StartOfEventBeCount;
 		}
 	}
+
+	fclose(output);
 
 	// Show final results
 	printf("\n");

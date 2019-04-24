@@ -37,7 +37,7 @@
 
 
  Author:      D. Calvet,        denis.calvetATcea.fr
-              
+
 
  History:
    April 2019 : created
@@ -182,12 +182,12 @@ int Datum_Decode(DatumContext *dc, unsigned short datum)
 		}
 		else if (dc->DatumType == DT_EVENT_TIME_STAMP_LSB)
 		{
-			dc->EventTimeStampLsb = datum; 
+			dc->EventTimeStampLsb = datum;
 			dc->DatumType = DT_EVENT_TIME_STAMP_MID;
 		}
 		else if (dc->DatumType == DT_EVENT_TIME_STAMP_MID)
 		{
-			dc->EventTimeStampMid = datum; 
+			dc->EventTimeStampMid = datum;
 			dc->DatumType   = DT_EVENT_TIME_STAMP_MSB;
 		}
 		else if (dc->DatumType == DT_EVENT_TIME_STAMP_MSB)
@@ -517,7 +517,7 @@ int Datum_Decode(DatumContext *dc, unsigned short datum)
 		}
 		else if (datum == PFX_LONG_ASCII_MSG)
 		{
-			dc->ItemType            = IT_LONG_MESSAGE; 
+			dc->ItemType            = IT_LONG_MESSAGE;
 			dc->isDatumTypeImplicit = 1;
 			dc->DatumType           = DT_ASCII_MSG_LENGTH;
 		}
@@ -529,7 +529,7 @@ int Datum_Decode(DatumContext *dc, unsigned short datum)
 		// No interpretable data
 		else
 		{
-			sprintf(&(dc->ErrorString[0]), "Datum(%d) %04d: found no matching prefix", dc->DatumCount, datum); 
+			sprintf(&(dc->ErrorString[0]), "Datum(%d) %04d: found no matching prefix", dc->DatumCount, datum);
 			return(-1);
 		}
 	}
@@ -584,7 +584,7 @@ int Item_Print(void *fp, DatumContext *dc, unsigned int flags)
 		case IT_MONITORING_FRAME:
 			if (flags & IT_MONITORING_FRAME)
 			{
-				SourceTypeToString(dc->FrameSourceType, &source_type[0]); 
+				SourceTypeToString(dc->FrameSourceType, &source_type[0]);
 				fprintf((FILE *)fp, "--- Start of Monitoring Frame (V.%01d) %s %02d (%4d bytes) --\n", dc->FramingVersion, &source_type[0], dc->FrameSourceId, dc->FrameSizeExpected);
 			}
 			break;
@@ -599,7 +599,7 @@ int Item_Print(void *fp, DatumContext *dc, unsigned int flags)
 		case IT_START_OF_EVENT:
 			if (flags & IT_START_OF_EVENT)
 			{
-				SourceTypeToString(dc->SourceType, &source_type[0]); 
+				SourceTypeToString(dc->SourceType, &source_type[0]);
 				fprintf((FILE *)fp, "-- Start of Event (Type %01d From %s %02d) --\n", dc->EventType, &source_type[0], dc->SourceId);
 				fprintf((FILE *)fp, "Time 0x%04x 0x%04x 0x%04x\n", dc->EventTimeStampMsb, dc->EventTimeStampMid, dc->EventTimeStampLsb);
 				fprintf((FILE *)fp, "Event_Number 0x%08x (%d)\n", dc->EventNumber, dc->EventNumber);
@@ -624,7 +624,7 @@ int Item_Print(void *fp, DatumContext *dc, unsigned int flags)
 		case IT_END_OF_EVENT:
 			if (flags & IT_END_OF_EVENT)
 			{
-				SourceTypeToString(dc->FrameSourceType, &source_type[0]); 
+				SourceTypeToString(dc->FrameSourceType, &source_type[0]);
 				fprintf((FILE *)fp, "----- End of Event ----- (from %s %02d - size %d bytes)\n", &source_type[0], dc->SourceId, dc->EventSize);
 			}
 			break;

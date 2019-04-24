@@ -14,8 +14,8 @@ using namespace std;
 // Numbers of #
 namespace n {
 
-    static const int arc = 4;
-    static const int chip = 4;
+    static const int cards = 4;
+    static const int chips = 4;
     static const int bins = 72;
     static const int samples = 50;
 

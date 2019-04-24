@@ -18,9 +18,9 @@
 VAR_OS    = linux
 
 ADD_CFLAGS = -pthread
-ADD_LIB    = 
+ADD_LIB    =
 
-# Change this directory: sources are under this 
+# Change this directory: sources are under this
 DIR_ROOT       = ../../../../projects
 PROJ = pandax
 
@@ -79,7 +79,7 @@ INCLUDE = \
 #----------------------------------------------------------------------
 # All targets
 #----------------------------------------------------------------------
-all : pcli prd fdec
+all : pcli prd fdec fconv
 
 #----------------------------------------------------------------------
 # Clean
@@ -177,6 +177,18 @@ $(DIR_BIN_TARGET)/fdecoder: \
 			$(LIBS) \
 			-o $(DIR_BIN_TARGET)/fdecoder
 
+fconv : $(DIR_BIN_TARGET)/fconverter
+
+$(DIR_BIN_TARGET)/fconverter: \
+	$(DIR_OBJ_TARGET)/fconverter.o \
+	$(DIR_OBJ_TARGET)/datum_decoder.o
+		$(LD) $(CFLAGS) \
+			$(DIR_OBJ_TARGET)/fconverter.o \
+			$(DIR_OBJ_TARGET)/datum_decoder.o \
+			$(LLIBS) \
+			$(LIBS) \
+			-o $(DIR_BIN_TARGET)/fconverter
+
 #----------------------------------------------------------------------
 # Rules for building object files
 #----------------------------------------------------------------------
@@ -263,14 +275,14 @@ $(DIR_OBJ_TARGET)/mreader.o : \
 		$(INCLUDE) \
 			-c $(DIR_PROJ)/mclient/mreader.c \
 			-o $(DIR_OBJ_TARGET)/mreader.o
-			
+
 $(DIR_OBJ_TARGET)/frame_scan.o : \
 	$(DIR_PROJ)/mclient/frame_scan.c
 		$(CC) $(CFLAGS) \
 		$(INCLUDE) \
 			-c $(DIR_PROJ)/mclient/frame_scan.c \
 			-o $(DIR_OBJ_TARGET)/frame_scan.o
-			
+
 $(DIR_OBJ_TARGET)/histo_int.o : \
 	$(DIR_PROJ)/util/histo_int.c
 		$(CC) $(CFLAGS) \
@@ -299,3 +311,9 @@ $(DIR_OBJ_TARGET)/fdecoder.o : \
 			-c $(DIR_PROJ)/mclient/fdecoder.c \
 			-o $(DIR_OBJ_TARGET)/fdecoder.o
 
+$(DIR_OBJ_TARGET)/fconverter.o : \
+	$(DIR_PROJ)/mclient/fconverter.c
+		$(CC) $(CFLAGS) \
+		$(INCLUDE) \
+			-c $(DIR_PROJ)/mclient/fconverter.c \
+			-o $(DIR_OBJ_TARGET)/fconverter.o
