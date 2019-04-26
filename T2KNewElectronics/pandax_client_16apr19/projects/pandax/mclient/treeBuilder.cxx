@@ -9,24 +9,68 @@
 #include <iostream>
 #include <stdio.h>
 #include <string>
+#include <fstream>
+#include <sstream>
 
 using namespace std;
 
-int main(int argc, char **argv)
+void treeBuilder(string input_dir, string output_dir, string input_file)
 {
     // Create root output file structure
-    TFile *output_file = new TFile(( input_dir + file_name + ext ).c_str(), "RECREATE");
-    TTree *tree = new TTree();
+    TFile *output_file = new TFile(( output_dir + input_file + ".root" ).c_str(), "RECREATE");
+    TTree *tree = new TTree("tree", "tree");
 
-    Int_t eventNumber;
+    Int_t nevent=-1;
+    Int_t eventNumber, event;
     Int_t ADCAmpl[n::cards][n::chips][n::bins][n::samples];
 
+
+    tree->Branch("event", &event, "event/I");
     tree->Branch("eventNumber", &eventNumber, "eventNumber/I");
-    tree->Branch("ADCAmpl", &ADCAmpl, TString::Format("ADCAmpl/I[%i][%i][%i][%i]", n::cards, n::chips, n::bins, n::samples));
+    tree->Branch("ADCAmpl", &ADCAmpl, TString::Format("ADCAmpl[%i][%i][%i][%i]/I", n::cards, n::chips, n::bins, n::samples));
 
-    // Read in txt file_
-    
+    Int_t prevevtnum = -99;
+
+    // Read in txt file
+    ifstream file((input_dir + input_file + ".txt").c_str());
+    cout << "File open : " << (input_dir + input_file + ".txt").c_str() << endl;
+    while(!file.eof())
+    {
+        int evtnum, card, chip, bin, sample, amp;
+        file >> evtnum >> card >> chip >> bin >> sample >> amp >> ws;
+        if (evtnum != prevevtnum) // new event
+        {
+            eventNumber = evtnum;
+            nevent++;
+
+            // Initialize event to 0
+            for (int i = 0; i < n::cards; i++)
+            {
+                for (int j = 0; j < n::chips; j++)
+                {
+                    for (int k = 0; k < n::bins; k++)
+                    {
+                        for (int l = 0; l < n::samples; l++)
+                        {
+                            ADCAmpl[i][j][k][l]=0;
+                        }
+                    }
+                }
+            }
 
 
-    return 0;
+        }
+        event = nevent;
+        prevevtnum = evtnum;
+        ADCAmpl[card][chip][bin][sample]=amp;
+
+        tree->Fill();
+    }
+
+    tree->Write();
+    tree->Print();
+    file.close();
+    output_file->Write();
+    output_file->Close();
+
 }
