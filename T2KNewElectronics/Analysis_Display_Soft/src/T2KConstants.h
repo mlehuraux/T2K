@@ -17,7 +17,7 @@ namespace n
 
     static const int cards = 4;
     static const int chips = 4;
-    static const int bins = 72; // To check, that's for connectors, you might need the DAQ channel instead
+    static const int bins = 80; // To check, that's for connectors, you might need the DAQ channel instead
     static const int samples = 511;
 
 }
