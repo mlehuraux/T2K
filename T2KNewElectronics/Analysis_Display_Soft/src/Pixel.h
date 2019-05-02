@@ -2,6 +2,7 @@
 #define Pixel_h
 
 #include "T2KConstants.h"
+#include "Mapping.h"
 #include <iostream>
 
 using namespace std;
@@ -11,10 +12,10 @@ class Pixel
     public :
         // Constructors
         Pixel();
-        void Pixel(int card, int chip, int channel, int ichip, int jchip);
+        Pixel(Mapping& map, int i, int j);
 
-        // Setters
-        void setPixelConnect(int card, int chip, int channel);
+        // Setters different
+        void setPixel(int card, int chip, int channel, int ichip, int jchip);
 
         // Getters
         int coordi();
@@ -22,19 +23,19 @@ class Pixel
         float coordx();
         float coordy();
 
-        /*
         // Display cell address content.
 	    friend ostream& operator<<(ostream& os, const Pixel& P)
 	    {
-            os << "*** Pixel ***" << endl;
-            printf("Connections : #Card : %i   #Chip : %i   #Channel : %i", P.m_card, P.m_chip, P.m_channel);
-            os << "Coordinates : " << endl;
-            printf("\tOn chip : (%i, %i)", P.m_ichip, P.m_jchip);
-            printf("\tOn board (%i, %i)", P.m_i, P.m_j);
-            printf("\tOn board in mm (%f, %f)", P.m_x*1000, P.m_y*1000);
+            os << "Pixel" << endl;
+            os << "{" << endl;
+            printf("\tConnections : #Card : %i   #Chip : %i   #Channel : %i\n", P.m_card, P.m_chip, P.m_channel);
+            os << "\tCoordinates : " << endl;
+            printf("\t\tOn chip : (%i, %i)\n", P.m_ichip, P.m_jchip);
+            printf("\t\tOn board (%i, %i)\n", P.m_i, P.m_j);
+            printf("\t\tOn board in mm (%.1f, %.1f)\n", P.m_x*1000, P.m_y*1000);
+            os << "}" << endl;
 		    return os;
         }
-        */
 
         // Other
 
