@@ -17,7 +17,7 @@ namespace n
 
     static const int cards = 4;
     static const int chips = 4;
-    static const int bins = 80; // To check, that's for connectors, you might need the DAQ channel instead
+    static const int bins = 80;
     static const int samples = 511;
 
 }
@@ -45,7 +45,12 @@ namespace geom
 namespace loc
 {
     static const string mapping = "/home/mlehuraux/GitLab/T2K/T2KNewElectronics/Analysis_Display_Soft/src/Mapping/";
+    static const string daq = "/home/mlehuraux/GitLab/T2K/T2KNewElectronics/Analysis_Display_Soft/src/DAQ/";
     static const string outputs = "/home/mlehuraux/GitLab/T2K/T2KNewElectronics/Analysis_Display_Soft/outputs/";
+    static const string rootfiles = "/home/mlehuraux/GitLab/T2K/T2KNewElectronics/test_data/root/";
+    static const string aqs = "/home/mlehuraux/GitLab/T2K/T2KNewElectronics/test_data/root/";
+    static const string txt = "/home/mlehuraux/GitLab/T2K/T2KNewElectronics/test_data/root/";
+
 
 }
 

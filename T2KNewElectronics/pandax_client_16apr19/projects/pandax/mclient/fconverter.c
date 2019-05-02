@@ -296,9 +296,12 @@ int main(int argc, char **argv)
 
 			// Print item
 			Item_Print(stdout, &dc, param.vflag);
-			printf("Event number : %u", dc.EventNumber);
-			printf("\n");
-			fprintf(output, "%u\t%hi\t%hi\t%hi\t%hi\t%hi\n", dc.EventNumber, dc.CardIndex, dc.ChipIndex, dc.ChannelIndex, dc.TimeBinIndex, dc.AdcSample);
+			if (dc.isItemComplete)
+			{
+				printf("Event number : %u", dc.EventNumber);
+				printf("\n");
+				fprintf(output, "%u\t%hi\t%hi\t%hi\t%hi\t%hi\n", dc.EventNumber, dc.CardIndex, dc.ChipIndex, dc.ChannelIndex, dc.TimeBinIndex, dc.AdcSample);
+			}
 			/*
 			current = dc.StartOfEventBeCount;
 			if (current-prev != 0) // new event

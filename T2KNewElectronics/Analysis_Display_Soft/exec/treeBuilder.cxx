@@ -3,7 +3,8 @@
 #include "TTree.h"
 #include "TBranch.h"
 #include "TObject.h"
-#include "/home/mlehuraux/GitLab/T2K/T2KNewElectronics/T2KConstants.h"
+#include "/home/mlehuraux/GitLab/T2K/T2KNewElectronics/Analysis_Display_Soft/src/T2KConstants.h"
+#include "/home/mlehuraux/GitLab/T2K/T2KNewElectronics/Analysis_Display_Soft/src/DAQ.h"
 
 // Global part
 #include <iostream>
@@ -16,6 +17,10 @@ using namespace std;
 
 void treeBuilder(string input_dir, string output_dir, string input_file)
 {
+    // Load DAQ conversion
+    DAQ daq;
+    daq.loadDAQ();
+
     // Create root output file structure
     TFile *output_file = new TFile(( output_dir + input_file + ".root" ).c_str(), "RECREATE");
     TTree *tree = new TTree("tree", "tree");
@@ -52,7 +57,7 @@ void treeBuilder(string input_dir, string output_dir, string input_file)
                     {
                         for (int l = 0; l < n::samples; l++)
                         {
-                            ADCAmpl[i][j][k][l]=0;
+                            ADCAmpl[i][j][daq.DAQchannel(k)][l]=0;
                         }
                     }
                 }
@@ -62,7 +67,7 @@ void treeBuilder(string input_dir, string output_dir, string input_file)
         }
         event = nevent;
         prevevtnum = evtnum;
-        ADCAmpl[card][chip][bin][sample]=amp;
+        ADCAmpl[card][chip][daq.DAQchannel(bin)][sample]=amp;
 
         tree->Fill();
     }
