@@ -5,6 +5,7 @@
 #include <iostream>
 #include "Pixel.h"
 #include "Mapping.h"
+#include "DAQ.h"
 
 using namespace std;
 
@@ -12,7 +13,7 @@ class Pads
 {
     public :
         // Constructors
-        void loadPadPlane(Mapping& map);
+        void loadPadPlane(DAQ& daq, Mapping& map);
 
         //Getters
         Pixel& pad(int i, int j){return pads[i][j];}

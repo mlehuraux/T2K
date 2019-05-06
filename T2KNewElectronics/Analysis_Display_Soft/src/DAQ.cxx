@@ -16,6 +16,7 @@ void DAQ::loadDAQ()
     {
         det2arc >> det >> arc;
         detector2arc[det]=arc;
+        arc2detector[arc]=det;
     }
     det2arc.close();
 
@@ -25,6 +26,7 @@ void DAQ::loadDAQ()
     {
         farc2daq >> arc >> daq;
         arc2daq[arc]=daq;
+        daq2arc[daq]=arc;
     }
     farc2daq.close();
 

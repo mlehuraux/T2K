@@ -24,15 +24,15 @@ void Mapping::loadMapping()
 
         */
 
-    int i, j, channel;
+    int i, j, connector;
 
     ifstream A((loc::mapping + "ChipA.txt").c_str());
     while (!A.eof())
     {
-        A >> j >> i >> channel;
+        A >> j >> i >> connector;
         //int index = channel - 3;
         //if (channel >=43) index -= 6;
-        int index = channel;
+        int index = connector;
         m_ichip[0][0][index] = i ;
         m_jchip[0][0][index] = j ;
         m_ichip[0][1][index] = i ;
@@ -42,10 +42,10 @@ void Mapping::loadMapping()
         m_ichip[2][1][index] = i ;
         m_jchip[2][1][index] = j ;
         // Coord to channel
-        m_channel[0][0][i][j] = channel ;
-        m_channel[0][1][i][j] = channel ;
-        m_channel[2][0][i][j] = channel ;
-        m_channel[2][1][i][j] = channel ;
+        m_connector[0][0][i][j] = connector ;
+        m_connector[0][1][i][j] = connector ;
+        m_connector[2][0][i][j] = connector ;
+        m_connector[2][1][i][j] = connector ;
 
 
     }
@@ -54,10 +54,10 @@ void Mapping::loadMapping()
     ifstream B((loc::mapping + "ChipB.txt").c_str());
     while(!B.eof())
     {
-        B >> i >> j >> channel ;
+        B >> j >> i >> connector ;
         //int index = channel - 3;
         //if (channel >=43) index -= 6;
-        int index = channel;
+        int index = connector;
         m_ichip[0][2][index] = i ;
         m_jchip[0][2][index] = j ;
         m_ichip[0][3][index] = i ;
@@ -67,20 +67,20 @@ void Mapping::loadMapping()
         m_ichip[2][3][index] = i ;
         m_jchip[2][3][index] = j ;
         // Coord to channel
-        m_channel[0][2][i][j] = channel ;
-        m_channel[0][3][i][j] = channel ;
-        m_channel[2][2][i][j] = channel ;
-        m_channel[2][3][i][j] = channel ;
+        m_connector[0][2][i][j] = connector ;
+        m_connector[0][3][i][j] = connector ;
+        m_connector[2][2][i][j] = connector ;
+        m_connector[2][3][i][j] = connector ;
     }
     B.close();
 
     ifstream C((loc::mapping + "ChipC.txt").c_str());
     while(!C.eof())
     {
-        C >> i >> j >> channel ;
+        C >> j >> i >> connector ;
         //int index = channel - 3;
         //if (channel >=43) index -= 6;
-        int index = channel;
+        int index = connector;
         m_ichip[1][0][index] = i ;
         m_jchip[1][0][index] = j ;
         m_ichip[1][1][index] = i ;
@@ -90,20 +90,20 @@ void Mapping::loadMapping()
         m_ichip[3][1][index] = i ;
         m_jchip[3][1][index] = j ;
         // Coord to channel
-        m_channel[1][0][i][j] = channel ;
-        m_channel[1][1][i][j] = channel ;
-        m_channel[2][0][i][j] = channel ;
-        m_channel[2][1][i][j] = channel ;
+        m_connector[1][0][i][j] = connector ;
+        m_connector[1][1][i][j] = connector ;
+        m_connector[3][0][i][j] = connector ;
+        m_connector[3][1][i][j] = connector ;
     }
     C.close();
 
     ifstream D((loc::mapping + "ChipD.txt").c_str());
     while(!D.eof())
     {
-        D >> i >> j >> channel ;
+        D >> j >> i >> connector ;
         //int index = channel - 3;
         //if (channel >=43) index -= 6;
-        int index = channel;
+        int index = connector;
         m_ichip[1][2][index] = i ;
         m_jchip[1][2][index] = j ;
         m_ichip[1][3][index] = i ;
@@ -113,10 +113,10 @@ void Mapping::loadMapping()
         m_ichip[3][3][index] = i ;
         m_jchip[3][3][index] = j ;
         // Coord to channel
-        m_channel[1][2][i][j] = channel ;
-        m_channel[1][3][i][j] = channel ;
-        m_channel[3][2][i][j] = channel ;
-        m_channel[3][3][i][j] = channel ;
+        m_connector[1][2][i][j] = connector ;
+        m_connector[1][3][i][j] = connector ;
+        m_connector[3][2][i][j] = connector ;
+        m_connector[3][3][i][j] = connector ;
 
     }
     D.close();

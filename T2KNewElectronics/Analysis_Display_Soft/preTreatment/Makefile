@@ -1,7 +1,7 @@
 SRCDIR		= ../src
 OBJDIR		= ../obj
 BINDIR		= ../bin
-EXE 		= Test
+EXE 		= preTreatment
 SRCFILES 	= $(wildcard $(SRCDIR)/*.cxx)
 OBJFILES	= $(subst $(SRCDIR),$(OBJDIR),$(SRCFILES:.cxx=.o))
 
@@ -40,7 +40,7 @@ default: build $(EXE)
 $(EXE): $(EXE).o $(OBJFILES)
 	@echo ""
 	@echo "Linking $@ from $^"
-	$(CXX) $(OBJFILES) $< -o $(BINDIR)/$@ $(LDFLAGS) 
+	$(CXX) $(OBJFILES) $< -o $(BINDIR)/$@ $(LDFLAGS)
 
 $(EXE).o: $(EXE).cxx $(OBJFILES)
 	@echo ""

@@ -11,10 +11,10 @@
 #include "TAttLine.h"
 #include "TStyle.h"
 
-#include "Pixel.h"
-#include "Mapping.h"
-#include "Pads.h"
-#include "DAQ.h"
+#include "../src/Pixel.h"
+#include "../src/Mapping.h"
+#include "../src/Pads.h"
+#include "../src/DAQ.h"
 
 using namespace std;
 
@@ -35,8 +35,12 @@ int main(int argc, char **argv)
     T2K.loadMapping();
     cout << "...Mapping loaded succesfully." << endl;
 
+    DAQ daq;
+    daq.loadDAQ();
+    cout << "... DAQ loaded successfully" << endl;
+
     Pads padPlane;
-    padPlane.loadPadPlane(T2K);
+    padPlane.loadPadPlane(daq, T2K);
     cout << "...Pad plane loaded succesfully." << endl;
 
     cout << "#cards : " << n::cards << endl;
@@ -65,37 +69,11 @@ int main(int argc, char **argv)
     printf("Card : %i   Chip : %i   Channel : %i    -->    (i,j) = (%i,%i)\n", 0, 3, 43, T2K.ichip(0,3,43), T2K.jchip(0,3,43));
     printf("Card : %i   Chip : %i   Channel : %i    -->    (i,j) = (%i,%i)\n", 0, 3, 78, T2K.ichip(0,3,78), T2K.jchip(0,3,78));
 
-    Pixel P;
-    P.setPixel(0,0,70,0,0);
-    cout << P << endl;
-    Pixel Q(T2K, 0, 24);
-    cout << Q << endl;
-
-    TCanvas *canvas = new TCanvas("canvas", "canvas", 200,10,600,480);
-    //canvas->SetWindowSize(geom::wx , geom::wy);
-    //gPad->Range(0, 0, 1, 1);
-    TPad *p1 = new TPad("p1", "p1", 0.1, 0.1, 0.9, 0.7);
-    p1->Draw();
-    p1->cd();
-    //gPad->Range(-0.5*geom::wx, -0.5*geom::wy, 0.5*geom::wx, 0.5*geom::wy);
-    p1->Range(-0.5*geom::nPadx*geom::dx, -0.5*geom::nPady*geom::dy, 0.5*geom::nPadx*geom::dx, 0.5*geom::nPady*geom::dy);
-
-    for (int i = 0; i < geom::nPadx; i++)
+    cout << "*************** DAQ checks ***************" << endl;
+    for (int i=0; i<n::bins; i++)
     {
-        for (int j = 0; j < geom::nPady; j++)
-        {
-            padline(padPlane.pad(i,j))->Draw("f");
-            //padline(padPlane.pad(i,j), floor(i/geom::padOnchipx)+5)->Draw("f");
-            padline(padPlane.pad(i,j), i)->Draw();
-        }
+        cout << "#connector : " << i << "   #DAQ channel : " << daq.DAQchannel(i) << "  back to connector : " << daq.connector(daq.DAQchannel(i)) << endl;
     }
-    p1->Modified();
-    canvas->Update();
-    canvas->SaveAs((loc::outputs+"test.pdf").c_str());
 
-    DAQ daq;
-    daq.loadDAQ();
-    cout << "... DAQ loaded successfully" << endl;
-    cout << "DAQchannel  connector 3 " << daq.DAQchannel(3) << endl;
     return 0;
 }

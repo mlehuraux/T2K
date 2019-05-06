@@ -300,7 +300,7 @@ int main(int argc, char **argv)
 			{
 				printf("Event number : %u", dc.EventNumber);
 				printf("\n");
-				fprintf(output, "%u\t%hi\t%hi\t%hi\t%hi\t%hi\n", dc.EventNumber, dc.CardIndex, dc.ChipIndex, dc.ChannelIndex, dc.TimeBinIndex, dc.AdcSample);
+				fprintf(output, "%i\t%hi\t%hi\t%hi\t%d\t%hi\n", dc.EventNumber, dc.CardIndex, dc.ChipIndex, dc.ChannelIndex, dc.AbsoluteSampleIndex, dc.AdcSample);
 			}
 			/*
 			current = dc.StartOfEventBeCount;

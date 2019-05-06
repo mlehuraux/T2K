@@ -17,7 +17,7 @@ namespace n
 
     static const int cards = 4;
     static const int chips = 4;
-    static const int bins = 80;
+    static const int bins = 82; // +1 because connectors and arc starts at 1 not 0 so dim [81] to go until index 80 and useless 0
     static const int samples = 511;
 
 }
@@ -49,7 +49,7 @@ namespace loc
     static const string outputs = "/home/mlehuraux/GitLab/T2K/T2KNewElectronics/Analysis_Display_Soft/outputs/";
     static const string rootfiles = "/home/mlehuraux/GitLab/T2K/T2KNewElectronics/test_data/root/";
     static const string aqs = "/home/mlehuraux/GitLab/T2K/T2KNewElectronics/test_data/root/";
-    static const string txt = "/home/mlehuraux/GitLab/T2K/T2KNewElectronics/test_data/root/";
+    static const string txt = "/home/mlehuraux/GitLab/T2K/T2KNewElectronics/test_data/txt/";
 
 
 }

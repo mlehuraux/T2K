@@ -11,10 +11,10 @@
 #include "TAttLine.h"
 #include "TStyle.h"
 
-#include "Pixel.h"
-#include "Mapping.h"
-#include "Pads.h"
-#include "DAQ.h"
+#include "../src/Pixel.h"
+#include "../src/Mapping.h"
+#include "../src/Pads.h"
+#include "../src/DAQ.h"
 
 using namespace std;
 
