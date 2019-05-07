@@ -87,7 +87,7 @@ int main(int argc, char **argv)
     t1->SetBranchAddress("MaxStripAmpl", &MaxStripAmpl);
     t1->SetBranchAddress("MaxStripPos", &MaxStripPos);
 
-    TCanvas *canvas = new TCanvas("canvas", "canvas", 200,10,600,600);
+    TCanvas *canvas = new TCanvas("canvas", "canvas", 200,10,geom::wx,geom::wy);
     //canvas->SetWindowSize(geom::wx , geom::wy);
     //gPad->Range(0, 0, 1, 1);
     TPad *p1 = new TPad("p1", "p1", 0.1, 0.1, 0.9, 0.7);
