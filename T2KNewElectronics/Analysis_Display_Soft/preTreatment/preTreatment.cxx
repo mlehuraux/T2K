@@ -3,6 +3,8 @@
 #include "TBranch.h"
 #include "TObject.h"
 #include <iostream>
+#include "TH1I.h"
+#include "TCanvas.h"
 
 #include "../src/Pixel.h"
 #include "../src/Mapping.h"
@@ -37,17 +39,34 @@ int main(int argc, char **argv)
         for ( int p = 0; p < n::cards; ++p){ //cards ARC
     	    for ( int q = 0; q < n::chips; ++q){ // chip AFTER
                 for ( int r = 0; r < n::bins; ++r){
+                    TCanvas *canvas = new TCanvas("canvas", "canvas", 200,10, 2*geom::wx,geom::wy);
+                    TH1I *signal = new TH1I("signal", "Signal", n::samples, 0, n::samples);
     		        int maxindex = 0;
     		        for ( int s = 0; s < n::samples; ++s){ // Samples
+                        signal->Fill(s, ADCAmpl[p][q][r][s]);
                         if (ADCAmpl[p][q][r][s] >= ADCAmpl[p][q][r][maxindex]) maxindex = s;
     		        }
                     MaxStripAmpl[p][q][r] = ADCAmpl[p][q][r][maxindex];
                     MaxStripPos[p][q][r] = maxindex;
+                    if (MaxStripAmpl[p][q][r] > 30 && i==10)
+                    {
+                        signal->SetMinimum(0.);
+                        signal->SetLineColor(4);
+                        signal->SetLineWidth(2);
+                        signal->GetXaxis()->SetTitle("Sample");
+                        signal->GetYaxis()->SetTitle("ADC");
+                        signal->Draw("hist");
+                        canvas->Update();
+                        canvas->SaveAs((loc::outputs + "SignalsEvent10/channel_" + to_string(r) + ".gif").c_str());
+                    }
+                    delete signal;
+                    delete canvas;
                 }
             }
         }
         b1->Fill();
         b2->Fill();
+
 
     }
     cout << "Tree filled" << endl;

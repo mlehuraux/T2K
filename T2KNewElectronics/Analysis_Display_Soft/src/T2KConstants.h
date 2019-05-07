@@ -48,7 +48,7 @@ namespace loc
     static const string daq = "/home/mlehuraux/GitLab/T2K/T2KNewElectronics/Analysis_Display_Soft/src/DAQ/";
     static const string outputs = "/home/mlehuraux/GitLab/T2K/T2KNewElectronics/Analysis_Display_Soft/outputs/";
     static const string rootfiles = "/home/mlehuraux/GitLab/T2K/T2KNewElectronics/test_data/root/";
-    static const string aqs = "/home/mlehuraux/GitLab/T2K/T2KNewElectronics/test_data/root/";
+    static const string aqs = "/home/mlehuraux/GitLab/T2K/T2KNewElectronics/test_data/aqs/";
     static const string txt = "/home/mlehuraux/GitLab/T2K/T2KNewElectronics/test_data/txt/";
 
 

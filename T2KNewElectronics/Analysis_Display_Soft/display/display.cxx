@@ -121,7 +121,7 @@ int main(int argc, char **argv)
 
     p1->Modified();
     canvas->Update();
-    canvas->SaveAs((loc::outputs+ + "event_" + event + ".gif").c_str());
+    canvas->SaveAs((loc::outputs+ "event_" + event + ".gif").c_str());
     f1->Close();
 
     return(0);
