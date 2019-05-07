@@ -30,14 +30,33 @@ TPolyLine *padline(Pixel& P, int color=602)
     TPolyLine *pline = new TPolyLine(4,x,y);
     pline->SetFillColor(color);
     pline->SetLineColor(kGray);
-    pline->SetLineWidth(2);
+    pline->SetLineWidth(1);
     return(pline);
 }
+
+
 
 int main(int argc, char **argv)
 {
     string input_file(argv[1]);
     string event(argv[2]);
+
+    // My colors---------------------------------
+    Int_t MyPalette[20];
+    const Int_t NRGBs = 5;
+    const Int_t NCont = 20;
+    Double_t stops[NRGBs] = { 0.00, 0.34, 0.61, 0.84, 1.00 };
+    Double_t red[NRGBs]   = { 0.00, 0.00, 0.87, 1.00, 0.51 };
+    Double_t green[NRGBs] = { 0.00, 0.81, 1.00, 0.20, 0.00 };
+    Double_t blue[NRGBs]  = { 0.51, 1.00, 0.12, 0.00, 0.00 };
+    gStyle->SetNumberContours(NCont);
+    Int_t FI = TColor::CreateGradientColorTable(NRGBs, stops, red, green, blue, NCont);
+    for (int i=0;i<20;i++)
+    {
+        MyPalette[i] = FI+i;
+    }
+
+
 
     int eventid = stoi(event);
 
@@ -68,7 +87,7 @@ int main(int argc, char **argv)
     t1->SetBranchAddress("MaxStripAmpl", &MaxStripAmpl);
     t1->SetBranchAddress("MaxStripPos", &MaxStripPos);
 
-    TCanvas *canvas = new TCanvas("canvas", "canvas", 200,10,600,480);
+    TCanvas *canvas = new TCanvas("canvas", "canvas", 200,10,600,600);
     //canvas->SetWindowSize(geom::wx , geom::wy);
     //gPad->Range(0, 0, 1, 1);
     TPad *p1 = new TPad("p1", "p1", 0.1, 0.1, 0.9, 0.7);
@@ -84,13 +103,17 @@ int main(int argc, char **argv)
         {
             Pixel P;
             P = padPlane.pad(i,j);
-            cout << i << "  " << j << "     " << P.card() << "   " << P.chip() << "  " << P.channel() << endl;
-            if (P.channel()!=-99) // error somewhere in DAQ
+            //cout << i << "  " << j << "     " << P.card() << "   " << P.chip() << "  " << P.channel() << endl;
+            if (P.channel()!=-99||P.channel()==65 || P.channel()==73) // error somewhere in DAQ
             {
                 //P.setAmp(ADCAmpl[P.card()][P.chip()][P.channel()][300]);
                 P.setAmp(MaxStripAmpl[P.card()][P.chip()][P.channel()]);
             }
-            if (P.ampl() > 300){padline(P,2)->Draw("f");}
+            int color = 2*floor(float(P.ampl())/2000*NCont);
+            //cout << color << endl;
+            if (NCont-1 < color){color=NCont-1;}
+            //if (P.ampl() > 0){padline(P,2)->Draw("f");}
+            if (P.ampl() > 0){padline(P,MyPalette[color])->Draw("f");}
             else{padline(P)->Draw("f");}
             padline(P)->Draw();
         }
@@ -98,7 +121,7 @@ int main(int argc, char **argv)
 
     p1->Modified();
     canvas->Update();
-    canvas->SaveAs((loc::outputs+ + "event_" + event + ".pdf").c_str());
+    canvas->SaveAs((loc::outputs+ + "event_" + event + ".gif").c_str());
     f1->Close();
 
     return(0);

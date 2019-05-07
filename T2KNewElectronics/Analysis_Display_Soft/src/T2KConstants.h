@@ -34,7 +34,7 @@ namespace geom
 
     // To represent geometry on canvas
     static const int wx = 3600; // width of canvas in pix
-    static const int wy = 3200; // height of canvas in pix
+    static const int wy = 3600; // height of canvas in pix
     static const float convx = 1.;//0.85*float(wx)/(nPadx*dx); // conversion factor
     static const float convy = convx; // conversion factor
 }
