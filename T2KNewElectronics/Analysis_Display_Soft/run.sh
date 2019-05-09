@@ -23,6 +23,8 @@ export here="/home/mlehuraux/GitLab/T2K/T2KNewElectronics/Analysis_Display_Soft"
 #make
 #cd $here/bin
 #./treeBuilder R2019_05_02-11_48_23-000
+#cd $here/outputs
+#mkdir -p R2019_05_02-11_48_23-000
 
 #################
 # Pre-treatment #
@@ -37,13 +39,19 @@ export here="/home/mlehuraux/GitLab/T2K/T2KNewElectronics/Analysis_Display_Soft"
 ###########
 #cd $here/display
 #make
+#cd $here/bin
+#for value in `seq 0 1 1357`
+#do
+#echo $value
+#./display R2019_05_02-11_48_23-000.root $value
+#done
+
+##################
+# Post-Treatment #
+##################
+#cd $here/postTreatment
+#make
 cd $here/bin
-for value in `seq 0 1 1357`
-do
-echo $value
-./display R2019_05_02-11_48_23-000.root $value
-done
-
-
-
+./postTreatment R2019_05_02-11_48_23-000.root
+cd $here
 

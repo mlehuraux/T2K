@@ -41,6 +41,8 @@ int main(int argc, char **argv)
     string input_file(argv[1]);
     string event(argv[2]);
 
+    string input_file_name = input_file.substr(0, input_file.size()-5);
+
     // My colors---------------------------------
     Int_t MyPalette[20];
     const Int_t NRGBs = 5;
@@ -121,7 +123,7 @@ int main(int argc, char **argv)
 
     p1->Modified();
     canvas->Update();
-    canvas->SaveAs((loc::outputs+ "event_" + event + ".gif").c_str());
+    canvas->SaveAs((loc::outputs+ input_file_name + "/event_" + event + ".gif").c_str());
     f1->Close();
 
     return(0);
