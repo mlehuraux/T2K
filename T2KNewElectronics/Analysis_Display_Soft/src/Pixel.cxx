@@ -10,7 +10,8 @@ Pixel::Pixel(DAQ& daq, Mapping& map, int i, int j, int amp)
     m_i = i;
     m_j = j;
     m_card = floor(m_i/geom::padOnchipx);
-    m_chip = n::chips-1-floor(m_j/geom::padOnchipy);
+    if (m_card%2==0){m_chip = n::chips-1-floor(m_j/geom::padOnchipy);}
+    else if (m_card%2==1){m_chip = floor(m_j/geom::padOnchipy);}
     m_ichip = i%geom::padOnchipx;
     m_jchip = j%geom::padOnchipy;
     m_channel = daq.DAQchannel(map.connector(m_card, m_chip, m_ichip, m_jchip));

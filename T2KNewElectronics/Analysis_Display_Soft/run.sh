@@ -27,22 +27,22 @@ export here="/home/mlehuraux/GitLab/T2K/T2KNewElectronics/Analysis_Display_Soft"
 #################
 # Pre-treatment #
 #################
-cd $here/preTreatment
-make
-cd $here/bin
-./preTreatment R2019_05_02-11_48_23-000.root
+#cd $here/preTreatment
+#make
+#cd $here/bin
+#./preTreatment R2019_05_02-11_48_23-000.root
 
 ###########
 # Display #
 ###########
 #cd $here/display
 #make
-#cd $here/bin
-#for value in `seq 0 1 1357`
-#do
-#echo $value
-#./display R2019_05_02-11_48_23-000.root $value
-#done
+cd $here/bin
+for value in `seq 0 1 1357`
+do
+echo $value
+./display R2019_05_02-11_48_23-000.root $value
+done
 
 
 

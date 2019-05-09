@@ -81,19 +81,19 @@ void Mapping::loadMapping()
         //int index = channel - 3;
         //if (channel >=43) index -= 6;
         int index = connector;
-        m_ichip[1][0][index] = i ;
-        m_jchip[1][0][index] = j ;
-        m_ichip[1][1][index] = i ;
-        m_jchip[1][1][index] = j ;
-        m_ichip[3][0][index] = i ;
-        m_jchip[3][0][index] = j ;
-        m_ichip[3][1][index] = i ;
-        m_jchip[3][1][index] = j ;
+        m_ichip[1][3][index] = i ;
+        m_jchip[1][3][index] = j ;
+        m_ichip[1][2][index] = i ;
+        m_jchip[1][2][index] = j ;
+        m_ichip[3][3][index] = i ;
+        m_jchip[3][3][index] = j ;
+        m_ichip[3][2][index] = i ;
+        m_jchip[3][2][index] = j ;
         // Coord to channel
-        m_connector[1][0][i][j] = connector ;
-        m_connector[1][1][i][j] = connector ;
-        m_connector[3][0][i][j] = connector ;
-        m_connector[3][1][i][j] = connector ;
+        m_connector[1][3][i][j] = connector ;
+        m_connector[1][2][i][j] = connector ;
+        m_connector[3][3][i][j] = connector ;
+        m_connector[3][2][i][j] = connector ;
     }
     C.close();
 
@@ -104,19 +104,19 @@ void Mapping::loadMapping()
         //int index = channel - 3;
         //if (channel >=43) index -= 6;
         int index = connector;
-        m_ichip[1][2][index] = i ;
-        m_jchip[1][2][index] = j ;
-        m_ichip[1][3][index] = i ;
-        m_jchip[1][3][index] = j ;
-        m_ichip[3][2][index] = i ;
-        m_jchip[3][2][index] = j ;
-        m_ichip[3][3][index] = i ;
-        m_jchip[3][3][index] = j ;
+        m_ichip[1][1][index] = i ;
+        m_jchip[1][1][index] = j ;
+        m_ichip[1][0][index] = i ;
+        m_jchip[1][0][index] = j ;
+        m_ichip[3][1][index] = i ;
+        m_jchip[3][1][index] = j ;
+        m_ichip[3][0][index] = i ;
+        m_jchip[3][0][index] = j ;
         // Coord to channel
-        m_connector[1][2][i][j] = connector ;
-        m_connector[1][3][i][j] = connector ;
-        m_connector[3][2][i][j] = connector ;
-        m_connector[3][3][i][j] = connector ;
+        m_connector[1][1][i][j] = connector ;
+        m_connector[1][0][i][j] = connector ;
+        m_connector[3][1][i][j] = connector ;
+        m_connector[3][0][i][j] = connector ;
 
     }
     D.close();
