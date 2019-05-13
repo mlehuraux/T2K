@@ -14,6 +14,7 @@
 #include "TTree.h"
 #include "TBranch.h"
 #include "TObject.h"
+#include "TH1I.h"
 
 #include "../src/Pixel.h"
 #include "../src/Mapping.h"
@@ -22,6 +23,15 @@
 
 using namespace std;
 
+// Gaussian function
+Double_t fgauss(Double_t *x, Double_t *par)
+{
+    Double_t arg = 0;
+    if (par[2] != 0) arg = (x[0] - par[1])/par[2];
+
+    Double_t fitval = par[0]*TMath::Exp(-0.5*arg*arg);
+    return fitval;
+}
 
 TPolyLine *padline(Pixel& P, int color=602)
 {
@@ -99,6 +109,9 @@ int main(int argc, char **argv)
 
     t1->GetEntry(eventid);
 
+    // Initialize track
+    Int_t track[geom::nPady][geom::nPadx];
+
     for (int i = 0; i < geom::nPadx; i++)
     {
         for (int j = 0; j < geom::nPady; j++)
@@ -110,6 +123,7 @@ int main(int argc, char **argv)
             {
                 //P.setAmp(ADCAmpl[P.card()][P.chip()][P.channel()][300]);
                 P.setAmp(MaxStripAmpl[P.card()][P.chip()][P.channel()]);
+                track[j][i]=MaxStripAmpl[P.card()][P.chip()][P.channel()];
             }
             int color = 2*floor(float(P.ampl())/2000*NCont);
             //cout << color << endl;
@@ -126,5 +140,35 @@ int main(int argc, char **argv)
     canvas->SaveAs((loc::outputs+ input_file_name + "/event_" + event + ".gif").c_str());
     f1->Close();
 
+    TCanvas *canvas1 = new TCanvas("canvas1", "canvas1",300, 1200);
+    canvas1->Divide(1, geom::nPady, 0, 0);
+
+    for (int j = 0; j < geom::nPady; j++)
+    {
+        canvas1->cd(geom::nPady-j);
+        TH1I *h = new TH1I("h", "", geom::nPadx, 0, geom::nPadx/2);
+        gStyle->SetOptStat(0);
+        for (int i = 0; i < geom::nPadx; i++)
+        {
+            h->Fill(i, track[j][i]);
+        }
+
+        TF1 *fitFcn1 = new TF1("fitFcn1",fgauss, -10., geom::nPadx/2, 3);
+        fitFcn1->SetNpx(500);
+        fitFcn1->SetLineColor(kRed);
+        Double_t mean1 = (Double_t) h->GetMean();
+        Double_t rms1  = (Double_t) max(h->GetRMS(), 0.5);
+        Double_t max1  = (Double_t) h->GetMaximum();
+        fitFcn1->SetParameters( max1, mean1, rms1 );
+        fitFcn1->SetParNames( "Constant", "Mean Value", "Sigma" );
+        h->Fit(fitFcn1,"","", -5., 5.);
+        h->SetMinimum(0.);
+        h->SetLineColor(4);
+        h->SetLineWidth(2);
+        h->Draw("hist");
+        fitFcn1->Draw("same");
+        canvas1->Update();
+    }
+    canvas1->SaveAs((loc::outputs+ input_file_name + "/track_" + event + ".gif").c_str());
     return(0);
 }

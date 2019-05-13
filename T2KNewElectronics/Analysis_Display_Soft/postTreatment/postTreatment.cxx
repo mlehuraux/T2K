@@ -48,7 +48,10 @@ int main(int argc, char **argv)
             { // chip AFTER
                 for ( int r = 0; r < n::bins; ++r)
                 {
-                    if (MaxStripAmpl[p][q][r]>0){histo->Fill(MaxStripPos[p][q][r]);}
+                    if (MaxStripAmpl[p][q][r]>0)
+                    {
+                        histo->Fill(MaxStripPos[p][q][r]);
+                    }
                 }
             }
         }
