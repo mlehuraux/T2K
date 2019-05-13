@@ -102,7 +102,7 @@ int main(int argc, char **argv)
     TCanvas *canvas = new TCanvas("canvas", "canvas", 200,10,geom::wx,geom::wy);
     //canvas->SetWindowSize(geom::wx , geom::wy);
     //gPad->Range(0, 0, 1, 1);
-    TPad *p1 = new TPad("p1", "p1", 0.1, 0.1, 0.9, 0.7);
+    TPad *p1 = new TPad("p1", "p1", 0.01, 0.01, 0.99, 0.99);
     p1->Range(-0.5*geom::nPadx*geom::dx, -0.5*geom::nPady*geom::dy, 0.5*geom::nPadx*geom::dx, 0.5*geom::nPady*geom::dy);
     p1->Draw();
     p1->cd();
