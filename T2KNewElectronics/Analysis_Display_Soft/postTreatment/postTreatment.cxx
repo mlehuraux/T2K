@@ -25,15 +25,15 @@ int main(int argc, char **argv)
     cout << "File open" << endl;
 
     Int_t ADCAmpl[n::cards][n::chips][n::bins][n::samples];
-    Int_t MaxStripAmpl[n::cards][n::chips][n::bins];
-    Int_t MaxStripPos[n::cards][n::chips][n::bins];
+    Int_t MaxAmpl[n::cards][n::chips][n::bins];
+    Int_t MaxAmplTimeSample[n::cards][n::chips][n::bins];
     Int_t eventNumber;
     Int_t ntot = t1->GetEntries();
 
     t1->SetBranchAddress("ADCAmpl", &ADCAmpl);
     t1->SetBranchAddress("eventNumber", &eventNumber);
-    t1->SetBranchAddress("MaxStripAmpl", &MaxStripAmpl);
-    t1->SetBranchAddress("MaxStripPos", &MaxStripPos);
+    t1->SetBranchAddress("MaxAmpl", &MaxAmpl);
+    t1->SetBranchAddress("MaxAmplTimeSample", &MaxAmplTimeSample);
 
     TCanvas *canvas = new TCanvas("canvas", "canvas", 200,10,geom::wx,geom::wy);
     TH1I *histo = new TH1I("histo", "Time window", n::samples, 0, n::samples);
@@ -48,9 +48,9 @@ int main(int argc, char **argv)
             { // chip AFTER
                 for ( int r = 0; r < n::bins; ++r)
                 {
-                    if (MaxStripAmpl[p][q][r]>0)
+                    if (MaxAmpl[p][q][r]>0)
                     {
-                        histo->Fill(MaxStripPos[p][q][r]);
+                        histo->Fill(MaxAmplTimeSample[p][q][r]);
                     }
                 }
             }

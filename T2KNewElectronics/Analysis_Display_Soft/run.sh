@@ -6,33 +6,35 @@ export make_convert="/home/mlehuraux/GitLab/T2K/T2KNewElectronics/pandax_client_
 export bin_convert="/home/mlehuraux/GitLab/T2K/T2KNewElectronics/pandax_client_16apr19/projects/bin/pandax/linux"
 export here="/home/mlehuraux/GitLab/T2K/T2KNewElectronics/Analysis_Display_Soft"
 
+export file=R2019_05_15-08_06_29-000
+
 ###############################
 # Convert .aqs file into .txt #
 ###############################
 # if not done already create the executable
 #cd $make_convert
 #make
-#cd $bin_convert
-#./fconverter -i $input_aqs/ R2019_05_02-11_48_23-000.aqs
-#./fdecoder -i $input_aqs/R2019_05_02-11_48_23-000.aqs -vflags 0x00003100
+cd $bin_convert
+./fconverter -i $input_aqs/ $file.aqs
+
 
 ###################
 # Build ROOT tree #
 ###################
 #cd $here/treeBuilder
 #make
-#cd $here/bin
-#./treeBuilder R2019_05_02-11_48_23-000
-#cd $here/outputs
-#mkdir -p R2019_05_02-11_48_23-000
+cd $here/bin
+./treeBuilder $file
+cd $here/outputs
+mkdir -p $file
 
 #################
 # Pre-treatment #
 #################
 #cd $here/preTreatment
 #make
-#cd $here/bin
-#./preTreatment R2019_05_02-11_48_23-000.root
+cd $here/bin
+./preTreatment $file.root
 
 ###########
 # Display #
@@ -42,7 +44,7 @@ export here="/home/mlehuraux/GitLab/T2K/T2KNewElectronics/Analysis_Display_Soft"
 cd $here/bin
 start=0
 nevent=1000
-./display R2019_05_02-11_48_23-000.root $start $nevent
+./display $file.root $start $nevent
 
 ##################
 # Post-Treatment #

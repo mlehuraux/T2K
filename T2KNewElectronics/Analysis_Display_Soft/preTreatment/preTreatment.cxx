@@ -31,16 +31,19 @@ int main(int argc, char **argv)
     cout << "File open" << endl;
 
     Int_t ADCAmpl[n::cards][n::chips][n::bins][n::samples];
-    Int_t MaxStripAmpl[n::cards][n::chips][n::bins];
-    Int_t MaxStripPos[n::cards][n::chips][n::bins];
-    Int_t PadAmpl[geom::nPadx][geom::nPady];
+    Int_t MaxAmpl[n::cards][n::chips][n::bins];
+    Int_t MaxAmplTimeSample[n::cards][n::chips][n::bins];
+    Int_t PadMaxAmpl[geom::nPadx][geom::nPady];
+    Int_t PadAmpl[geom::nPadx][geom::nPady][n::samples];
+
     Int_t ntot = t1->GetEntries();
 
     t1->SetBranchAddress("ADCAmpl", & ADCAmpl);
 
-    TBranch *b1 = t1->Branch("MaxStripAmpl", &MaxStripAmpl, Form("MaxStripAmpl[%i][%i][%i]/I", n::cards, n::chips, n::bins));
-    TBranch *b2 = t1->Branch("MaxStripPos", &MaxStripPos, Form("MaxStripAmpl[%i][%i][%i]/I", n::cards, n::chips, n::bins));
-    TBranch *b3 = t1->Branch("PadAmpl", &PadAmpl, Form("PadAmpl[%i][%i]/I", geom::nPadx, geom::nPady));
+    TBranch *b1 = t1->Branch("MaxAmpl", &MaxAmpl, Form("MaxAmpl[%i][%i][%i]/I", n::cards, n::chips, n::bins));
+    TBranch *b2 = t1->Branch("MaxAmplTimeSample", &MaxAmplTimeSample, Form("MaxAmplTimeSample[%i][%i][%i]/I", n::cards, n::chips, n::bins));
+    TBranch *b3 = t1->Branch("PadMaxAmpl", &PadMaxAmpl, Form("PadMaxAmpl[%i][%i]/I", geom::nPadx, geom::nPady));
+    TBranch *b4 = t1->Branch("PadAmpl", &PadAmpl, Form("PadAmpl[%i][%i][%i]/I", geom::nPadx, geom::nPady, n::samples));
 
 
     cout << "Tree OK" << endl;
@@ -56,11 +59,13 @@ int main(int argc, char **argv)
     		        for ( int s = 0; s < n::samples; ++s){ // Samples
                         signal->Fill(s, ADCAmpl[p][q][r][s]);
                         if (ADCAmpl[p][q][r][s] >= ADCAmpl[p][q][r][maxindex]) maxindex = s;
+                        PadAmpl[T2K.i(p, q, daq.connector(r))][T2K.j(p,q,daq.connector(r))][s] = ADCAmpl[p][q][r][s];
+
     		        }
-                    MaxStripAmpl[p][q][r] = ADCAmpl[p][q][r][maxindex];
-                    MaxStripPos[p][q][r] = maxindex;
-                    PadAmpl[T2K.i(p, q, daq.connector(r))][T2K.j(p,q,daq.connector(r))] = ADCAmpl[p][q][r][maxindex];
-                    if (MaxStripAmpl[p][q][r] > 30 && i==10)
+                    MaxAmpl[p][q][r] = ADCAmpl[p][q][r][maxindex];
+                    MaxAmplTimeSample[p][q][r] = maxindex;
+                    PadMaxAmpl[T2K.i(p, q, daq.connector(r))][T2K.j(p,q,daq.connector(r))] = ADCAmpl[p][q][r][maxindex];
+                    if (MaxAmpl[p][q][r] > 30 && i==10)
                     {
                         signal->SetMinimum(0.);
                         signal->SetLineColor(4);
@@ -79,6 +84,7 @@ int main(int argc, char **argv)
         b1->Fill();
         b2->Fill();
         b3->Fill();
+        b4->Fill();
 
 
     }

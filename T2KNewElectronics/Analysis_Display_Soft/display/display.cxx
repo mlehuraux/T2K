@@ -92,14 +92,14 @@ int main(int argc, char **argv)
 
     Int_t eventNumber;
     Int_t ADCAmpl[n::cards][n::chips][n::bins][n::samples];
-    Int_t MaxStripAmpl[n::cards][n::chips][n::bins];
-    Int_t MaxStripPos[n::cards][n::chips][n::bins];
+    Int_t MaxAmpl[n::cards][n::chips][n::bins];
+    Int_t MaxAmplTimeSample[n::cards][n::chips][n::bins];
     Int_t ntot = t1->GetEntries();
 
     t1->SetBranchAddress("ADCAmpl", &ADCAmpl);
     t1->SetBranchAddress("eventNumber", &eventNumber);
-    t1->SetBranchAddress("MaxStripAmpl", &MaxStripAmpl);
-    t1->SetBranchAddress("MaxStripPos", &MaxStripPos);
+    t1->SetBranchAddress("MaxAmpl", &MaxAmpl);
+    t1->SetBranchAddress("MaxAmplTimeSample", &MaxAmplTimeSample);
 
     for (int p=istart; p<min(ntot, istart+inevent); p++)
     {
@@ -125,8 +125,8 @@ int main(int argc, char **argv)
                 if (P.channel()!=-99||P.channel()==65 || P.channel()==73) // error somewhere in DAQ
                 {
                     //P.setAmp(ADCAmpl[P.card()][P.chip()][P.channel()][300]);
-                    P.setAmp(MaxStripAmpl[P.card()][P.chip()][P.channel()]);
-                    //track[j][i]=MaxStripAmpl[P.card()][P.chip()][P.channel()];
+                    P.setAmp(MaxAmpl[P.card()][P.chip()][P.channel()]);
+                    //track[j][i]=MaxAmpl[P.card()][P.chip()][P.channel()];
                 }
                 int color = 2*floor(float(P.ampl())/2000*NCont);
                 //cout << color << endl;
