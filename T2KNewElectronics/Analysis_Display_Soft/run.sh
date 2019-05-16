@@ -1,4 +1,4 @@
-export input_aqs="/home/mlehuraux/GitLab/T2K/T2KNewElectronics/test_data/aqs" 
+export input_aqs="/home/mlehuraux/GitLab/T2K/T2KNewElectronics/test_data/aqs"
 export input_txt="/home/mlehuraux/GitLab/T2K/T2KNewElectronics/test_data/txt"
 export output_root="/home/mlehuraux/GitLab/T2K/T2KNewElectronics/test_data/root"
 
@@ -9,9 +9,9 @@ export here="/home/mlehuraux/GitLab/T2K/T2KNewElectronics/Analysis_Display_Soft"
 ###############################
 # Convert .aqs file into .txt #
 ###############################
-# if not done already create the executable 
-#cd $make_convert 
-#make 
+# if not done already create the executable
+#cd $make_convert
+#make
 #cd $bin_convert
 #./fconverter -i $input_aqs/ R2019_05_02-11_48_23-000.aqs
 #./fdecoder -i $input_aqs/R2019_05_02-11_48_23-000.aqs -vflags 0x00003100
@@ -31,20 +31,18 @@ export here="/home/mlehuraux/GitLab/T2K/T2KNewElectronics/Analysis_Display_Soft"
 #################
 #cd $here/preTreatment
 #make
-cd $here/bin
-./preTreatment R2019_05_02-11_48_23-000.root
+#cd $here/bin
+#./preTreatment R2019_05_02-11_48_23-000.root
 
 ###########
 # Display #
 ###########
 #cd $here/display
 #make
-#cd $here/bin
-#for value in `seq 0 1 10`
-#do
-#echo $value
-#./display R2019_05_02-11_48_23-000.root $value
-#done
+cd $here/bin
+start=0
+nevent=1000
+./display R2019_05_02-11_48_23-000.root $start $nevent
 
 ##################
 # Post-Treatment #
@@ -54,4 +52,3 @@ cd $here/bin
 #cd $here/bin
 #./postTreatment R2019_05_02-11_48_23-000.root
 #cd $here
-

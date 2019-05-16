@@ -50,7 +50,7 @@ void fast_display(string input_file, int start, int nevent)
     gStyle->SetPalette(kBird);
     gStyle->SetOptStat(0);
 
-    for (int p=start; p<start+nevent; p++)
+    for (int p=start; p<min(ntot, start+nevent); p++)
     {
         t1->GetEntry(p);
         TH2I *pads = new TH2I("pads","", geom::nPadx,0,geom::nPadx, geom::nPady,0,geom::nPady);

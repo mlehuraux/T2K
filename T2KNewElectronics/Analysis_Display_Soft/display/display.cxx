@@ -49,7 +49,8 @@ TPolyLine *padline(Pixel& P, int color=602)
 int main(int argc, char **argv)
 {
     string input_file(argv[1]);
-    string event(argv[2]);
+    string start(argv[2]);
+    string nevent(argv[3]);
 
     string input_file_name = input_file.substr(0, input_file.size()-5);
 
@@ -70,7 +71,8 @@ int main(int argc, char **argv)
 
 
 
-    int eventid = stoi(event);
+    int istart = stoi(start);
+    int inevent = stoi(nevent);
 
     DAQ daq;
     daq.loadDAQ();
@@ -99,47 +101,50 @@ int main(int argc, char **argv)
     t1->SetBranchAddress("MaxStripAmpl", &MaxStripAmpl);
     t1->SetBranchAddress("MaxStripPos", &MaxStripPos);
 
-    TCanvas *canvas = new TCanvas("canvas", "canvas", 200,10,geom::wx,geom::wy);
-    //canvas->SetWindowSize(geom::wx , geom::wy);
-    //gPad->Range(0, 0, 1, 1);
-    TPad *p1 = new TPad("p1", "p1", 0.01, 0.01, 0.99, 0.99);
-    p1->Range(-0.5*geom::nPadx*geom::dx, -0.5*geom::nPady*geom::dy, 0.5*geom::nPadx*geom::dx, 0.5*geom::nPady*geom::dy);
-    p1->Draw();
-    p1->cd();
-
-    t1->GetEntry(eventid);
-
-    // Initialize track
-    Int_t track[geom::nPady][geom::nPadx];
-
-    for (int i = 0; i < geom::nPadx; i++)
+    for (int p=istart; p<min(ntot, istart+inevent); p++)
     {
-        for (int j = 0; j < geom::nPady; j++)
+        TCanvas *canvas = new TCanvas("canvas", "canvas", 200,10,geom::wx,geom::wy);
+        //canvas->SetWindowSize(geom::wx , geom::wy);
+        //gPad->Range(0, 0, 1, 1);
+        TPad *p1 = new TPad("p1", "p1", 0.01, 0.01, 0.99, 0.99);
+        p1->Range(-0.5*geom::nPadx*geom::dx, -0.5*geom::nPady*geom::dy, 0.5*geom::nPadx*geom::dx, 0.5*geom::nPady*geom::dy);
+        p1->Draw();
+        p1->cd();
+        t1->GetEntry(p);
+
+        // Initialize track
+        //Int_t track[geom::nPady][geom::nPadx];
+
+        for (int i = 0; i < geom::nPadx; i++)
         {
-            Pixel P;
-            P = padPlane.pad(i,j);
-            //cout << i << "  " << j << "     " << P.card() << "   " << P.chip() << "  " << P.channel() << endl;
-            if (P.channel()!=-99||P.channel()==65 || P.channel()==73) // error somewhere in DAQ
+            for (int j = 0; j < geom::nPady; j++)
             {
-                //P.setAmp(ADCAmpl[P.card()][P.chip()][P.channel()][300]);
-                P.setAmp(MaxStripAmpl[P.card()][P.chip()][P.channel()]);
-                track[j][i]=MaxStripAmpl[P.card()][P.chip()][P.channel()];
+                Pixel P;
+                P = padPlane.pad(i,j);
+                //cout << i << "  " << j << "     " << P.card() << "   " << P.chip() << "  " << P.channel() << endl;
+                if (P.channel()!=-99||P.channel()==65 || P.channel()==73) // error somewhere in DAQ
+                {
+                    //P.setAmp(ADCAmpl[P.card()][P.chip()][P.channel()][300]);
+                    P.setAmp(MaxStripAmpl[P.card()][P.chip()][P.channel()]);
+                    //track[j][i]=MaxStripAmpl[P.card()][P.chip()][P.channel()];
+                }
+                int color = 2*floor(float(P.ampl())/2000*NCont);
+                //cout << color << endl;
+                if (NCont-1 < color){color=NCont-1;}
+                //if (P.ampl() > 0){padline(P,2)->Draw("f");}
+                if (P.ampl() > 0){padline(P,MyPalette[color])->Draw("f");}
+                else{padline(P)->Draw("f");}
+                padline(P)->Draw();
             }
-            int color = 2*floor(float(P.ampl())/2000*NCont);
-            //cout << color << endl;
-            if (NCont-1 < color){color=NCont-1;}
-            //if (P.ampl() > 0){padline(P,2)->Draw("f");}
-            if (P.ampl() > 0){padline(P,MyPalette[color])->Draw("f");}
-            else{padline(P)->Draw("f");}
-            padline(P)->Draw();
         }
+        p1->Modified();
+        canvas->Update();
+        canvas->SaveAs((loc::outputs+ input_file_name + "/event_" + to_string(p) + ".gif").c_str());
+        delete canvas;
     }
 
-    p1->Modified();
-    canvas->Update();
-    canvas->SaveAs((loc::outputs+ input_file_name + "/event_" + event + ".gif").c_str());
     f1->Close();
-
+/*
     TCanvas *canvas1 = new TCanvas("canvas1", "canvas1",300, 1200);
     canvas1->Divide(1, geom::nPady, 0, 0);
 
@@ -170,5 +175,6 @@ int main(int argc, char **argv)
         canvas1->Update();
     }
     canvas1->SaveAs((loc::outputs+ input_file_name + "/track_" + event + ".gif").c_str());
+*/
     return(0);
 }
