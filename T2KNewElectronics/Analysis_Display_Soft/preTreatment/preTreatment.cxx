@@ -18,6 +18,14 @@ int main(int argc, char **argv)
 {
     string input_file(argv[1]);
 
+    DAQ daq;
+    daq.loadDAQ();
+    cout << "... DAQ loaded successfully" << endl;
+
+    Mapping T2K;
+    T2K.loadMapping();
+    cout << "...Mapping loaded succesfully." << endl;
+
     TFile * f1 = TFile::Open(( loc::rootfiles + input_file ).c_str(), "UPDATE");
     TTree * t1 = (TTree*)f1->Get("tree");
     cout << "File open" << endl;
@@ -25,12 +33,15 @@ int main(int argc, char **argv)
     Int_t ADCAmpl[n::cards][n::chips][n::bins][n::samples];
     Int_t MaxStripAmpl[n::cards][n::chips][n::bins];
     Int_t MaxStripPos[n::cards][n::chips][n::bins];
+    Int_t PadAmpl[geom::nPadx][geom::nPady];
     Int_t ntot = t1->GetEntries();
 
     t1->SetBranchAddress("ADCAmpl", & ADCAmpl);
 
     TBranch *b1 = t1->Branch("MaxStripAmpl", &MaxStripAmpl, Form("MaxStripAmpl[%i][%i][%i]/I", n::cards, n::chips, n::bins));
     TBranch *b2 = t1->Branch("MaxStripPos", &MaxStripPos, Form("MaxStripAmpl[%i][%i][%i]/I", n::cards, n::chips, n::bins));
+    TBranch *b3 = t1->Branch("PadAmpl", &PadAmpl, Form("PadAmpl[%i][%i]/I", geom::nPadx, geom::nPady));
+
 
     cout << "Tree OK" << endl;
 
@@ -48,6 +59,7 @@ int main(int argc, char **argv)
     		        }
                     MaxStripAmpl[p][q][r] = ADCAmpl[p][q][r][maxindex];
                     MaxStripPos[p][q][r] = maxindex;
+                    PadAmpl[T2K.i(p, q, daq.connector(r))][T2K.j(p,q,daq.connector(r))] = ADCAmpl[p][q][r][maxindex];
                     if (MaxStripAmpl[p][q][r] > 30 && i==10)
                     {
                         signal->SetMinimum(0.);
@@ -66,6 +78,7 @@ int main(int argc, char **argv)
         }
         b1->Fill();
         b2->Fill();
+        b3->Fill();
 
 
     }

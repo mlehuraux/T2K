@@ -123,3 +123,17 @@ void Mapping::loadMapping()
 
 
 }
+
+
+int Mapping::i(int card, int chip, int bin)
+{
+    return (m_ichip[card][chip][bin] + card*geom::padOnchipx);
+}
+
+int Mapping::j(int card, int chip, int bin)
+{
+    int result;
+    if (card%2==0){result=m_jchip[card][chip][bin] + (n::chips-1-chip)*geom::padOnchipy;}
+    else if (card%2==1){result=m_jchip[card][chip][bin] + chip*geom::padOnchipy;}
+    return result;
+}
