@@ -3,11 +3,11 @@ export compile=0
 export startevent=1
 export maxevent=1000
 
-export input_aqs="/local/home/t2kt/Documents/DisplayT2KMarion/T2K-T2K/T2KNewElectronics/test_data/aqs"
-export input_txt="/local/home/t2kt/Documents/DisplayT2KMarion/T2K-T2K/T2KNewElectronics/test_data/txt"
-export output_root="/local/home/t2kt/Documents/DisplayT2KMarion/T2K-T2K/T2KNewElectronics/test_data/root"
+export input_aqs="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/test_data/aqs"
+export input_txt="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/test_data/txt"
+export output_root="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/test_data/root"
 
-export here="/local/home/t2kt/Documents/DisplayT2KMarion/T2K-T2K/T2KNewElectronics/Monitoring/"
+export here="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/Monitoring/"
 
 ###############################
 #   Pedestals visualisation   #

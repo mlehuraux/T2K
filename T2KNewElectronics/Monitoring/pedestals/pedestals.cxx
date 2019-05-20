@@ -17,6 +17,7 @@ April 2019    : created from mreader.c
 #include <stdio.h>
 #include <string.h>
 #include <fcntl.h>
+#include <fstream>
 
 #include "fdecoder.h"
 #include "datum_decoder.h"
@@ -112,87 +113,6 @@ int parse_cmd_args(int argc, char **argv, Param* p)
 			}
 		}
 
-/*
-		// vflag
-		else if (strncmp(argv[i], "-vflag", 6) == 0)
-		{
-			match = 1;
-			if ((i + 1) < argc)
-			{
-				if (sscanf(argv[i + 1], "%i", &(p->vflag)) == 1)
-				{
-					i++;
-				}
-				else
-				{
-					printf("Warning: could not scan argument after option -vflag. Ignored\n");
-				}
-			}
-			else
-			{
-				printf("Warning: missing argument after option -vflag. Ignored\n");
-			}
-
-		}
-
-		// zs_preamble
-		else if (strncmp(argv[i], "-zs_preamble", 12) == 0)
-		{
-			match = 1;
-			if ((i + 1) < argc)
-			{
-				if (sscanf(argv[i + 1], "%i", &(p->sample_index_offset_zs)) == 1)
-				{
-					i++;
-				}
-				else
-				{
-					printf("Warning: could not scan argument after option -zs_preamble. Ignored\n");
-				}
-			}
-			else
-			{
-				printf("Warning: missing argument after option -zs_preamble. Ignored\n");
-			}
-
-		}
-
-		// verbose
-		else if (strncmp(argv[i], "-v", 2) == 0)
-		{
-			match = 1;
-			if ((i + 1) < argc)
-			{
-				if (sscanf(argv[i + 1], "%d", &verbose) == 1)
-				{
-					i++;
-				}
-				else
-				{
-					verbose = 1;
-				}
-			}
-			else
-			{
-				verbose = 1;
-			}
-
-		}
-
-		// help
-		else if (strncmp(argv[i], "-h", 2) == 0)
-		{
-			match = 1;
-			help();
-			return (-1); // force an error to exit
-		}
-
-		// unmatched options
-		if (match == 0)
-		{
-			printf("Warning: unsupported option %s\n", argv[i]);
-		}
-*/
 	}
 	return (0);
 
@@ -244,6 +164,19 @@ int main(int argc, char **argv)
 		return(-1);
 	}
 
+	string inputdir(argv[2]);
+	string inputfile(argv[3]);
+
+	string input_file_name = inputfile.substr(0, inputfile.size()-4);
+	string outputdir = (inputdir + "../txt/").c_str();
+	string outputfile1 = outputdir + input_file_name + "_ped_geom.txt";
+	string outputfile2 = outputdir + input_file_name + "_ped_elec.txt";
+
+	FILE * output1;
+	FILE * output2;
+	output1 = fopen(outputfile1.c_str(), "w");
+	output2 = fopen(outputfile2.c_str(), "w");
+
 	// Initialize the data interpretation context
 	DatumContext_Init(&dc, param.sample_index_offset_zs);
 
@@ -282,8 +215,10 @@ int main(int argc, char **argv)
 			//Item_Print(stdout, &dc, param.vflag);
 			if (dc.isItemComplete)
 			{
-				printf("Event number : %u", dc.EventNumber);
-				printf("\n");
+				fprintf(output1, "%i\t%i\t%f\t%f\n", T2K.i(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex)), T2K.j(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex)), 0.01*dc.PedestalMean, 0.01*dc.PedestalDev);
+				fprintf(output2, "%hi\t%hi\t%hi\t%f\t%f\n", dc.CardIndex, dc.ChipIndex, dc.ChannelIndex, 0.01*dc.PedestalMean, 0.01*dc.PedestalDev);
+
+				cout << '\r' << "Event number : " << dc.EventNumber << flush;
 				// 0.1 because 10 evts in pedestal run and stored as int so x100
 				pedmean->Fill(T2K.i(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex)), T2K.j(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex)), 0.01*dc.PedestalMean);
 				pedrms->Fill(T2K.i(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex)), T2K.j(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex)), 0.01*dc.PedestalDev);
@@ -331,5 +266,7 @@ int main(int argc, char **argv)
 		fclose(param.fsrc);
 	}
 
+	fclose(output1);
+	fclose(output2);
 	return(0);
 }

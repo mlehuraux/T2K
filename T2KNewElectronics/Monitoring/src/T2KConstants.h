@@ -44,12 +44,12 @@ namespace geom
 // Files location
 namespace loc
 {
-    static const string mapping = "/local/home/t2kt/Documents/DisplayT2KMarion/T2K-T2K/T2KNewElectronics/Monitoring/src/Mapping/";
-    static const string daq = "/local/home/t2kt/Documents/DisplayT2KMarion/T2K-T2K/T2KNewElectronics/Monitoring/src/DAQ/";
-    static const string outputs = "/local/home/t2kt/Documents/DisplayT2KMarion/T2K-T2K/T2KNewElectronics/Monitoring/outputs/";
-    static const string rootfiles = "/local/home/t2kt/Documents/DisplayT2KMarion/T2K-T2K/T2KNewElectronics/test_data/root/";
-    static const string aqs = "/local/home/t2kt/Documents/DisplayT2KMarion/T2K-T2K/T2KNewElectronics/test_data/aqs/";
-    static const string txt = "/local/home/t2kt/Documents/DisplayT2KMarion/T2K-T2K/T2KNewElectronics/test_data/txt/";
+    static const string mapping = "/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/Monitoring/src/Mapping/";
+    static const string daq = "/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/Monitoring/src/DAQ/";
+    static const string outputs = "/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/Monitoring/outputs/";
+    static const string rootfiles = "/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/test_data/root/";
+    static const string aqs = "/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/test_data/aqs/";
+    static const string txt = "/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/test_data/txt/";
 
 
 }
