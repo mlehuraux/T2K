@@ -215,14 +215,17 @@ int main(int argc, char **argv)
 			//Item_Print(stdout, &dc, param.vflag);
 			if (dc.isItemComplete)
 			{
-				fprintf(output1, "%i\t%i\t%f\t%f\n", T2K.i(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex)), T2K.j(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex)), 0.01*dc.PedestalMean, 0.01*dc.PedestalDev);
+				cout << "Card Index : " << dc.CardIndex << " Chip	" << dc.ChipIndex << " DAQ " <<  dc.ChannelIndex << "	Connector" << daq.connector(dc.ChannelIndex)<< endl;
 				fprintf(output2, "%hi\t%hi\t%hi\t%f\t%f\n", dc.CardIndex, dc.ChipIndex, dc.ChannelIndex, 0.01*dc.PedestalMean, 0.01*dc.PedestalDev);
 
-				cout << '\r' << "Event number : " << dc.EventNumber << flush;
-				// 0.1 because 10 evts in pedestal run and stored as int so x100
-				pedmean->Fill(T2K.i(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex)), T2K.j(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex)), 0.01*dc.PedestalMean);
-				pedrms->Fill(T2K.i(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex)), T2K.j(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex)), 0.01*dc.PedestalDev);
-
+				//cout << '\r' << "Event number : " << dc.EventNumber << flush;
+				// 0.1 because 10 evts in pedestal run and stored as int so x10
+				if (dc.ChannelIndex!=15&&dc.ChannelIndex!=28&&dc.ChannelIndex!=53&&dc.ChannelIndex!=66&&dc.ChannelIndex>2)
+				{
+					fprintf(output1, "%i\t%i\t%f\t%f\n", T2K.i(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex)), T2K.j(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex)), 0.01*dc.PedestalMean, 0.01*dc.PedestalDev);
+					pedmean->Fill(T2K.i(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex)), T2K.j(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex)), 0.01*dc.PedestalMean);
+					pedrms->Fill(T2K.i(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex)), T2K.j(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex)), 0.01*dc.PedestalDev);
+				}
 			}
 		}
 	}
@@ -235,7 +238,7 @@ int main(int argc, char **argv)
 	pedmean->Draw("COLZ");
 	canvas->cd(2);
 	pedrms->Draw("COLZ");
-	canvas->SaveAs((loc::outputs + "pedestals.gif").c_str());
+	canvas->SaveAs((loc::outputs + "pedestals.C").c_str());
 
 	delete canvas;
 	delete pedmean;
