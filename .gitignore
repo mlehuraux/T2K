@@ -16,4 +16,7 @@ lib/
 /DataWriter_devel/interface/dict_interface.h
 *.mk
 *.gif
-
+/T2KNewElectronics/Analysis_Display_Soft/src/T2KConstants.h
+/T2KNewElectronics/Analysis_Display_Soft/run.sh
+/T2KNewElectronics/Monitoring/src/T2KConstants.h
+/T2KNewElectronics/Monitoring/run.sh
