@@ -1,7 +1,7 @@
 #export file=R2019_05_13-16_05_17-000
 #export file=R2019_05_13-16_10_24-000
 #export file=R2019_05_15-08_06_29-000
-export file=R2019_05_17-14_30_16-000
+export file=R2019_05_22-21_08_42-008
 export compile=0
 export startevent=1
 export maxevent=1000
@@ -81,4 +81,3 @@ fi
 #cd $here/bin
 #./postTreatment $file.root
 #cd $here
-

@@ -36,16 +36,13 @@ void fast_display(string input_file, int start, int nevent)
 
     Int_t eventNumber;
     Int_t ADCAmpl[n::cards][n::chips][n::bins][n::samples];
-    Int_t MaxStripAmpl[n::cards][n::chips][n::bins];
-    Int_t MaxStripPos[n::cards][n::chips][n::bins];
     Int_t PadMaxAmpl[geom::nPadx][geom::nPady];
     Int_t ntot = t1->GetEntries();
 
     t1->SetBranchAddress("ADCAmpl", &ADCAmpl);
     t1->SetBranchAddress("eventNumber", &eventNumber);
-    t1->SetBranchAddress("MaxStripAmpl", &MaxStripAmpl);
-    t1->SetBranchAddress("MaxStripPos", &MaxStripPos);
     t1->SetBranchAddress("PadMaxAmpl", &PadMaxAmpl);
+
 
     gStyle->SetPalette(kBird);
     gStyle->SetOptStat(0);
