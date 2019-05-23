@@ -6,7 +6,7 @@ export make_convert="/home/mlehuraux/GitLab/T2K/T2KNewElectronics/pandax_client_
 export bin_convert="/home/mlehuraux/GitLab/T2K/T2KNewElectronics/pandax_client_16apr19/projects/bin/pandax/linux"
 export here="/home/mlehuraux/GitLab/T2K/T2KNewElectronics/Analysis_Display_Soft"
 
-export file=R2019_05_15-08_06_29-000
+export file=R2019_05_15-15_55_34-000
 
 ###############################
 # Convert .aqs file into .txt #
