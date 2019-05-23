@@ -4,8 +4,9 @@
 export file=R2019_05_22-21_08_42-008
 export compile=0
 export startevent=1
-export maxevent=1000
+export nevent=20
 
+export data="/local/home/t2kt/projects/bin/pandax/data"
 export input_aqs="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/test_data/aqs"
 export input_txt="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/test_data/txt"
 export output_root="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/test_data/root"
@@ -13,6 +14,9 @@ export output_root="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/test
 export make_convert="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/pandax_client_16apr19/projects/pandax/mclient/linux"
 export bin_convert="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/pandax_client_16apr19/projects/bin/pandax/linux"
 export here="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/Analysis_Display_Soft"
+
+cd $input_aqs
+#ln -s $data/$file.aqs
 
 ###############################
 # Convert .aqs file into .txt #
@@ -25,7 +29,7 @@ then
 	make
 fi
 cd $bin_convert
-./fconverter -i $input_aqs/ $file.aqs
+#./fconverter -i $input_aqs/ $file.aqs
 #./fdecoder -i $input_aqs/$file.aqs -vflags 0x00003100
 
 ###################
@@ -66,12 +70,9 @@ then
 	make
 else
 	cd $here/bin
-	for value in `seq $startevent 1 $maxevent`
-	do
-		echo $value
-		./display $file.root $value
-	done
+	./display $file.root 1 1000
 fi
+cd $here
 
 ##################
 # Post-Treatment #

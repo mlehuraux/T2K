@@ -3,6 +3,8 @@ export compile=1
 export startevent=1
 export maxevent=1000
 
+export data="/local/home/t2kt/projects/bin/pandax/data"
+
 export make_convert="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/pandax_client_16apr19/projects/pandax/mclient/linux"
 export bin_convert="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/pandax_client_16apr19/projects/bin/pandax/linux"
 
@@ -12,31 +14,20 @@ export output_root="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/test
 
 export here="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/Monitoring/"
 
-
-###############################
-# Convert .aqs file into .txt #
-###############################
-# if not done already create the executable
-if [ $compile = 1 ]
-then
-	cd $make_convert
-	make clean
-	make
-fi
-cd $bin_convert
-./fdecoder -i $file.aqs 
+cd $input_aqs
+ln -s $data/$file.aqs
 
 ###############################
 #   Pedestals visualisation   #
 ###############################
 # if not done already create the executable
-#if [ $compile = 1 ]
-#then
-#	cd $here/pedestals
-#  make clean
-#	make
-#fi
-#cd $here/bin
-#./pedestals -i $input_aqs/ $file.aqs
+if [ $compile = 1 ]
+then
+	cd $here/pedestals
+  make clean
+	make
+fi
+cd $here/bin
+./pedestals -i $input_aqs/ $file.aqs
 
 cd $here

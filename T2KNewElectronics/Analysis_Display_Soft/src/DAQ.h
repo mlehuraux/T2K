@@ -10,7 +10,13 @@ class DAQ
         void loadDAQ();
 
         // Getters
-        int DAQchannel(int detector){return(arc2daq[detector2arc[detector]]);}
+        int DAQchannel(int detector)
+        {
+          int res;
+          res = arc2daq[detector2arc[detector]];
+          if (res==-99 && detector==65){res=49;}
+          return(res);
+        }
         int connector(int daqchannel){return(arc2detector[daq2arc[daqchannel]]);}
 
         // Other

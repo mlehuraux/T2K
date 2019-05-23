@@ -69,10 +69,9 @@ int main(int argc, char **argv)
         MyPalette[i] = FI+i;
     }
 
-
-
     int istart = stoi(start);
     int inevent = stoi(nevent);
+
 
     DAQ daq;
     daq.loadDAQ();
@@ -122,7 +121,8 @@ int main(int argc, char **argv)
                 Pixel P;
                 P = padPlane.pad(i,j);
                 //cout << i << "  " << j << "     " << P.card() << "   " << P.chip() << "  " << P.channel() << endl;
-                if (P.channel()!=-99||P.channel()==65 || P.channel()==73) // error somewhere in DAQ
+                //if (P.channel()!=-99||P.channel()==65 || P.channel()==73) // error somewhere in DAQ
+                if (P.channel()!=15&&P.channel()!=28&&P.channel()!=53&&P.channel()!=66&&P.channel()<79&&P.channel()>2) // error somewhere in DAQ
                 {
                     //P.setAmp(ADCAmpl[P.card()][P.chip()][P.channel()][300]);
                     P.setAmp(MaxAmpl[P.card()][P.chip()][P.channel()]);
