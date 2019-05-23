@@ -1,7 +1,7 @@
 #export file=R2019_05_13-16_05_17-000
 #export file=R2019_05_13-16_10_24-000
 #export file=R2019_05_15-08_06_29-000
-export file=R2019_05_22-21_08_42-008
+export file=R2019_05_22-06_57_13-000
 export compile=0
 export startevent=1
 export nevent=20
@@ -16,7 +16,7 @@ export bin_convert="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/pand
 export here="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/Analysis_Display_Soft"
 
 cd $input_aqs
-#ln -s $data/$file.aqs
+ln -s $data/$file.aqs
 
 ###############################
 # Convert .aqs file into .txt #
@@ -29,7 +29,7 @@ then
 	make
 fi
 cd $bin_convert
-#./fconverter -i $input_aqs/ $file.aqs
+./fconverter -i $input_aqs/ $file.aqs
 #./fdecoder -i $input_aqs/$file.aqs -vflags 0x00003100
 
 ###################
@@ -40,12 +40,12 @@ then
 	cd $here/treeBuilder
 	make clean
 	make
-else
-	cd $here/bin
-	./treeBuilder $file
-	cd $here/outputs
-	mkdir -p $file
 fi
+cd $here/bin
+./treeBuilder $file
+cd $here/outputs
+mkdir -p $file
+
 
 #################
 # Pre-treatment #
@@ -55,10 +55,10 @@ then
 	cd $here/preTreatment
 	make clean
 	make
-else
-	cd $here/bin
-	./preTreatment $file.root
 fi
+cd $here/bin
+./preTreatment $file.root
+
 
 ###########
 # Display #
@@ -68,10 +68,10 @@ then
 	cd $here/display
 	make clean
 	make
-else
-	cd $here/bin
-	./display $file.root 1 1000
 fi
+cd $here/bin
+./display $file.root 1 1000
+
 cd $here
 
 ##################

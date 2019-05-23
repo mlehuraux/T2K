@@ -1,8 +1,8 @@
 void pedestals()
 {
 //=========Macro generated from canvas: canvas/canvas
-//=========  (Thu May 23 11:04:34 2019) by ROOT version 6.15/01
-   TCanvas *canvas = new TCanvas("canvas", "canvas",0,0,1000,500);
+//=========  (Thu May 23 15:50:01 2019) by ROOT version 6.15/01
+   TCanvas *canvas = new TCanvas("canvas", "canvas",0,0,1100,500);
    gStyle->SetOptStat(0);
    canvas->SetHighLightColor(2);
    canvas->Range(0,0,1,1);
@@ -21,8 +21,8 @@ void pedestals()
    canvas_1->SetBorderSize(2);
    canvas_1->SetFrameBorderMode(0);
    
-   TH2F *pedmean = new TH2F("pedmean","",36,0,36,32,0,32);
-   pedmean->SetBinContent(39,499.46);
+   TH2F *pedmean = new TH2F("pedmean","Pedestals mean value",36,0,36,32,0,32);
+   pedmean->SetBinContent(39,249.73);
    pedmean->SetBinContent(40,249.47);
    pedmean->SetBinContent(41,249.14);
    pedmean->SetBinContent(42,249.62);
@@ -40,7 +40,7 @@ void pedestals()
    pedmean->SetBinContent(54,250.28);
    pedmean->SetBinContent(55,250.03);
    pedmean->SetBinContent(56,249.86);
-   pedmean->SetBinContent(57,499.34);
+   pedmean->SetBinContent(57,249.67);
    pedmean->SetBinContent(58,248.97);
    pedmean->SetBinContent(59,250.18);
    pedmean->SetBinContent(60,249.59);
@@ -139,7 +139,7 @@ void pedestals()
    pedmean->SetBinContent(159,249.98);
    pedmean->SetBinContent(160,249.09);
    pedmean->SetBinContent(161,250.55);
-   pedmean->SetBinContent(162,498.68);
+   pedmean->SetBinContent(162,249.34);
    pedmean->SetBinContent(163,249.89);
    pedmean->SetBinContent(164,250.34);
    pedmean->SetBinContent(165,250.18);
@@ -157,7 +157,7 @@ void pedestals()
    pedmean->SetBinContent(177,249.54);
    pedmean->SetBinContent(178,249.64);
    pedmean->SetBinContent(179,250.64);
-   pedmean->SetBinContent(180,751.77);
+   pedmean->SetBinContent(180,250.59);
    pedmean->SetBinContent(181,249.98);
    pedmean->SetBinContent(182,250.21);
    pedmean->SetBinContent(183,249.93);
@@ -310,7 +310,7 @@ void pedestals()
    pedmean->SetBinContent(338,249.77);
    pedmean->SetBinContent(339,250.17);
    pedmean->SetBinContent(340,249.99);
-   pedmean->SetBinContent(343,501.12);
+   pedmean->SetBinContent(343,250.56);
    pedmean->SetBinContent(344,249.24);
    pedmean->SetBinContent(345,249.73);
    pedmean->SetBinContent(346,250.35);
@@ -328,7 +328,7 @@ void pedestals()
    pedmean->SetBinContent(358,250.68);
    pedmean->SetBinContent(359,250.14);
    pedmean->SetBinContent(360,250.17);
-   pedmean->SetBinContent(361,502.02);
+   pedmean->SetBinContent(361,251.01);
    pedmean->SetBinContent(362,249.86);
    pedmean->SetBinContent(363,250.58);
    pedmean->SetBinContent(364,250.03);
@@ -427,7 +427,7 @@ void pedestals()
    pedmean->SetBinContent(463,249.67);
    pedmean->SetBinContent(464,250.61);
    pedmean->SetBinContent(465,250.52);
-   pedmean->SetBinContent(466,496.78);
+   pedmean->SetBinContent(466,248.39);
    pedmean->SetBinContent(467,249.74);
    pedmean->SetBinContent(468,250.55);
    pedmean->SetBinContent(469,249.8);
@@ -445,7 +445,7 @@ void pedestals()
    pedmean->SetBinContent(481,249.34);
    pedmean->SetBinContent(482,250.09);
    pedmean->SetBinContent(483,250.13);
-   pedmean->SetBinContent(484,750.03);
+   pedmean->SetBinContent(484,250.01);
    pedmean->SetBinContent(485,250.24);
    pedmean->SetBinContent(486,250.08);
    pedmean->SetBinContent(487,249.72);
@@ -750,7 +750,7 @@ void pedestals()
    pedmean->SetBinContent(804,250.25);
    pedmean->SetBinContent(805,249.85);
    pedmean->SetBinContent(806,249.52);
-   pedmean->SetBinContent(807,499.84);
+   pedmean->SetBinContent(807,249.92);
    pedmean->SetBinContent(808,248.93);
    pedmean->SetBinContent(809,249.81);
    pedmean->SetBinContent(810,248.83);
@@ -768,7 +768,7 @@ void pedestals()
    pedmean->SetBinContent(822,249.26);
    pedmean->SetBinContent(823,249.96);
    pedmean->SetBinContent(824,250.68);
-   pedmean->SetBinContent(825,500.26);
+   pedmean->SetBinContent(825,250.13);
    pedmean->SetBinContent(826,250.66);
    pedmean->SetBinContent(827,250.92);
    pedmean->SetBinContent(828,249.79);
@@ -867,7 +867,7 @@ void pedestals()
    pedmean->SetBinContent(927,249.26);
    pedmean->SetBinContent(928,250.16);
    pedmean->SetBinContent(929,250.36);
-   pedmean->SetBinContent(930,499.9);
+   pedmean->SetBinContent(930,249.95);
    pedmean->SetBinContent(931,249.52);
    pedmean->SetBinContent(932,250.52);
    pedmean->SetBinContent(933,250.62);
@@ -885,7 +885,7 @@ void pedestals()
    pedmean->SetBinContent(945,250.08);
    pedmean->SetBinContent(946,250.75);
    pedmean->SetBinContent(947,249.81);
-   pedmean->SetBinContent(948,749.94);
+   pedmean->SetBinContent(948,249.98);
    pedmean->SetBinContent(951,250.96);
    pedmean->SetBinContent(952,249.71);
    pedmean->SetBinContent(953,250.78);
@@ -1038,7 +1038,7 @@ void pedestals()
    pedmean->SetBinContent(1108,249.71);
    pedmean->SetBinContent(1109,249.61);
    pedmean->SetBinContent(1110,250.61);
-   pedmean->SetBinContent(1111,500.5);
+   pedmean->SetBinContent(1111,250.25);
    pedmean->SetBinContent(1112,249.82);
    pedmean->SetBinContent(1113,249.6);
    pedmean->SetBinContent(1114,250.35);
@@ -1056,7 +1056,7 @@ void pedestals()
    pedmean->SetBinContent(1126,249.48);
    pedmean->SetBinContent(1127,249.86);
    pedmean->SetBinContent(1128,250.37);
-   pedmean->SetBinContent(1129,501.46);
+   pedmean->SetBinContent(1129,250.73);
    pedmean->SetBinContent(1130,250.33);
    pedmean->SetBinContent(1131,249.53);
    pedmean->SetBinContent(1132,250.7);
@@ -1155,7 +1155,7 @@ void pedestals()
    pedmean->SetBinContent(1231,248.61);
    pedmean->SetBinContent(1232,249.63);
    pedmean->SetBinContent(1233,250.31);
-   pedmean->SetBinContent(1234,499.9);
+   pedmean->SetBinContent(1234,249.95);
    pedmean->SetBinContent(1235,250);
    pedmean->SetBinContent(1236,250.45);
    pedmean->SetBinContent(1237,250.02);
@@ -1173,8 +1173,8 @@ void pedestals()
    pedmean->SetBinContent(1249,249.32);
    pedmean->SetBinContent(1250,249.76);
    pedmean->SetBinContent(1251,251.16);
-   pedmean->SetBinContent(1252,499.2);
-   pedmean->SetBinError(39,353.1716);
+   pedmean->SetBinContent(1252,249.6);
+   pedmean->SetBinError(39,249.73);
    pedmean->SetBinError(40,249.47);
    pedmean->SetBinError(41,249.14);
    pedmean->SetBinError(42,249.62);
@@ -1192,7 +1192,7 @@ void pedestals()
    pedmean->SetBinError(54,250.28);
    pedmean->SetBinError(55,250.03);
    pedmean->SetBinError(56,249.86);
-   pedmean->SetBinError(57,353.0867);
+   pedmean->SetBinError(57,249.67);
    pedmean->SetBinError(58,248.97);
    pedmean->SetBinError(59,250.18);
    pedmean->SetBinError(60,249.59);
@@ -1291,7 +1291,7 @@ void pedestals()
    pedmean->SetBinError(159,249.98);
    pedmean->SetBinError(160,249.09);
    pedmean->SetBinError(161,250.55);
-   pedmean->SetBinError(162,352.62);
+   pedmean->SetBinError(162,249.34);
    pedmean->SetBinError(163,249.89);
    pedmean->SetBinError(164,250.34);
    pedmean->SetBinError(165,250.18);
@@ -1309,7 +1309,7 @@ void pedestals()
    pedmean->SetBinError(177,249.54);
    pedmean->SetBinError(178,249.64);
    pedmean->SetBinError(179,250.64);
-   pedmean->SetBinError(180,434.0346);
+   pedmean->SetBinError(180,250.59);
    pedmean->SetBinError(181,249.98);
    pedmean->SetBinError(182,250.21);
    pedmean->SetBinError(183,249.93);
@@ -1462,7 +1462,7 @@ void pedestals()
    pedmean->SetBinError(338,249.77);
    pedmean->SetBinError(339,250.17);
    pedmean->SetBinError(340,249.99);
-   pedmean->SetBinError(343,354.3454);
+   pedmean->SetBinError(343,250.56);
    pedmean->SetBinError(344,249.24);
    pedmean->SetBinError(345,249.73);
    pedmean->SetBinError(346,250.35);
@@ -1480,7 +1480,7 @@ void pedestals()
    pedmean->SetBinError(358,250.68);
    pedmean->SetBinError(359,250.14);
    pedmean->SetBinError(360,250.17);
-   pedmean->SetBinError(361,354.9817);
+   pedmean->SetBinError(361,251.01);
    pedmean->SetBinError(362,249.86);
    pedmean->SetBinError(363,250.58);
    pedmean->SetBinError(364,250.03);
@@ -1579,7 +1579,7 @@ void pedestals()
    pedmean->SetBinError(463,249.67);
    pedmean->SetBinError(464,250.61);
    pedmean->SetBinError(465,250.52);
-   pedmean->SetBinError(466,351.2765);
+   pedmean->SetBinError(466,248.39);
    pedmean->SetBinError(467,249.74);
    pedmean->SetBinError(468,250.55);
    pedmean->SetBinError(469,249.8);
@@ -1597,7 +1597,7 @@ void pedestals()
    pedmean->SetBinError(481,249.34);
    pedmean->SetBinError(482,250.09);
    pedmean->SetBinError(483,250.13);
-   pedmean->SetBinError(484,433.03);
+   pedmean->SetBinError(484,250.01);
    pedmean->SetBinError(485,250.24);
    pedmean->SetBinError(486,250.08);
    pedmean->SetBinError(487,249.72);
@@ -1902,7 +1902,7 @@ void pedestals()
    pedmean->SetBinError(804,250.25);
    pedmean->SetBinError(805,249.85);
    pedmean->SetBinError(806,249.52);
-   pedmean->SetBinError(807,353.4403);
+   pedmean->SetBinError(807,249.92);
    pedmean->SetBinError(808,248.93);
    pedmean->SetBinError(809,249.81);
    pedmean->SetBinError(810,248.83);
@@ -1920,7 +1920,7 @@ void pedestals()
    pedmean->SetBinError(822,249.26);
    pedmean->SetBinError(823,249.96);
    pedmean->SetBinError(824,250.68);
-   pedmean->SetBinError(825,353.7372);
+   pedmean->SetBinError(825,250.13);
    pedmean->SetBinError(826,250.66);
    pedmean->SetBinError(827,250.92);
    pedmean->SetBinError(828,249.79);
@@ -2019,7 +2019,7 @@ void pedestals()
    pedmean->SetBinError(927,249.26);
    pedmean->SetBinError(928,250.16);
    pedmean->SetBinError(929,250.36);
-   pedmean->SetBinError(930,353.4827);
+   pedmean->SetBinError(930,249.95);
    pedmean->SetBinError(931,249.52);
    pedmean->SetBinError(932,250.52);
    pedmean->SetBinError(933,250.62);
@@ -2037,7 +2037,7 @@ void pedestals()
    pedmean->SetBinError(945,250.08);
    pedmean->SetBinError(946,250.75);
    pedmean->SetBinError(947,249.81);
-   pedmean->SetBinError(948,432.9781);
+   pedmean->SetBinError(948,249.98);
    pedmean->SetBinError(951,250.96);
    pedmean->SetBinError(952,249.71);
    pedmean->SetBinError(953,250.78);
@@ -2190,7 +2190,7 @@ void pedestals()
    pedmean->SetBinError(1108,249.71);
    pedmean->SetBinError(1109,249.61);
    pedmean->SetBinError(1110,250.61);
-   pedmean->SetBinError(1111,353.9069);
+   pedmean->SetBinError(1111,250.25);
    pedmean->SetBinError(1112,249.82);
    pedmean->SetBinError(1113,249.6);
    pedmean->SetBinError(1114,250.35);
@@ -2208,7 +2208,7 @@ void pedestals()
    pedmean->SetBinError(1126,249.48);
    pedmean->SetBinError(1127,249.86);
    pedmean->SetBinError(1128,250.37);
-   pedmean->SetBinError(1129,354.5858);
+   pedmean->SetBinError(1129,250.73);
    pedmean->SetBinError(1130,250.33);
    pedmean->SetBinError(1131,249.53);
    pedmean->SetBinError(1132,250.7);
@@ -2307,7 +2307,7 @@ void pedestals()
    pedmean->SetBinError(1231,248.61);
    pedmean->SetBinError(1232,249.63);
    pedmean->SetBinError(1233,250.31);
-   pedmean->SetBinError(1234,353.4827);
+   pedmean->SetBinError(1234,249.95);
    pedmean->SetBinError(1235,250);
    pedmean->SetBinError(1236,250.45);
    pedmean->SetBinError(1237,250.02);
@@ -2325,18 +2325,20 @@ void pedestals()
    pedmean->SetBinError(1249,249.32);
    pedmean->SetBinError(1250,249.76);
    pedmean->SetBinError(1251,251.16);
-   pedmean->SetBinError(1252,352.9877);
-   pedmean->SetEntries(1171);
+   pedmean->SetBinError(1252,249.6);
+   pedmean->SetEntries(1152);
 
    Int_t ci;      // for color index setting
    TColor *color; // for color definition with alpha
    ci = TColor::GetColor("#000099");
    pedmean->SetLineColor(ci);
+   pedmean->GetXaxis()->SetTitle("Pads on X axis");
    pedmean->GetXaxis()->SetLabelFont(42);
    pedmean->GetXaxis()->SetLabelSize(0.035);
    pedmean->GetXaxis()->SetTitleSize(0.035);
    pedmean->GetXaxis()->SetTitleOffset(1);
    pedmean->GetXaxis()->SetTitleFont(42);
+   pedmean->GetYaxis()->SetTitle("Pads on Y axis");
    pedmean->GetYaxis()->SetLabelFont(42);
    pedmean->GetYaxis()->SetLabelSize(0.035);
    pedmean->GetYaxis()->SetTitleSize(0.035);
@@ -2360,8 +2362,8 @@ void pedestals()
    canvas_2->SetBorderSize(2);
    canvas_2->SetFrameBorderMode(0);
    
-   TH2F *pedrms = new TH2F("pedrms","",36,0,36,32,0,32);
-   pedrms->SetBinContent(39,19.48);
+   TH2F *pedrms = new TH2F("pedrms","Pedestals RMS",36,0,36,32,0,32);
+   pedrms->SetBinContent(39,9.74);
    pedrms->SetBinContent(40,10.78);
    pedrms->SetBinContent(41,10.44);
    pedrms->SetBinContent(42,10.4);
@@ -2379,7 +2381,7 @@ void pedestals()
    pedrms->SetBinContent(54,11.27);
    pedrms->SetBinContent(55,11.44);
    pedrms->SetBinContent(56,11.53);
-   pedrms->SetBinContent(57,21.52);
+   pedrms->SetBinContent(57,10.76);
    pedrms->SetBinContent(58,10.95);
    pedrms->SetBinContent(59,10.6);
    pedrms->SetBinContent(60,10.82);
@@ -2478,7 +2480,7 @@ void pedestals()
    pedrms->SetBinContent(159,11.35);
    pedrms->SetBinContent(160,10.61);
    pedrms->SetBinContent(161,10.74);
-   pedrms->SetBinContent(162,26.56);
+   pedrms->SetBinContent(162,13.28);
    pedrms->SetBinContent(163,13.14);
    pedrms->SetBinContent(164,13.23);
    pedrms->SetBinContent(165,13.87);
@@ -2496,7 +2498,7 @@ void pedestals()
    pedrms->SetBinContent(177,11.16);
    pedrms->SetBinContent(178,10.93);
    pedrms->SetBinContent(179,11.09);
-   pedrms->SetBinContent(180,37.35);
+   pedrms->SetBinContent(180,12.45);
    pedrms->SetBinContent(181,12.23);
    pedrms->SetBinContent(182,12.53);
    pedrms->SetBinContent(183,13.82);
@@ -2649,7 +2651,7 @@ void pedestals()
    pedrms->SetBinContent(338,10.54);
    pedrms->SetBinContent(339,10.31);
    pedrms->SetBinContent(340,10.8);
-   pedrms->SetBinContent(343,20.8);
+   pedrms->SetBinContent(343,10.4);
    pedrms->SetBinContent(344,9.92);
    pedrms->SetBinContent(345,9.67);
    pedrms->SetBinContent(346,9.83);
@@ -2667,7 +2669,7 @@ void pedestals()
    pedrms->SetBinContent(358,10.34);
    pedrms->SetBinContent(359,11.06);
    pedrms->SetBinContent(360,10);
-   pedrms->SetBinContent(361,22.8);
+   pedrms->SetBinContent(361,11.4);
    pedrms->SetBinContent(362,11.5);
    pedrms->SetBinContent(363,11.42);
    pedrms->SetBinContent(364,11.81);
@@ -2766,7 +2768,7 @@ void pedestals()
    pedrms->SetBinContent(463,10.06);
    pedrms->SetBinContent(464,10.9);
    pedrms->SetBinContent(465,11);
-   pedrms->SetBinContent(466,20.3);
+   pedrms->SetBinContent(466,10.15);
    pedrms->SetBinContent(467,10.57);
    pedrms->SetBinContent(468,10.19);
    pedrms->SetBinContent(469,10.58);
@@ -2784,7 +2786,7 @@ void pedestals()
    pedrms->SetBinContent(481,12.56);
    pedrms->SetBinContent(482,12.27);
    pedrms->SetBinContent(483,11.49);
-   pedrms->SetBinContent(484,30.39);
+   pedrms->SetBinContent(484,10.13);
    pedrms->SetBinContent(485,10.41);
    pedrms->SetBinContent(486,11);
    pedrms->SetBinContent(487,11.2);
@@ -3089,7 +3091,7 @@ void pedestals()
    pedrms->SetBinContent(804,10.55);
    pedrms->SetBinContent(805,10.59);
    pedrms->SetBinContent(806,10.37);
-   pedrms->SetBinContent(807,20.82);
+   pedrms->SetBinContent(807,10.41);
    pedrms->SetBinContent(808,10.58);
    pedrms->SetBinContent(809,10.57);
    pedrms->SetBinContent(810,10.93);
@@ -3107,7 +3109,7 @@ void pedestals()
    pedrms->SetBinContent(822,11.68);
    pedrms->SetBinContent(823,11.4);
    pedrms->SetBinContent(824,11.71);
-   pedrms->SetBinContent(825,22.36);
+   pedrms->SetBinContent(825,11.18);
    pedrms->SetBinContent(826,10.36);
    pedrms->SetBinContent(827,10.55);
    pedrms->SetBinContent(828,10.37);
@@ -3206,7 +3208,7 @@ void pedestals()
    pedrms->SetBinContent(927,10.03);
    pedrms->SetBinContent(928,10.38);
    pedrms->SetBinContent(929,10.12);
-   pedrms->SetBinContent(930,20.28);
+   pedrms->SetBinContent(930,10.14);
    pedrms->SetBinContent(931,10.44);
    pedrms->SetBinContent(932,11.33);
    pedrms->SetBinContent(933,10.87);
@@ -3224,7 +3226,7 @@ void pedestals()
    pedrms->SetBinContent(945,10.19);
    pedrms->SetBinContent(946,10.28);
    pedrms->SetBinContent(947,9.82);
-   pedrms->SetBinContent(948,29.64);
+   pedrms->SetBinContent(948,9.88);
    pedrms->SetBinContent(951,10.22);
    pedrms->SetBinContent(952,9.76);
    pedrms->SetBinContent(953,9.47);
@@ -3377,7 +3379,7 @@ void pedestals()
    pedrms->SetBinContent(1108,12.52);
    pedrms->SetBinContent(1109,12.93);
    pedrms->SetBinContent(1110,12.27);
-   pedrms->SetBinContent(1111,24.5);
+   pedrms->SetBinContent(1111,12.25);
    pedrms->SetBinContent(1112,10.4);
    pedrms->SetBinContent(1113,10.43);
    pedrms->SetBinContent(1114,10.76);
@@ -3395,7 +3397,7 @@ void pedestals()
    pedrms->SetBinContent(1126,13.76);
    pedrms->SetBinContent(1127,12.87);
    pedrms->SetBinContent(1128,13.14);
-   pedrms->SetBinContent(1129,26.08);
+   pedrms->SetBinContent(1129,13.04);
    pedrms->SetBinContent(1130,10.31);
    pedrms->SetBinContent(1131,10.19);
    pedrms->SetBinContent(1132,10.68);
@@ -3494,7 +3496,7 @@ void pedestals()
    pedrms->SetBinContent(1231,10.05);
    pedrms->SetBinContent(1232,10.43);
    pedrms->SetBinContent(1233,10.56);
-   pedrms->SetBinContent(1234,21.64);
+   pedrms->SetBinContent(1234,10.82);
    pedrms->SetBinContent(1235,12.87);
    pedrms->SetBinContent(1236,13.14);
    pedrms->SetBinContent(1237,13.1);
@@ -3512,8 +3514,8 @@ void pedestals()
    pedrms->SetBinContent(1249,9.85);
    pedrms->SetBinContent(1250,10.46);
    pedrms->SetBinContent(1251,10.5);
-   pedrms->SetBinContent(1252,21.74);
-   pedrms->SetBinError(39,13.77444);
+   pedrms->SetBinContent(1252,10.87);
+   pedrms->SetBinError(39,9.74);
    pedrms->SetBinError(40,10.78);
    pedrms->SetBinError(41,10.44);
    pedrms->SetBinError(42,10.4);
@@ -3531,7 +3533,7 @@ void pedestals()
    pedrms->SetBinError(54,11.27);
    pedrms->SetBinError(55,11.44);
    pedrms->SetBinError(56,11.53);
-   pedrms->SetBinError(57,15.21694);
+   pedrms->SetBinError(57,10.76);
    pedrms->SetBinError(58,10.95);
    pedrms->SetBinError(59,10.6);
    pedrms->SetBinError(60,10.82);
@@ -3630,7 +3632,7 @@ void pedestals()
    pedrms->SetBinError(159,11.35);
    pedrms->SetBinError(160,10.61);
    pedrms->SetBinError(161,10.74);
-   pedrms->SetBinError(162,18.78076);
+   pedrms->SetBinError(162,13.28);
    pedrms->SetBinError(163,13.14);
    pedrms->SetBinError(164,13.23);
    pedrms->SetBinError(165,13.87);
@@ -3648,7 +3650,7 @@ void pedestals()
    pedrms->SetBinError(177,11.16);
    pedrms->SetBinError(178,10.93);
    pedrms->SetBinError(179,11.09);
-   pedrms->SetBinError(180,21.56403);
+   pedrms->SetBinError(180,12.45);
    pedrms->SetBinError(181,12.23);
    pedrms->SetBinError(182,12.53);
    pedrms->SetBinError(183,13.82);
@@ -3801,7 +3803,7 @@ void pedestals()
    pedrms->SetBinError(338,10.54);
    pedrms->SetBinError(339,10.31);
    pedrms->SetBinError(340,10.8);
-   pedrms->SetBinError(343,14.70782);
+   pedrms->SetBinError(343,10.4);
    pedrms->SetBinError(344,9.92);
    pedrms->SetBinError(345,9.67);
    pedrms->SetBinError(346,9.83);
@@ -3819,7 +3821,7 @@ void pedestals()
    pedrms->SetBinError(358,10.34);
    pedrms->SetBinError(359,11.06);
    pedrms->SetBinError(360,10);
-   pedrms->SetBinError(361,16.12203);
+   pedrms->SetBinError(361,11.4);
    pedrms->SetBinError(362,11.5);
    pedrms->SetBinError(363,11.42);
    pedrms->SetBinError(364,11.81);
@@ -3918,7 +3920,7 @@ void pedestals()
    pedrms->SetBinError(463,10.06);
    pedrms->SetBinError(464,10.9);
    pedrms->SetBinError(465,11);
-   pedrms->SetBinError(466,14.35427);
+   pedrms->SetBinError(466,10.15);
    pedrms->SetBinError(467,10.57);
    pedrms->SetBinError(468,10.19);
    pedrms->SetBinError(469,10.58);
@@ -3936,7 +3938,7 @@ void pedestals()
    pedrms->SetBinError(481,12.56);
    pedrms->SetBinError(482,12.27);
    pedrms->SetBinError(483,11.49);
-   pedrms->SetBinError(484,17.54567);
+   pedrms->SetBinError(484,10.13);
    pedrms->SetBinError(485,10.41);
    pedrms->SetBinError(486,11);
    pedrms->SetBinError(487,11.2);
@@ -4241,7 +4243,7 @@ void pedestals()
    pedrms->SetBinError(804,10.55);
    pedrms->SetBinError(805,10.59);
    pedrms->SetBinError(806,10.37);
-   pedrms->SetBinError(807,14.72196);
+   pedrms->SetBinError(807,10.41);
    pedrms->SetBinError(808,10.58);
    pedrms->SetBinError(809,10.57);
    pedrms->SetBinError(810,10.93);
@@ -4259,7 +4261,7 @@ void pedestals()
    pedrms->SetBinError(822,11.68);
    pedrms->SetBinError(823,11.4);
    pedrms->SetBinError(824,11.71);
-   pedrms->SetBinError(825,15.81091);
+   pedrms->SetBinError(825,11.18);
    pedrms->SetBinError(826,10.36);
    pedrms->SetBinError(827,10.55);
    pedrms->SetBinError(828,10.37);
@@ -4358,7 +4360,7 @@ void pedestals()
    pedrms->SetBinError(927,10.03);
    pedrms->SetBinError(928,10.38);
    pedrms->SetBinError(929,10.12);
-   pedrms->SetBinError(930,14.34013);
+   pedrms->SetBinError(930,10.14);
    pedrms->SetBinError(931,10.44);
    pedrms->SetBinError(932,11.33);
    pedrms->SetBinError(933,10.87);
@@ -4376,7 +4378,7 @@ void pedestals()
    pedrms->SetBinError(945,10.19);
    pedrms->SetBinError(946,10.28);
    pedrms->SetBinError(947,9.82);
-   pedrms->SetBinError(948,17.11266);
+   pedrms->SetBinError(948,9.88);
    pedrms->SetBinError(951,10.22);
    pedrms->SetBinError(952,9.76);
    pedrms->SetBinError(953,9.47);
@@ -4529,7 +4531,7 @@ void pedestals()
    pedrms->SetBinError(1108,12.52);
    pedrms->SetBinError(1109,12.93);
    pedrms->SetBinError(1110,12.27);
-   pedrms->SetBinError(1111,17.32412);
+   pedrms->SetBinError(1111,12.25);
    pedrms->SetBinError(1112,10.4);
    pedrms->SetBinError(1113,10.43);
    pedrms->SetBinError(1114,10.76);
@@ -4547,7 +4549,7 @@ void pedestals()
    pedrms->SetBinError(1126,13.76);
    pedrms->SetBinError(1127,12.87);
    pedrms->SetBinError(1128,13.14);
-   pedrms->SetBinError(1129,18.44134);
+   pedrms->SetBinError(1129,13.04);
    pedrms->SetBinError(1130,10.31);
    pedrms->SetBinError(1131,10.19);
    pedrms->SetBinError(1132,10.68);
@@ -4646,7 +4648,7 @@ void pedestals()
    pedrms->SetBinError(1231,10.05);
    pedrms->SetBinError(1232,10.43);
    pedrms->SetBinError(1233,10.56);
-   pedrms->SetBinError(1234,15.30179);
+   pedrms->SetBinError(1234,10.82);
    pedrms->SetBinError(1235,12.87);
    pedrms->SetBinError(1236,13.14);
    pedrms->SetBinError(1237,13.1);
@@ -4664,16 +4666,18 @@ void pedestals()
    pedrms->SetBinError(1249,9.85);
    pedrms->SetBinError(1250,10.46);
    pedrms->SetBinError(1251,10.5);
-   pedrms->SetBinError(1252,15.3725);
-   pedrms->SetEntries(1171);
+   pedrms->SetBinError(1252,10.87);
+   pedrms->SetEntries(1152);
 
    ci = TColor::GetColor("#000099");
    pedrms->SetLineColor(ci);
+   pedrms->GetXaxis()->SetTitle("Pads on X axis");
    pedrms->GetXaxis()->SetLabelFont(42);
    pedrms->GetXaxis()->SetLabelSize(0.035);
    pedrms->GetXaxis()->SetTitleSize(0.035);
    pedrms->GetXaxis()->SetTitleOffset(1);
    pedrms->GetXaxis()->SetTitleFont(42);
+   pedrms->GetYaxis()->SetTitle("Pads on Y axis");
    pedrms->GetYaxis()->SetLabelFont(42);
    pedrms->GetYaxis()->SetLabelSize(0.035);
    pedrms->GetYaxis()->SetTitleSize(0.035);

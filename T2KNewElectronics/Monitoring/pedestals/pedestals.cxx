@@ -136,8 +136,8 @@ int main(int argc, char **argv)
         T2K.loadMapping();
         cout << "...Mapping loaded succesfully." << endl;
 
-	TH2F *pedmean = new TH2F("pedmean", "", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
-	TH2F *pedrms = new TH2F("pedrms", "", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
+	TH2F *pedmean = new TH2F("pedmean", "Pedestals mean value", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
+	TH2F *pedrms = new TH2F("pedrms", "Pedestals RMS", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
 
 	// Default parameters
 	//sprintf(param.inp_file, "C:\\users\\calvet\\projects\\bin\\pandax\\data\\R2018_11_27-15_24_07-000.aqs"); //Change default file path
@@ -190,7 +190,7 @@ int main(int argc, char **argv)
 	done = 0;
 	i    = 0;
 	int current = 0;
-	int prev = 0;
+	int daqprev = 0;
 	while (!done)
 	{
 		// Read one short word
@@ -215,11 +215,9 @@ int main(int argc, char **argv)
 			//Item_Print(stdout, &dc, param.vflag);
 			if (dc.isItemComplete)
 			{
-				printf("Decoder    : Version %d.%d Compiled %s at %s\n", dc.DecoderMajorVersion, dc.DecoderMinorVersion, dc.DecoderCompilationDate, dc.DecoderCompilationTime);
-				cout << "Card Index : " << dc.CardIndex << " Chip	" << dc.ChipIndex << " DAQ " <<  dc.ChannelIndex << "	Connector" << daq.connector(dc.ChannelIndex)<< endl;
+				if (dc.ChannelIndex==78 && dc.ChannelIndex==daqprev){continue;}
 				fprintf(output2, "%hi\t%hi\t%hi\t%f\t%f\n", dc.CardIndex, dc.ChipIndex, dc.ChannelIndex, 0.01*dc.PedestalMean, 0.01*dc.PedestalDev);
 
-				//cout << '\r' << "Event number : " << dc.EventNumber << flush;
 				// 0.1 because 10 evts in pedestal run and stored as int so x10
 				if (dc.ChannelIndex!=15&&dc.ChannelIndex!=28&&dc.ChannelIndex!=53&&dc.ChannelIndex!=66&&dc.ChannelIndex>2&&dc.ChannelIndex<79)
 				{
@@ -227,19 +225,25 @@ int main(int argc, char **argv)
 					pedmean->Fill(T2K.i(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex)), T2K.j(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex)), 0.01*dc.PedestalMean);
 					pedrms->Fill(T2K.i(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex)), T2K.j(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex)), 0.01*dc.PedestalDev);
 				}
+				daqprev = dc.ChannelIndex;
 			}
 		}
 	}
 
 	gStyle->SetOptStat(0);
 	gStyle->SetPalette(kBird);
-	TCanvas *canvas = new TCanvas("canvas", "canvas", 1000, 500);
+	TCanvas *canvas = new TCanvas("canvas", "canvas", 1100, 500);
 	canvas->Divide(2,1);
 	canvas->cd(1);
+	pedmean->GetXaxis()->SetTitle("Pads on X axis");
+	pedmean->GetYaxis()->SetTitle("Pads on Y axis");
 	pedmean->Draw("COLZ");
 	canvas->cd(2);
+	pedrms->GetXaxis()->SetTitle("Pads on X axis");
+	pedrms->GetYaxis()->SetTitle("Pads on Y axis");
 	pedrms->Draw("COLZ");
-	canvas->SaveAs((loc::outputs + "pedestals.C").c_str());
+	//canvas->SaveAs((loc::outputs + "pedestals/" + input_file_name + ".C").c_str());
+	canvas->SaveAs((loc::outputs + "pedestals/" + input_file_name + ".gif").c_str());
 
 	delete canvas;
 	delete pedmean;
