@@ -1,7 +1,7 @@
 void pedestals()
 {
 //=========Macro generated from canvas: canvas/canvas
-//=========  (Wed May 22 11:11:22 2019) by ROOT version 6.15/01
+//=========  (Wed May 22 15:14:44 2019) by ROOT version 6.15/01
    TCanvas *canvas = new TCanvas("canvas", "canvas",0,0,1000,500);
    gStyle->SetOptStat(0);
    canvas->SetHighLightColor(2);

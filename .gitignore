@@ -12,3 +12,4 @@ lib/
 /DataWriter_devel/interface/dict_interface.cc
 /DataWriter_devel/interface/dict_interface.h
 *.mk
+*.gif

@@ -215,6 +215,7 @@ int main(int argc, char **argv)
 			//Item_Print(stdout, &dc, param.vflag);
 			if (dc.isItemComplete)
 			{
+				printf("Decoder    : Version %d.%d Compiled %s at %s\n", dc.DecoderMajorVersion, dc.DecoderMinorVersion, dc.DecoderCompilationDate, dc.DecoderCompilationTime);
 				cout << "Card Index : " << dc.CardIndex << " Chip	" << dc.ChipIndex << " DAQ " <<  dc.ChannelIndex << "	Connector" << daq.connector(dc.ChannelIndex)<< endl;
 				fprintf(output2, "%hi\t%hi\t%hi\t%f\t%f\n", dc.CardIndex, dc.ChipIndex, dc.ChannelIndex, 0.01*dc.PedestalMean, 0.01*dc.PedestalDev);
 
