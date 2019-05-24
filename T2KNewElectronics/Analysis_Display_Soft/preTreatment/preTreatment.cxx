@@ -17,6 +17,7 @@ using namespace std;
 int main(int argc, char **argv)
 {
     string input_file(argv[1]);
+    string input_file_name = input_file.substr(0, input_file.size()-5);
 
     DAQ daq;
     daq.loadDAQ();
@@ -80,7 +81,7 @@ int main(int argc, char **argv)
                         signal->GetYaxis()->SetTitle("ADC");
                         signal->Draw("hist");
                         canvas->Update();
-                        canvas->SaveAs((loc::outputs + "SignalsEvent10/channel_" + to_string(r) + ".gif").c_str());
+                        canvas->SaveAs((loc::outputs + input_file_name +  "/channel_" + to_string(r) + ".gif").c_str());
                     }
                     delete signal;
                     delete canvas;

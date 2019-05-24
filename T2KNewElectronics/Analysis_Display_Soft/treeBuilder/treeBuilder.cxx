@@ -68,7 +68,7 @@ int main(int argc, char **argv)
         if (evtnum==prevevtnum)
         {
             //transfer[card][chip][daq.DAQchannel(bin)][sample] = amp;
-            cout << card << "   " << chip << "   " << bin << "    " << sample << "  " << amp << endl;
+            //cout << card << "   " << chip << "   " << bin << "    " << sample << "  " << amp << endl;
             ADCAmpl[card][chip][bin][sample] = amp;
         }
         else
