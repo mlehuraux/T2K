@@ -1,4 +1,4 @@
-export file=R2019_05_23-14_38_28-000
+export file=R2019_05_22-06_55_58-000
 export compile=0
 export startevent=1
 export maxevent=1000
@@ -28,6 +28,6 @@ then
 	make
 fi
 cd $here/bin
-./pedestals -i $input_aqs/ $file.aqs
+./pedestals -i $input_aqs/ $file.aqs 0 610 380 250 5
 
 cd $here

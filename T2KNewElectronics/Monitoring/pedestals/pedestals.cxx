@@ -36,6 +36,9 @@ April 2019    : created from mreader.c
 #include "TH2F.h"
 #include "TStyle.h"
 #include "TCanvas.h"
+#include "TFile.h"
+#include "TTree.h"
+#include "TBranch.h"
 
 
 typedef struct _Param {
@@ -128,6 +131,7 @@ int main(int argc, char **argv)
 	int err;
 	int done;
 
+
 	DAQ daq;
         daq.loadDAQ();
         cout << "... DAQ loaded successfully" << endl;
@@ -163,11 +167,30 @@ int main(int argc, char **argv)
 		printf("could not open file %s.\n", param.inp_file);
 		return(-1);
 	}
-
 	string inputdir(argv[2]);
 	string inputfile(argv[3]);
+	// Default condiion taking
+	Int_t zerosup = 1; // 0 non activated 1 activated
+	Int_t peaking = 116; // in ns
+	Int_t tension = 380;
+	Int_t zerosupthres = 250;
+	Int_t zerosupsigmas = 5;
+
+	if (argc > 4) // specify conditions of data taking with arguments if not default
+	{
+			zerosup = stoi(argv[4]);
+			peaking = stoi(argv[5]);
+			if (argc > 5 ){tension = stoi(argv[6]);}
+			if (argc > 7)
+			{
+				zerosupthres = stoi(argv[7]);
+				zerosupsigmas = stoi(argv[8]);
+			}
+	}
 
 	string input_file_name = inputfile.substr(0, inputfile.size()-4);
+
+	// Open txt files to write outputs
 	string outputdir = (inputdir + "../txt/").c_str();
 	string outputfile1 = outputdir + input_file_name + "_ped_geom.txt";
 	string outputfile2 = outputdir + input_file_name + "_ped_elec.txt";
@@ -176,6 +199,23 @@ int main(int argc, char **argv)
 	FILE * output2;
 	output1 = fopen(outputfile1.c_str(), "w");
 	output2 = fopen(outputfile2.c_str(), "w");
+
+	Int_t PedestalMean[geom::nPadx][geom::nPady];
+	Int_t PedestalRMS[geom::nPadx][geom::nPady];
+	Int_t DAQChannel[geom::nPadx][geom::nPady];
+
+	TFile *output_file = new TFile(( loc::rootfiles + input_file_name + ".root" ).c_str(), "RECREATE");
+	TTree *meta = new TTree("meta", "meta");
+	meta->Branch("zerosup", &zerosup, "zerosup/I");
+	meta->Branch("peaking", &peaking, "peaking/I");
+	meta->Branch("tension", &tension, "tension/I");
+	meta->Branch("zerosuphtres", &zerosupthres, "zerosupthres/I");
+	meta->Branch("zerosupsigmas", &zerosupsigmas, "zerosupsigmas/I");
+
+	meta->Branch("PedestalMean", &PedestalMean, TString::Format("PedestalMean[%i][%i]/I", geom::nPadx, geom::nPady));
+	meta->Branch("PedestalRMS", &PedestalRMS, TString::Format("PedestalRMS[%i][%i]/I", geom::nPadx, geom::nPady));
+	meta->Branch("DAQChannel", &DAQChannel, TString::Format("DAQChannel[%i][%i]/I", geom::nPadx, geom::nPady));
+
 
 	// Initialize the data interpretation context
 	DatumContext_Init(&dc, param.sample_index_offset_zs);
@@ -224,11 +264,22 @@ int main(int argc, char **argv)
 					fprintf(output1, "%i\t%i\t%f\t%f\n", T2K.i(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex)), T2K.j(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex)), 0.01*dc.PedestalMean, 0.01*dc.PedestalDev);
 					pedmean->Fill(T2K.i(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex)), T2K.j(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex)), 0.01*dc.PedestalMean);
 					pedrms->Fill(T2K.i(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex)), T2K.j(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex)), 0.01*dc.PedestalDev);
+
+					// To fill on root file
+					PedestalMean[T2K.i(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex))][T2K.j(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex))] = 0.01*dc.PedestalMean;
+					PedestalRMS[T2K.i(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex))][T2K.j(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex))] = 0.01*dc.PedestalDev;
+					DAQChannel[T2K.i(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex))][T2K.j(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex))] = dc.ChannelIndex;
 				}
 				daqprev = dc.ChannelIndex;
 			}
 		}
 	}
+
+	meta->Fill();
+	meta->Write("", TObject::kOverwrite);
+	output_file->Write();
+	output_file->Close();
+
 
 	gStyle->SetOptStat(0);
 	gStyle->SetPalette(kBird);

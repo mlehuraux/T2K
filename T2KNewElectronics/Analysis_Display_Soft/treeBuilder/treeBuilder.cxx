@@ -89,7 +89,7 @@ int main(int argc, char **argv)
 
     }
 
-    tree->Write();
+    tree->Write("", TObject::kOverwrite);
     tree->Print();
     file.close();
     output_file->Write();
