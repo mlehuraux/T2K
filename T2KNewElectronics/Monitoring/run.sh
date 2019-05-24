@@ -1,4 +1,4 @@
-export file=R2019_05_22-06_55_58-000
+export file=R2019_05_24-08_51_39-000
 export compile=0
 export startevent=1
 export maxevent=1000
@@ -15,7 +15,7 @@ export output_root="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/test
 export here="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/Monitoring/"
 
 cd $input_aqs
-ln -s $data/$file.aqs
+#ln -s $data/$file.aqs
 
 ###############################
 #   Pedestals visualisation   #
@@ -28,6 +28,6 @@ then
 	make
 fi
 cd $here/bin
-./pedestals -i $input_aqs/ $file.aqs 0 610 380 250 5
+./pedestals -i $input_aqs/ $file.aqs 0 1134 380 250 5
 
 cd $here

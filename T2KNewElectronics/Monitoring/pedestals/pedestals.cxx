@@ -169,7 +169,7 @@ int main(int argc, char **argv)
 	}
 	string inputdir(argv[2]);
 	string inputfile(argv[3]);
-	// Default condiion taking
+	// Default condition taking
 	Int_t zerosup = 1; // 0 non activated 1 activated
 	Int_t peaking = 116; // in ns
 	Int_t tension = 380;
