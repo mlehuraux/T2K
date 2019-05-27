@@ -14,7 +14,7 @@ using namespace std;
 // Numbers of #
 namespace n
 {
-
+    static const int pads = 1152; //from i = 0 to 36 and j = 0 to 32
     static const int cards = 4;
     static const int chips = 4;
     static const int bins = 82; // +1 because connectors and arc starts at 1 not 0 so dim [81] to go until index 80 and useless 0

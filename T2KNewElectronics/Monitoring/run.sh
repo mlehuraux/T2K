@@ -1,5 +1,6 @@
-export file=R2019_05_24-08_51_39-000
-export compile=0
+export file=R2019_05_27-14_26_27-000
+export filedata=R2019_05_24-08_53_45-000
+export compile=1
 export startevent=1
 export maxevent=1000
 
@@ -15,19 +16,28 @@ export output_root="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/test
 export here="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/Monitoring/"
 
 cd $input_aqs
-#ln -s $data/$file.aqs
+ln -s $data/$file.aqs
 
 ###############################
 #   Pedestals visualisation   #
 ###############################
 # if not done already create the executable
+
+#if [ $compile = 1 ]
+#then
+#	cd $here/pedestals
+#  make clean
+#	make
+#fi
+#cd $here/bin
+#./pedestals -i $input_aqs/ $file.aqs 0 1134 380 250 5
+
 if [ $compile = 1 ]
 then
-	cd $here/pedestals
+	cd $here/monitor
   make clean
 	make
 fi
 cd $here/bin
-./pedestals -i $input_aqs/ $file.aqs 0 1134 380 250 5
-
+./monitor -i $input_aqs/ $filedata.aqs
 cd $here
