@@ -151,33 +151,30 @@ void decodeEvent(unsigned int i, Mapping& T2K, DAQ& daq)
 	histoInit();
 
 	// Scan the file
-	int done = 0;
+	bool done = true;
 	int current = 0;
-	while (!done)
+	while (done)
 	{
+		//done = false;
 		// Read one short word
 		if (fread(&datum, sizeof(unsigned short), 1, param.fsrc) != 1)
 		{
 			printf("\n");
 			printf("*** End of file reached ***\n");
-			done = 1;
+			done = false;
 		}
 		else
 		{
-			fea.tot_file_rd += sizeof(unsigned short);
 
 			// Interpret datum
 			if ((err = Datum_Decode(&dc, datum)) < 0)
 			{
 				printf("%d Datum_Decode: %s\n", err, &dc.ErrorString[0]);
-				done = 1;
+				done = true;
 			}
-
-			if (dc.isItemComplete)
+			else{ done=true;}
+			if (dc.isItemComplete && dc.EventNumber==i)
 			{
-				//cout << dc.EventNumber << endl;
-				if (dc.EventNumber==i)
-				{
 					//cout << dc.ChannelIndex << endl;
 					if (dc.ChannelIndex!=15&&dc.ChannelIndex!=28&&dc.ChannelIndex!=53&&dc.ChannelIndex!=66&&dc.ChannelIndex>2&&dc.ChannelIndex<79)
 					{
@@ -185,25 +182,31 @@ void decodeEvent(unsigned int i, Mapping& T2K, DAQ& daq)
 						int x = T2K.i(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex));
 						int y = T2K.j(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex));
 						int k = padNum(x, y);
-						//cout << x << "	" << y << "		" << k << endl;
+						cout << x << "	" << y << "		" << k << endl;
 						//cout << int(dc.AbsoluteSampleIndex) << "	" << int(dc.AdcSample) << endl;
 						//hADCvsTIME[k]->Fill(int(dc.AbsoluteSampleIndex), int(dc.AdcSample));
 					}
-				}
-				else if (dc.EventNumber > i && dc.EventNumber < i+2)
-				{
-					cout << "Event decoded" << endl;
-					break;
-				}
+					else{done=true;}
 			}
+			else
+			{
+				cout << "Done" << endl;
+				done=false;
+			}
+			/*if (dc.EventNumber > i)
+			{
+				cout << "Event decoded" << endl;
+				done = false;
+			}
+			else{done = false;}*/
 		}
 	}
 
 	// Extract max from signals for display
-	for (int p=0; p<n::pads; p++)
+	for (int q=0; q<n::pads; q++)
 	{
-		cout << p << "	" << iFrompad(p) << "	" << jFrompad(p) << endl; 
-		//cout << iFrompad(p) << "	" <<  jFrompad(p) << "	" << endl; //<< hADCvsTIME[p]->GetMaximum() << endl;
+		//cout << q << endl; //"	" << iFrompad(q) << "	" << jFrompad(q) << endl;
+		//cout << iFrompad(q) << "	" <<  jFrompad(q) << "	" << endl; //<< hADCvsTIME[p]->GetMaximum() << endl;
 		//pads->Fill(iFrompad(p), jFrompad(p), hADCvsTIME[p]->GetMaximum());
 	}
 
@@ -257,7 +260,8 @@ int main(int argc, char **argv)
 
 	// Initialize the data interpretation context
 	DatumContext_Init(&dc, param.sample_index_offset_zs);
-	decodeEvent(10, T2K, daq);
+
+	decodeEvent(3, T2K, daq);
 
 	// Close file if it has been opened
 	if (param.fsrc)

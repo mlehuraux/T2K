@@ -133,12 +133,12 @@ int main(int argc, char **argv)
 
 
 	DAQ daq;
-        daq.loadDAQ();
-        cout << "... DAQ loaded successfully" << endl;
+  daq.loadDAQ();
+  cout << "... DAQ loaded successfully" << endl;
 
-        Mapping T2K;
-        T2K.loadMapping();
-        cout << "...Mapping loaded succesfully." << endl;
+  Mapping T2K;
+  T2K.loadMapping();
+  cout << "...Mapping loaded succesfully." << endl;
 
 	TH2F *pedmean = new TH2F("pedmean", "Pedestals mean value", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
 	TH2F *pedrms = new TH2F("pedrms", "Pedestals RMS", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
