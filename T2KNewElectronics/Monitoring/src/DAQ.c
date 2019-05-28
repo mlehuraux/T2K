@@ -14,7 +14,7 @@ void DAQ::loadDAQ()
     ifstream det2arc((loc::daq + "detector2arc.txt").c_str());
     while (!det2arc.eof())
     {
-        det2arc >> det >> arc;
+        det2arc >> det >> arc >> ws;
         detector2arc[det]=arc;
         arc2detector[arc]=det;
     }
@@ -24,7 +24,7 @@ void DAQ::loadDAQ()
     ifstream farc2daq((loc::daq + "arc2daq.txt").c_str());
     while (!farc2daq.eof())
     {
-        farc2daq >> arc >> daq;
+        farc2daq >> arc >> daq >> ws;
         arc2daq[arc]=daq;
         daq2arc[daq]=arc;
     }

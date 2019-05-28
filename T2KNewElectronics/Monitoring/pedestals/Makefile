@@ -13,7 +13,7 @@ ROOTLDFLAGS	= $(shell root-config --ldflags)
 
 # C++ compiler
 CXX        	= g++ -std=c++11 -g -O2 -lm -lrt -lpthread
-CXXFLAGS   	= -W -Wall -Wextra -pedantic $(ROOTCFLAGS)
+CXXFLAGS   	= -W -fPIC -Wall -Wextra -pedantic $(ROOTCFLAGS)
 LDFLAGS    	= $(ROOTLDFLAGS) $(ROOTLIBS) $(ROOTGLIBS) -lMinuit
 
 INCLUDES   	= -I$(SRCDIR) $(ROOTCFLAGS)

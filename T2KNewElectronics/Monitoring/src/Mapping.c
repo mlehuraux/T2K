@@ -29,7 +29,7 @@ void Mapping::loadMapping()
     ifstream A((loc::mapping + "ChipA.txt").c_str());
     while (!A.eof())
     {
-        A >> j >> i >> connector;
+        A >> j >> i >> connector >> ws;
         //int index = channel - 3;
         //if (channel >=43) index -= 6;
         int index = connector;
@@ -54,7 +54,7 @@ void Mapping::loadMapping()
     ifstream B((loc::mapping + "ChipB.txt").c_str());
     while(!B.eof())
     {
-        B >> j >> i >> connector ;
+        B >> j >> i >> connector >> ws;
         //int index = channel - 3;
         //if (channel >=43) index -= 6;
         int index = connector;
@@ -77,7 +77,7 @@ void Mapping::loadMapping()
     ifstream C((loc::mapping + "ChipC.txt").c_str());
     while(!C.eof())
     {
-        C >> j >> i >> connector ;
+        C >> j >> i >> connector >> ws;;
         //int index = channel - 3;
         //if (channel >=43) index -= 6;
         int index = connector;
@@ -100,7 +100,7 @@ void Mapping::loadMapping()
     ifstream D((loc::mapping + "ChipD.txt").c_str());
     while(!D.eof())
     {
-        D >> j >> i >> connector ;
+        D >> j >> i >> connector >> ws; 
         //int index = channel - 3;
         //if (channel >=43) index -= 6;
         int index = connector;

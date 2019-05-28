@@ -1,7 +1,7 @@
 SRCDIR		= ../src
 OBJDIR		= ../obj
 BINDIR		= ../bin
-EXE 		= monitor
+EXE 		= T2KMonitor
 SRCFILES 	= $(wildcard $(SRCDIR)/*.c)
 OBJFILES	= $(subst $(SRCDIR),$(OBJDIR),$(SRCFILES:.c=.o))
 
@@ -12,7 +12,7 @@ ROOTGLIBS  	= $(shell root-config --glibs)
 ROOTLDFLAGS	= $(shell root-config --ldflags)
 
 # C++ compiler
-CXX        	= g++ -std=c++11 -g -O2 -lm -lrt -lpthread
+CXX        	= g++ -fpic -std=c++11 -g -O2 -lm -lrt -lpthread
 CXXFLAGS   	= -W -Wall -Wextra -pedantic $(ROOTCFLAGS)
 LDFLAGS    	= $(ROOTLDFLAGS) $(ROOTLIBS) $(ROOTGLIBS) -lMinuit
 

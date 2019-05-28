@@ -32,8 +32,8 @@ April 2019    : created from mreader.c
 #include "../src/T2KConstants.h"
 
 // ROOT
-#include "TH1I.h"
-#include "TH2F.h"
+#include "TH1D.h"
+#include "TH2D.h"
 #include "TStyle.h"
 #include "TCanvas.h"
 #include "TFile.h"
@@ -58,6 +58,10 @@ Param param;
 Features fea;
 DatumContext dc;
 int verbose;
+
+// Histograms for monitoring
+TH1D *hADCvsTIME[n::pads];
+TH2D *pads = new TH2D("pads", "", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
 
 /*******************************************************************************
 Features_Clear
@@ -119,43 +123,38 @@ int parse_cmd_args(int argc, char **argv, Param* p)
 
 }
 
-void histoInit()
+void histoEventInit()
 {
 	gStyle->SetOptStat(0);
 	gStyle->SetPalette(kBird);
-	TH1I *hADCvsTIME[n::pads];
-	TH2I *pads = new TH2I("pads", "", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
 	for(int k=0;k<n::pads;k++)
 	{
 		char histName[40];
 		sprintf(histName,"hADCvsTIME %d",k);
-		hADCvsTIME[k] = new TH1I( histName, histName, n::samples,0,n::samples);
+		hADCvsTIME[k] = new TH1D( histName, histName, n::samples,0,n::samples);
 		hADCvsTIME[k]->SetMinimum(-1);
 		hADCvsTIME[k]->Reset();
 	}
-
+	pads->Reset();
 }
 
 int padNum(int i, int j){return(j*geom::nPadx+i);}
 int iFrompad(int padnum){return(padnum%geom::nPadx);}
 int jFrompad(int padnum){return(padnum/geom::nPadx);}
 
-
-void decodeEvent(unsigned int i, Mapping& T2K, DAQ& daq)
+void decodeEvent(DAQ& daq, Mapping& T2K, int evtnum)
 {
 	unsigned short datum;
 	int err;
+
 	// Initialize histos
-	TH1I *hADCvsTIME[n::pads];
-	TH2I *pads;
-	histoInit();
+	histoEventInit();
 
 	// Scan the file
 	bool done = true;
 	int current = 0;
 	while (done)
 	{
-		//done = false;
 		// Read one short word
 		if (fread(&datum, sizeof(unsigned short), 1, param.fsrc) != 1)
 		{
@@ -165,7 +164,8 @@ void decodeEvent(unsigned int i, Mapping& T2K, DAQ& daq)
 		}
 		else
 		{
-
+			fea.tot_file_rd += sizeof(unsigned short);
+			cout << dc.EventNumber << endl;
 			// Interpret datum
 			if ((err = Datum_Decode(&dc, datum)) < 0)
 			{
@@ -173,7 +173,7 @@ void decodeEvent(unsigned int i, Mapping& T2K, DAQ& daq)
 				done = true;
 			}
 			else{ done=true;}
-			if (dc.isItemComplete && dc.EventNumber==i)
+			if (dc.isItemComplete && dc.EventNumber==evtnum)
 			{
 					//cout << dc.ChannelIndex << endl;
 					if (dc.ChannelIndex!=15&&dc.ChannelIndex!=28&&dc.ChannelIndex!=53&&dc.ChannelIndex!=66&&dc.ChannelIndex>2&&dc.ChannelIndex<79)
@@ -184,33 +184,31 @@ void decodeEvent(unsigned int i, Mapping& T2K, DAQ& daq)
 						int k = padNum(x, y);
 						cout << x << "	" << y << "		" << k << endl;
 						//cout << int(dc.AbsoluteSampleIndex) << "	" << int(dc.AdcSample) << endl;
-						//hADCvsTIME[k]->Fill(int(dc.AbsoluteSampleIndex), int(dc.AdcSample));
+						int a = (int)dc.AbsoluteSampleIndex;
+						double b = (double)dc.AdcSample;
+						cout << a << "	" << b << endl;
+						hADCvsTIME[k]->Fill(a,b);
 					}
 					else{done=true;}
 			}
-			else
+			if (dc.isItemComplete && dc.EventNumber>evtnum && dc.EventNumber < 100000)
 			{
 				cout << "Done" << endl;
-				done=false;
-			}
-			/*if (dc.EventNumber > i)
-			{
-				cout << "Event decoded" << endl;
 				done = false;
 			}
-			else{done = false;}*/
 		}
 	}
+
 
 	// Extract max from signals for display
 	for (int q=0; q<n::pads; q++)
 	{
-		//cout << q << endl; //"	" << iFrompad(q) << "	" << jFrompad(q) << endl;
-		//cout << iFrompad(q) << "	" <<  jFrompad(q) << "	" << endl; //<< hADCvsTIME[p]->GetMaximum() << endl;
-		//pads->Fill(iFrompad(p), jFrompad(p), hADCvsTIME[p]->GetMaximum());
+		pads->Fill(iFrompad(q), jFrompad(q), hADCvsTIME[q]->GetMaximum());
 	}
-
-	pads->Draw();
+	TCanvas *canvas = new TCanvas("canvas", "canvas", 200,10,geom::wx,geom::wy);
+	pads->Draw("COLZ");
+	canvas->SaveAs((loc::outputs + "monitoring/" + to_string(evtnum) + ".gif").c_str());
+	delete canvas;
 }
 
 /*******************************************************************************
@@ -218,9 +216,6 @@ Main
 *******************************************************************************/
 int main(int argc, char **argv)
 {
-	unsigned short datum;
-	int err;
-
 	DAQ daq;
   daq.loadDAQ();
   cout << "... DAQ loaded successfully" << endl;
@@ -243,7 +238,7 @@ int main(int argc, char **argv)
 		return (-1);
 	}
 
-	// Open input file
+	// Open input 	TH1D *hADCvsTIME[n::pads];
 	char filename[140];
 	strcpy(filename, param.inp_dir);
 	strcat(filename, param.inp_file);
@@ -260,14 +255,14 @@ int main(int argc, char **argv)
 
 	// Initialize the data interpretation context
 	DatumContext_Init(&dc, param.sample_index_offset_zs);
-
-	decodeEvent(3, T2K, daq);
-
+	for (int p = 3; p < 25; p++)
+	{
+		decodeEvent(daq, T2K, p);
+	}
 	// Close file if it has been opened
 	if (param.fsrc)
 	{
 		fclose(param.fsrc);
 	}
-
 	return(0);
 }

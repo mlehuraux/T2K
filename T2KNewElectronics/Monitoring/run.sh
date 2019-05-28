@@ -1,5 +1,5 @@
 export file=R2019_05_27-14_26_27-000
-export filedata=R2019_05_23-14_40_29-000
+export filedata=R2019_05_23-07_30_10-000
 export compile=1
 export startevent=1
 export maxevent=1000
@@ -39,5 +39,5 @@ then
 	make
 fi
 cd $here/bin
-./monitor -i $input_aqs/ $filedata.aqs
+./T2KMonitor -i $input_aqs/ $filedata.aqs
 cd $here
