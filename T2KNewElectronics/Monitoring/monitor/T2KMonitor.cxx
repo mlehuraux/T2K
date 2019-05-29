@@ -16,6 +16,7 @@
 #include "../src/Pixel.h"
 #include "../src/T2KConstants.h"
 #include "../src/T2KMainFrame.h"
+#include "Globals.h"
 
 // ROOT
 #include "TH1I.h"
@@ -33,31 +34,11 @@
 #include <TGFrame.h>
 #include <TRootEmbeddedCanvas.h>
 #include <RQ_OBJECT.h>
+#include <TRint.h>
 #include <TApplication.h>
 
-using namespace std;
 
-/*******************************************************************************
-Global Variables
-*******************************************************************************/
-/*typedef struct _Param {
-	char inp_dir[120];
-	char inp_file[120];
-	FILE *fsrc;
-	int  has_no_run;
-	int  show_run;
-	unsigned int vflag;
-	int  sample_index_offset_zs;
-} Param;
-*/
-Param param;
-Features fea;
-DatumContext dc;
-int verbose;
-TH1D *hADCvsTIME[n::pads];
-TH2D *pads = new TH2D("pads", "", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
-std::vector<int> eventPos;
-int iEvent = 0;
+using namespace std;
 
 int parse_cmd_args(int argc, char **argv, Param* p)
 {
@@ -110,8 +91,11 @@ int main(int argc, char **argv)
 		return(-1);
 	}
 	else{cout << "File " << filename << " open" << endl;}
+
+	TRint *theApp = new TRint("App", 0, 0);
 	// Popup the GUI...
 	new T2KMainFrame(gClient->GetRoot(),800,800);
+	theApp->Run();
 
 	// Close file if it has been opened
 	if (param.fsrc){fclose(param.fsrc);}

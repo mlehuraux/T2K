@@ -2,6 +2,7 @@ SRCDIR		= ../src
 OBJDIR		= ../obj
 BINDIR		= ../bin
 EXE 		= T2KMonitor
+HEADERS = $(wildcard $(SRCDIR)/*.h)
 SRCFILES 	= $(wildcard $(SRCDIR)/*.c)
 OBJFILES	= $(subst $(SRCDIR),$(OBJDIR),$(SRCFILES:.c=.o))
 
@@ -12,7 +13,7 @@ ROOTGLIBS  	= $(shell root-config --glibs)
 ROOTLDFLAGS	= $(shell root-config --ldflags)
 
 # C++ compiler
-CXX        	= g++ -fpic -std=c++11 -g -O2 -lm -lrt -lpthread
+CXX        	= g++ -std=c++11 -g -O2 -lm -lrt -lpthread
 CXXFLAGS   	= -W -Wall -Wextra -pedantic $(ROOTCFLAGS)
 LDFLAGS    	= $(ROOTLDFLAGS) $(ROOTLIBS) $(ROOTGLIBS) -lMinuit
 
@@ -52,6 +53,10 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	@echo ""
 	@echo "Compiling $< to $@"
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
+# Create the directory 
+MyDict.cxx: $ Linkdef.h
+	@echo "Building the directory..."
+	rootcint -f $@ -c $(CXXFLAGS) -p $^
 
 
 .PHONY: build

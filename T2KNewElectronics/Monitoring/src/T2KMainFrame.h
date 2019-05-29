@@ -12,16 +12,6 @@
 #include <RQ_OBJECT.h>
 #include <TApplication.h>
 
-typedef struct _Param {
-	char inp_dir[120];
-	char inp_file[120];
-	FILE *fsrc;
-	int  has_no_run;
-	int  show_run;
-	unsigned int vflag;
-	int  sample_index_offset_zs;
-} Param;
-
 class T2KMainFrame {
 
   RQ_OBJECT("T2KMainFrame")

@@ -10,6 +10,7 @@
 #include "Pixel.h"
 #include "T2KConstants.h"
 #include "T2KMainFrame.h"
+#include "Globals.h"
 
 #include <fstream>
 #include <string>
@@ -25,19 +26,6 @@
 #include "TBranch.h"
 
 using namespace std;
-
-/*******************************************************************************
-Global Variables
-*******************************************************************************/
-Param param;
-Features fea;
-DatumContext dc;
-int verbose;
-TH1D *hADCvsTIME[n::pads];
-TH2D *pads = new TH2D("pads", "", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
-std::vector<int> eventPos;
-int iEvent = 0;
-
 /*******************************************************************************
 Useful functions
 *******************************************************************************/
@@ -66,6 +54,38 @@ void Features_Clear(Features *f)
 	sprintf(f->run_str, "");
 }
 
+T2KMainFrame::~T2KMainFrame()
+{
+  // Clean up used widgets: frames, buttons, layout hints
+  fMain->Cleanup();
+  delete fMain;
+}
+
+void T2KMainFrame::CloseWindow()
+{
+  gApplication->Terminate(0);
+}
+
+void T2KMainFrame::HandleButton(Int_t id)
+{
+//  if (id == -1) {
+//    TGButton *btn = (TGButton *) gTQSender;
+//    id = btn->WidgetId();
+//  }
+  switch (id) {
+  case 1:
+    iEvent = iEvent-1;
+    DrawNext(iEvent);
+    break;
+  case 2:
+    iEvent = iEvent+1;
+    DrawNext(iEvent);
+    break;
+  default:
+    break;
+  }
+}
+
 T2KMainFrame::T2KMainFrame(const TGWindow *p,UInt_t w,UInt_t h)
 {
   // Create a main frame
@@ -73,7 +93,8 @@ T2KMainFrame::T2KMainFrame(const TGWindow *p,UInt_t w,UInt_t h)
 
   fMain->Connect("CloseWindow()","T2KMainFrame",this,"CloseWindow()");
 
-  // Create canvas widget
+  // Create canvas widget	theApp->Run();
+
   fEcanvas = new TRootEmbeddedCanvas("Ecanvas",fMain,800,600);
   fMain->AddFrame(fEcanvas, new TGLayoutHints(kLHintsExpandX |
 
@@ -232,36 +253,4 @@ void T2KMainFrame::DrawNext(Int_t ev)
   fCanvas->Update();
 
   ev++;
-}
-
-T2KMainFrame::~T2KMainFrame()
-{
-  // Clean up used widgets: frames, buttons, layout hints
-  fMain->Cleanup();
-  delete fMain;
-}
-
-void T2KMainFrame::CloseWindow()
-{
-  gApplication->Terminate(0);
-}
-
-void T2KMainFrame::HandleButton(Int_t id)
-{
-//  if (id == -1) {
-//    TGButton *btn = (TGButton *) gTQSender;
-//    id = btn->WidgetId();
-//  }
-  switch (id) {
-  case 1:
-    iEvent = iEvent-1;
-    DrawNext(iEvent);
-    break;
-  case 2:
-    iEvent = iEvent+1;
-    DrawNext(iEvent);
-    break;
-  default:
-    break;
-  }
 }
