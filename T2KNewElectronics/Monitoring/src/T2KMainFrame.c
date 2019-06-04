@@ -25,7 +25,7 @@
 #include "TFile.h"
 #include "TTree.h"
 #include "TBranch.h"
-
+#include "TPolyLine.h"
 using namespace std;
 
 extern Param param;
@@ -59,6 +59,19 @@ void histoEventInit()
 	}
 	pads->Reset();
 }
+
+TPolyLine *padline(Pixel& P, int color=602)
+{
+    Float_t x[4] = {geom::convx*(P.coordx()-0.5*geom::dx), geom::convx*(P.coordx()-0.5*geom::dx), geom::convx*(P.coordx()+0.5*geom::dx), geom::convx*(P.coordx()+0.5*geom::dx)};
+    Float_t y[4] = {geom::convy*(P.coordy()-0.5*geom::dy), geom::convy*(P.coordy()+0.5*geom::dy), geom::convy*(P.coordy()+0.5*geom::dy), geom::convy*(P.coordy()-0.5*geom::dy)};
+    TPolyLine *pline = new TPolyLine(4,x,y);
+    pline->SetFillColor(color);
+    pline->SetLineColor(kGray);
+    pline->SetLineWidth(1);
+    return(pline);
+}
+
+/********************************************************************************/
 
 void Features_Clear(Features *f)
 {
@@ -109,8 +122,7 @@ T2KMainFrame::T2KMainFrame(const TGWindow *p,UInt_t w,UInt_t h)
 
   fEcanvas = new TRootEmbeddedCanvas("Ecanvas",fMain,800,600);
   fMain->AddFrame(fEcanvas, new TGLayoutHints(kLHintsExpandX |
-
-                  kLHintsExpandY, 10,10,10,1));
+									kLHintsExpandY, 10,10,10,1));
   // Create a horizontal frame widget with buttons
   hframe = new TGHorizontalFrame(fMain,200,40);
   prev = new TGTextButton(hframe,"&Prev");
@@ -143,6 +155,7 @@ T2KMainFrame::T2KMainFrame(const TGWindow *p,UInt_t w,UInt_t h)
 
 void T2KMainFrame::DrawNext(Int_t ev)
 {
+	cout << iEvent << "	" << ev << endl;
 	// Load classes
 	DAQ daq;
   daq.loadDAQ();
@@ -151,15 +164,19 @@ void T2KMainFrame::DrawNext(Int_t ev)
   T2K.loadMapping();
   //cout << "...Mapping loaded succesfully." << endl;
 
-  gStyle->SetTitleTextColor(50);
+	Pads padPlane;
+	padPlane.loadPadPlane(daq, T2K);
+	//cout << "...Pad plane loaded succesfully." << endl;
+
+  gStyle->SetTitleTextColor(602);
   gStyle->SetTitleFont(102);
   gStyle->SetTitleColor(60, "XY");
   gStyle->SetTitleFont(102, "XY");
-  gStyle->SetTitleFontSize(0.07);
+  gStyle->SetTitleFontSize(0.05);
   gStyle->SetTextFont(82);
   gStyle->SetLabelFont(82,"XY");
   gStyle->SetLabelSize(0.04,"XY");
-/*
+
   Int_t MyPalette[20];
   const Int_t NRGBs = 5;
   const Int_t NCont = 20;
@@ -174,9 +191,6 @@ void T2KMainFrame::DrawNext(Int_t ev)
     MyPalette[i] = FI+i;
   }
 
-	cout << "Palette loaded" << endl;
-*/
-
 	// Default
 	param.sample_index_offset_zs = 4;
 	param.vflag                  = 0;
@@ -184,10 +198,9 @@ void T2KMainFrame::DrawNext(Int_t ev)
 	param.show_run               = 0;
 	verbose                      = 0;
 
-
   TCanvas *fCanvas = fEcanvas->GetCanvas();
   fCanvas->cd();
-  TString nevt = "Event: ";
+  TString nevt = "Event ";
   nevt += ev;
 
   // Fill in histo
@@ -198,6 +211,10 @@ void T2KMainFrame::DrawNext(Int_t ev)
 
 	// Initialize histos
 	histoEventInit();
+	//TPad *p1 = new TPad("p1", "p1", 0.01, 0.01, 0.99, 0.99);
+	//p1->Range(-0.5*geom::nPadx*geom::dx, -0.5*geom::nPady*geom::dy, 0.5*geom::nPadx*geom::dx, 0.5*geom::nPady*geom::dy);
+	//p1->Draw();
+	//p1->cd();
 
 	// Scan the file
 	bool done = true;
@@ -221,7 +238,8 @@ void T2KMainFrame::DrawNext(Int_t ev)
 				done = true;
 			}
 			else{ done=true;}
-			if (dc.isItemComplete && dc.EventNumber==ev)
+			int evnum = (int) dc.EventNumber;
+			if (dc.isItemComplete && evnum==ev)
 			{
 					if (dc.ChannelIndex!=15&&dc.ChannelIndex!=28&&dc.ChannelIndex!=53&&dc.ChannelIndex!=66&&dc.ChannelIndex>2&&dc.ChannelIndex<79)
 					{
@@ -232,10 +250,24 @@ void T2KMainFrame::DrawNext(Int_t ev)
 						int a = (int)dc.AbsoluteSampleIndex;
 						double b = (double)dc.AdcSample;
 						hADCvsTIME[k]->Fill(a,b);
+
+/*
+						// TPolyLine Style for click and show signal
+						Pixel P;
+						P = padPlane.pad(x,y);
+						if (P.channel()!=15&&P.channel()!=28&&P.channel()!=53&&P.channel()!=66&&P.channel()<79&&P.channel()>2) // error somewhere in DAQ
+						{
+								P.setAmp(int(b));
+						}
+						int color = 2*floor(float(P.ampl())/2000*NCont);
+						if (P.ampl() > 0){padline(P,MyPalette[color])->Draw("f");}
+						else{padline(P)->Draw("f");}
+						padline(P)->Draw();
+*/
 					}
 					else{done=true;}
 			}
-			if (dc.isItemComplete && dc.EventNumber>ev && dc.EventNumber < 100000)
+			if (dc.isItemComplete && evnum>ev && evnum < 1000000)
 			{
 				done = false;
 			}
@@ -248,13 +280,16 @@ void T2KMainFrame::DrawNext(Int_t ev)
 		pads->Fill(iFrompad(q), jFrompad(q), hADCvsTIME[q]->GetMaximum());
 	}
 
+	pads->SetNameTitle("pads", nevt);
   pads->SetMinimum(0);
-  pads->SetMaximum(4096);
+	//pads->SetMaximum(4096);
+  pads->SetMaximum(1000);
   pads->SetMinimum(-0.1);
   pads->GetXaxis()->SetTitle("Pads on X axis");
   pads->GetYaxis()->SetTitle("Pads on Y axis");
   pads->Draw("COLZ");
 
+	//p1->Modified();
   fCanvas->SetTickx();
   fCanvas->SetTicky();
   fCanvas->SetRightMargin(0.12);
@@ -267,6 +302,5 @@ void T2KMainFrame::DrawNext(Int_t ev)
 		delete hADCvsTIME[q];
 	}
 
-  ev++;
-
+	ev++;
 }

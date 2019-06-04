@@ -21,7 +21,7 @@ namespace n
     static const int cards = 4;
     static const int chips = 4;
     static const int bins = 82; // +1 because connectors and arc starts at 1 not 0 so dim [81] to go until index 80 and useless 0
-    static const int samples = 511;
+    static const int samples = 510;
 }
 
 // Geometry

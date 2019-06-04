@@ -103,6 +103,7 @@ int main(int argc, char **argv)
 
 	TRint *theApp = new TRint("App", 0, 0);
 	// Popup the GUI...
+	iEvent = 20;
 	new T2KMainFrame(gClient->GetRoot(),800,800);
 	theApp->Run();
 
