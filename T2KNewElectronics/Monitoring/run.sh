@@ -1,5 +1,5 @@
-export file=R2019_05_27-14_26_27-000
-export filedata=R2019_05_23-07_30_10-000
+export fileped=R2019_05_27-14_26_27-000
+export filedata=R2019_05_29-16_17_24-000
 export compile=1
 export startevent=1
 export maxevent=1000
@@ -16,7 +16,7 @@ export output_root="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/test
 export here="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/Monitoring/"
 
 cd $input_aqs
-#ln -s $data/$filedata.aqs
+ln -s $data/$filedata.aqs
 
 ###############################
 #   Pedestals visualisation   #
@@ -30,7 +30,7 @@ cd $input_aqs
 #	make
 #fi
 #cd $here/bin
-#./pedestals -i $input_aqs/ $file.aqs 0 1134 380 250 5
+#./pedestals -i $input_aqs/ $fileped.aqs 0 1134 380 250 5
 
 if [ $compile = 1 ]
 then

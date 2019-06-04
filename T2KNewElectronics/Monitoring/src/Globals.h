@@ -29,7 +29,7 @@ typedef struct _Param {
 	unsigned int vflag;
 	int  sample_index_offset_zs;
 } Param;
-
+/*
 static Param param;
 static Features fea;
 static DatumContext dc;
@@ -38,5 +38,5 @@ static TH1D *hADCvsTIME[n::pads];
 static TH2D *pads;// = new TH2D("pads", "", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
 static std::vector<int> eventPos;
 static int iEvent;
-
+*/
 #endif

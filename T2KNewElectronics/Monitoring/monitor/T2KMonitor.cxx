@@ -40,6 +40,15 @@
 
 using namespace std;
 
+Param param;
+Features fea;
+DatumContext dc;
+int verbose;
+TH1D *hADCvsTIME[n::pads];
+TH2D *pads;// = new TH2D("pads", "", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
+std::vector<int> eventPos;
+int iEvent;
+
 int parse_cmd_args(int argc, char **argv, Param* p)
 {
 	int i;

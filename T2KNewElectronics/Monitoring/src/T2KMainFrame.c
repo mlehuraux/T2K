@@ -15,6 +15,7 @@
 #include <fstream>
 #include <string>
 #include <iostream>
+#include <stdio.h>
 
 // ROOT
 #include "TH1I.h"
@@ -26,6 +27,15 @@
 #include "TBranch.h"
 
 using namespace std;
+
+extern Param param;
+extern Features fea;
+extern DatumContext dc;
+extern int verbose;
+extern TH1D *hADCvsTIME[n::pads];
+extern TH2D *pads;// = new TH2D("pads", "", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
+extern std::vector<int> eventPos;
+extern int iEvent;
 /*******************************************************************************
 Useful functions
 *******************************************************************************/
@@ -37,6 +47,8 @@ void histoEventInit()
 {
 	gStyle->SetOptStat(0);
 	gStyle->SetPalette(kBird);
+	pads = new TH2D("pads", "", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
+
 	for(int k=0;k<n::pads;k++)
 	{
 		char histName[40];
@@ -134,10 +146,10 @@ void T2KMainFrame::DrawNext(Int_t ev)
 	// Load classes
 	DAQ daq;
   daq.loadDAQ();
-  cout << "... DAQ loaded successfully" << endl;
+  //cout << "... DAQ loaded successfully" << endl;
   Mapping T2K;
   T2K.loadMapping();
-  cout << "...Mapping loaded succesfully." << endl;
+  //cout << "...Mapping loaded succesfully." << endl;
 
   gStyle->SetTitleTextColor(50);
   gStyle->SetTitleFont(102);
@@ -147,7 +159,7 @@ void T2KMainFrame::DrawNext(Int_t ev)
   gStyle->SetTextFont(82);
   gStyle->SetLabelFont(82,"XY");
   gStyle->SetLabelSize(0.04,"XY");
-
+/*
   Int_t MyPalette[20];
   const Int_t NRGBs = 5;
   const Int_t NCont = 20;
@@ -162,12 +174,16 @@ void T2KMainFrame::DrawNext(Int_t ev)
     MyPalette[i] = FI+i;
   }
 
+	cout << "Palette loaded" << endl;
+*/
+
 	// Default
 	param.sample_index_offset_zs = 4;
 	param.vflag                  = 0;
 	param.has_no_run             = 0;
 	param.show_run               = 0;
 	verbose                      = 0;
+
 
   TCanvas *fCanvas = fEcanvas->GetCanvas();
   fCanvas->cd();
@@ -176,7 +192,6 @@ void T2KMainFrame::DrawNext(Int_t ev)
 
   // Fill in histo
 	DatumContext_Init(&dc, param.sample_index_offset_zs);
-
 	// decodeEvent
 	unsigned short datum;
 	int err;
@@ -199,7 +214,6 @@ void T2KMainFrame::DrawNext(Int_t ev)
 		else
 		{
 			fea.tot_file_rd += sizeof(unsigned short);
-			cout << dc.EventNumber << endl;
 			// Interpret datum
 			if ((err = Datum_Decode(&dc, datum)) < 0)
 			{
@@ -209,25 +223,20 @@ void T2KMainFrame::DrawNext(Int_t ev)
 			else{ done=true;}
 			if (dc.isItemComplete && dc.EventNumber==ev)
 			{
-					cout << dc.ChannelIndex << endl;
 					if (dc.ChannelIndex!=15&&dc.ChannelIndex!=28&&dc.ChannelIndex!=53&&dc.ChannelIndex!=66&&dc.ChannelIndex>2&&dc.ChannelIndex<79)
 					{
 						// histo and display
 						int x = T2K.i(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex));
 						int y = T2K.j(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex));
 						int k = padNum(x, y);
-						cout << x << "	" << y << "		" << k << endl;
-						//cout << int(dc.AbsoluteSampleIndex) << "	" << int(dc.AdcSample) << endl;
 						int a = (int)dc.AbsoluteSampleIndex;
 						double b = (double)dc.AdcSample;
-						//cout << a << "	" << b << endl;
 						hADCvsTIME[k]->Fill(a,b);
 					}
 					else{done=true;}
 			}
 			if (dc.isItemComplete && dc.EventNumber>ev && dc.EventNumber < 100000)
 			{
-				cout << "Done" << endl;
 				done = false;
 			}
 		}
@@ -241,7 +250,6 @@ void T2KMainFrame::DrawNext(Int_t ev)
 
   pads->SetMinimum(0);
   pads->SetMaximum(4096);
-  //tree->Draw("PadMaxAmpl[][]:Alt$(PadMaxAmpl[][]):>>h","eventNumber==2","colz");
   pads->SetMinimum(-0.1);
   pads->GetXaxis()->SetTitle("Pads on X axis");
   pads->GetYaxis()->SetTitle("Pads on Y axis");
@@ -252,5 +260,13 @@ void T2KMainFrame::DrawNext(Int_t ev)
   fCanvas->SetRightMargin(0.12);
   fCanvas->Update();
 
+	// Delete histos
+	delete pads;
+	for (int q=0; q<n::pads; q++)
+	{
+		delete hADCvsTIME[q];
+	}
+
   ev++;
+
 }
