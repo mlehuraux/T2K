@@ -49,6 +49,8 @@ TH2D *pads;// = new TH2D("pads", "", geom::nPadx, 0, geom::nPadx, geom::nPady, 0
 std::vector<long int> eventPos;
 int iEvent;
 Pixel P;
+TH2D *occupation;
+TCanvas *stack;
 
 
 void scan()
@@ -130,6 +132,23 @@ GUI framework
 *******************************************************************************/
 int main(int argc, char **argv)
 {
+	// Palette
+	const Int_t NCont = 400;
+  Int_t MyPalette[NCont];
+  const Int_t NRGBs = 5;
+  Double_t stops[NRGBs] = { 0.00, 0.34, 0.61, 0.84, 1.00 };
+  Double_t red[NRGBs]   = { 0.00, 0.00, 0.87, 1.00, 0.51 };
+  Double_t green[NRGBs] = { 0.00, 0.81, 1.00, 0.20, 0.00 };
+  Double_t blue[NRGBs]  = { 0.51, 1.00, 0.12, 0.00, 0.00 };
+  gStyle->SetNumberContours(NCont);
+  Int_t FI = TColor::CreateGradientColorTable(NRGBs, stops, red, green, blue, NCont);
+  for (int i=0;i<NCont;i++)
+  {
+    MyPalette[i] = FI+int((double(NCont-1)/double(sqrt(NCont-1))))*int(sqrt(i));
+  }
+	//gStyle->SetPalette(kBird);
+	gStyle->SetPalette(NCont, MyPalette);
+
 	// Parse command line arguments
 	if (parse_cmd_args(argc, argv, &param) < 0){return (-1);}
 
@@ -147,7 +166,7 @@ int main(int argc, char **argv)
 
 	scan();
 	cout << "Scan of the file completed..." << endl;
-	cout << eventPos[0] << "	" << eventPos[eventPos.size()-1] << endl;
+
 	TRint *theApp = new TRint("App", 0, 0);
 	// Popup the GUI...
 	iEvent = 0;
@@ -156,6 +175,7 @@ int main(int argc, char **argv)
 
 	// Close file if it has been opened
 	if (param.fsrc){fclose(param.fsrc);}
-
+	//delete stack;
+	//delete occupation;
 	return(0);
 }

@@ -7,13 +7,13 @@ export startevent=1
 export nevent=20
 
 export data="/local/home/t2kt/projects/bin/pandax/data"
-export input_aqs="/home/mlehuraux/GitLab/T2K/T2KNewElectronics/test_data/aqs"
-export input_txt="/home/mlehuraux/GitLab/T2K/T2KNewElectronics/test_data/txt"
-export output_root="/home/mlehuraux/GitLab/T2K/T2KNewElectronics/test_data/root"
+export input_aqs="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/test_data/aqs"
+export input_txt="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/test_data/txt"
+export output_root="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/test_data/root"
 
-export make_convert="/home/mlehuraux/GitLab/T2K/T2KNewElectronics/pandax_client_16apr19/projects/pandax/mclient/linux"
-export bin_convert="/home/mlehuraux/GitLab/T2K/T2KNewElectronics/pandax_client_16apr19/projects/bin/pandax/linux"
-export here="/home/mlehuraux/GitLab/T2K/T2KNewElectronics/Analysis_Display_Soft"
+export make_convert="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/pandax_client_16apr19/projects/pandax/mclient/linux"
+export bin_convert="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/pandax_client_16apr19/projects/bin/pandax/linux"
+export here="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/Analysis_Display_Soft"
 
 cd $input_aqs
 ln -s $data/$file.aqs

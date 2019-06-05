@@ -22,6 +22,7 @@
 #include "TH1I.h"
 #include "TH1D.h"
 #include "TH2D.h"
+#include "TH2I.h"
 #include "TStyle.h"
 #include "TFile.h"
 #include "TTree.h"
@@ -29,6 +30,7 @@
 #include "TPolyLine.h"
 #include "TPad.h"
 #include "TCanvas.h"
+#include "TPaletteAxis.h"
 
 using namespace std;
 
@@ -41,6 +43,8 @@ extern TH2D *pads;// = new TH2D("pads", "", geom::nPadx, 0, geom::nPadx, geom::n
 extern std::vector<long int> eventPos;
 extern int iEvent;
 extern 	Pixel P;
+extern TH2D *occupation;
+extern TCanvas *stack;
 
 /*******************************************************************************
 Useful functions
@@ -52,7 +56,6 @@ int jFrompad(int padnum){return(padnum/geom::nPadx);}
 void histoEventInit()
 {
 	gStyle->SetOptStat(0);
-	gStyle->SetPalette(kBird);
 	pads = new TH2D("pads", "", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
 
 	for(int k=0;k<n::pads;k++)
@@ -125,6 +128,11 @@ T2KMainFrame::T2KMainFrame(const TGWindow *p,UInt_t w,UInt_t h)
   fMain->Connect("CloseWindow()","T2KMainFrame",this,"CloseWindow()");
 
   // Create canvas widget	theApp->Run();
+	// Stack
+	occupation = new TH2D("occupation", "Occupation", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
+	stack = new TCanvas("stack", "Monitoring Information", 1100, 500);
+	stack->Divide(2,1);
+	stack->Draw();
 
   fEcanvas = new TRootEmbeddedCanvas("Ecanvas",fMain, geom::times*geom::wx, geom::times*geom::wy);
   fMain->AddFrame(fEcanvas, new TGLayoutHints(kLHintsExpandX |
@@ -182,20 +190,29 @@ void T2KMainFrame::DrawNext(Int_t ev)
   gStyle->SetLabelFont(82,"XY");
   gStyle->SetLabelSize(0.04,"XY");
 
-  Int_t MyPalette[20];
+	const Int_t NCont = 400;
+  Int_t MyPalette[NCont];
   const Int_t NRGBs = 5;
-  const Int_t NCont = 20;
   Double_t stops[NRGBs] = { 0.00, 0.34, 0.61, 0.84, 1.00 };
   Double_t red[NRGBs]   = { 0.00, 0.00, 0.87, 1.00, 0.51 };
   Double_t green[NRGBs] = { 0.00, 0.81, 1.00, 0.20, 0.00 };
   Double_t blue[NRGBs]  = { 0.51, 1.00, 0.12, 0.00, 0.00 };
   gStyle->SetNumberContours(NCont);
   Int_t FI = TColor::CreateGradientColorTable(NRGBs, stops, red, green, blue, NCont);
-  for (int i=0;i<20;i++)
+  for (int i=0;i<NCont;i++)
   {
-    MyPalette[i] = FI+i;
+    MyPalette[i] = FI+int((double(NCont-1)/double(sqrt(NCont-1))))*int(sqrt(i));
   }
+	//gStyle->SetPalette(kBird);
+	gStyle->SetPalette(NCont, MyPalette);
 
+	// Stack window for monitoring
+	stack->cd(1);
+  occupation->SetMinimum(-0.1);
+  occupation->GetXaxis()->SetTitle("Pads on X axis");
+  occupation->GetYaxis()->SetTitle("Pads on Y axis");
+	occupation->Draw("COLZ");
+	stack->Update();
 	// Default
 	param.sample_index_offset_zs = 4;
 	param.vflag                  = 0;
@@ -276,34 +293,35 @@ void T2KMainFrame::DrawNext(Int_t ev)
 	// Extract max from signals for display
 	for (int q=0; q<n::pads; q++)
 	{
-		pads->Fill(iFrompad(q), jFrompad(q), hADCvsTIME[q]->GetMaximum());
+		double amp = hADCvsTIME[q]->GetMaximum();
+		pads->Fill(iFrompad(q), jFrompad(q), amp);
+		occupation->Fill(iFrompad(q), jFrompad(q), amp);
 
 		// TPolyLine Style for click and show signal
 		P = padPlane.pad(iFrompad(q),jFrompad(q));
 		if (P.channel()!=15&&P.channel()!=28&&P.channel()!=53&&P.channel()!=66&&P.channel()<79&&P.channel()>2) // error somewhere in DAQ
 		{
-				P.setAmp(int(hADCvsTIME[q]->GetMaximum()));
+				P.setAmp(int(amp));
 		}
-		int color = 2*floor(float(P.ampl())/2000*NCont);
-		if (P.ampl() > 0){padline(P, 2)->Draw("f");}
+		int color = (float(P.ampl())/4096*NCont);
+		if (P.ampl() > 0){padline(P, MyPalette[color])->Draw("f");}
 		else{padline(P)->Draw("f");}
 		padline(P)->Draw();
 	}
 
 	pads->SetNameTitle("pads", nevt);
-  	pads->SetMinimum(0);
-	//pads->SetMaximum(4096);
-  	pads->SetMaximum(1000);
-  	pads->SetMinimum(-0.1);
-  	pads->GetXaxis()->SetTitle("Pads on X axis");
-  	pads->GetYaxis()->SetTitle("Pads on Y axis");
-  	//pads->Draw("COLZ");
+	pads->SetMaximum(4096);
+  pads->SetMinimum(-0.1);
+  pads->GetXaxis()->SetTitle("Pads on X axis");
+  pads->GetYaxis()->SetTitle("Pads on Y axis");
+  //pads->Draw("COLZ");
 
 	p1->Modified();
-  	fCanvas->SetTickx();
-  	fCanvas->SetTicky();
-  	fCanvas->SetRightMargin(0.12);
-  	fCanvas->Update();
+  fCanvas->SetTickx();
+  fCanvas->SetTicky();
+  fCanvas->SetRightMargin(0.12);
+  fCanvas->Update();
+	stack->Update();
 	cout << "\r" << nevt << flush;
 	// Delete histos
 	delete pads;
