@@ -22,6 +22,8 @@ private:
   TGHorizontalFrame    *hframe;
   TGTextButton         *next;
   TGTextButton         *prev;
+  //TGTextButton         *start;
+  //TGTextButton         *stop;
   TGTextButton         *exit;
 
 public:

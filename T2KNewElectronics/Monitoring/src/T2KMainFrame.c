@@ -45,6 +45,8 @@ extern int iEvent;
 extern 	Pixel P;
 extern TH2D *occupation;
 extern TCanvas *stack;
+extern int maxev;
+extern int prevmaxev;
 
 /*******************************************************************************
 Useful functions
@@ -147,6 +149,12 @@ T2KMainFrame::T2KMainFrame(const TGWindow *p,UInt_t w,UInt_t h)
   next->Connect("Clicked()","T2KMainFrame",this,"HandleButton(=2)");
   hframe->AddFrame(next, new TGLayoutHints(kLHintsCenterX,
                                            5,5,3,4));
+
+	//start = new TGTextButton(hframe,"&Start");
+	//start->Connect("Clicked()","T2KMainFrame",this,"HandleButton(=3)");
+	//hframe->AddFrame(start, new TGLayoutHints(kLHintsCenterX,
+																				//	 5,5,3,4));
+
   exit = new TGTextButton(hframe,"&Exit");
   exit->Connect("Clicked()","T2KMainFrame",this,"CloseWindow()");
   hframe->AddFrame(exit, new TGLayoutHints(kLHintsCenterX,
@@ -169,6 +177,8 @@ T2KMainFrame::T2KMainFrame(const TGWindow *p,UInt_t w,UInt_t h)
 
 void T2KMainFrame::DrawNext(Int_t ev)
 {
+	prevmaxev = maxev;
+	if (maxev < ev){maxev=ev;}
 	// Load classes
 	DAQ daq;
   daq.loadDAQ();
@@ -207,12 +217,10 @@ void T2KMainFrame::DrawNext(Int_t ev)
 	gStyle->SetPalette(NCont, MyPalette);
 
 	// Stack window for monitoring
-	stack->cd(1);
   occupation->SetMinimum(-0.1);
   occupation->GetXaxis()->SetTitle("Pads on X axis");
   occupation->GetYaxis()->SetTitle("Pads on Y axis");
-	occupation->Draw("COLZ");
-	stack->Update();
+
 	// Default
 	param.sample_index_offset_zs = 4;
 	param.vflag                  = 0;
@@ -246,7 +254,6 @@ void T2KMainFrame::DrawNext(Int_t ev)
 	// Scan the file
 	bool done = true;
 	int current = 0;
-	//cout << "Position in bytes : " << eventPos[ev] << endl;
 	fseek(param.fsrc, eventPos[ev-1], SEEK_SET);
 	while (done)
 	{
@@ -295,7 +302,7 @@ void T2KMainFrame::DrawNext(Int_t ev)
 	{
 		double amp = hADCvsTIME[q]->GetMaximum();
 		pads->Fill(iFrompad(q), jFrompad(q), amp);
-		occupation->Fill(iFrompad(q), jFrompad(q), amp);
+		if (ev == maxev && prevmaxev!=maxev){occupation->Fill(iFrompad(q), jFrompad(q), amp);}
 
 		// TPolyLine Style for click and show signal
 		P = padPlane.pad(iFrompad(q),jFrompad(q));
@@ -321,6 +328,9 @@ void T2KMainFrame::DrawNext(Int_t ev)
   fCanvas->SetTicky();
   fCanvas->SetRightMargin(0.12);
   fCanvas->Update();
+
+	stack->cd(1);
+	occupation->Draw("COLZ");
 	stack->Update();
 	cout << "\r" << nevt << flush;
 	// Delete histos

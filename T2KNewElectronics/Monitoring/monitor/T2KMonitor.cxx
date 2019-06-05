@@ -51,7 +51,8 @@ int iEvent;
 Pixel P;
 TH2D *occupation;
 TCanvas *stack;
-
+int maxev;
+int prevmaxev;
 
 void scan()
 {
@@ -167,6 +168,8 @@ int main(int argc, char **argv)
 	scan();
 	cout << "Scan of the file completed..." << endl;
 
+	maxev = -1;
+	prevmaxev = -1;
 	TRint *theApp = new TRint("App", 0, 0);
 	// Popup the GUI...
 	iEvent = 0;
