@@ -1,22 +1,22 @@
 export fileped=R2019_05_27-14_26_27-000
-export filedata=R2019_06_04-10_22_17-000
+export filedata=R2019_05_16-08_31_25-000
 export compile=1
 export startevent=1
 export maxevent=1000
 
-export data="/local/home/t2kt/projects/bin/pandax/data"
+#export data="/local/home/t2kt/projects/bin/pandax/data"
 
-export make_convert="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/pandax_client_16apr19/projects/pandax/mclient/linux"
-export bin_convert="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/pandax_client_16apr19/projects/bin/pandax/linux"
+export make_convert="/home/mlehuraux/GitLab/T2K/T2KNewElectronics/pandax_client_16apr19/projects/pandax/mclient/linux"
+export bin_convert="/home/mlehuraux/GitLab/T2K/T2KNewElectronics/pandax_client_16apr19/projects/bin/pandax/linux"
 
-export input_aqs="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/test_data/aqs"
-export input_txt="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/test_data/txt"
-export output_root="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/test_data/root"
+export input_aqs="/home/mlehuraux/GitLab/T2K/T2KNewElectronics/test_data/aqs"
+export input_txt="/home/mlehuraux/GitLab/T2K/T2KNewElectronics/test_data/txt"
+export output_root="/home/mlehuraux/GitLab/T2K/T2KNewElectronics/test_data/root"
 
-export here="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/Monitoring/"
+export here="/home/mlehuraux/GitLab/T2K/T2KNewElectronics/Monitoring/"
 
-cd $input_aqs
-ln -s $data/$filedata.aqs
+#cd $input_aqs
+#ln -s $data/$filedata.aqs
 
 ###############################
 #   Pedestals visualisation   #

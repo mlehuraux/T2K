@@ -16,6 +16,7 @@
 #include <string>
 #include <iostream>
 #include <stdio.h>
+#include <vector>
 
 // ROOT
 #include "TH1I.h"
@@ -26,6 +27,9 @@
 #include "TTree.h"
 #include "TBranch.h"
 #include "TPolyLine.h"
+#include "TPad.h"
+#include "TCanvas.h"
+
 using namespace std;
 
 extern Param param;
@@ -34,8 +38,10 @@ extern DatumContext dc;
 extern int verbose;
 extern TH1D *hADCvsTIME[n::pads];
 extern TH2D *pads;// = new TH2D("pads", "", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
-extern std::vector<int> eventPos;
+extern std::vector<long int> eventPos;
 extern int iEvent;
+extern 	Pixel P;
+
 /*******************************************************************************
 Useful functions
 *******************************************************************************/
@@ -120,7 +126,7 @@ T2KMainFrame::T2KMainFrame(const TGWindow *p,UInt_t w,UInt_t h)
 
   // Create canvas widget	theApp->Run();
 
-  fEcanvas = new TRootEmbeddedCanvas("Ecanvas",fMain,800,600);
+  fEcanvas = new TRootEmbeddedCanvas("Ecanvas",fMain, geom::times*geom::wx, geom::times*geom::wy);
   fMain->AddFrame(fEcanvas, new TGLayoutHints(kLHintsExpandX |
 									kLHintsExpandY, 10,10,10,1));
   // Create a horizontal frame widget with buttons
@@ -155,7 +161,6 @@ T2KMainFrame::T2KMainFrame(const TGWindow *p,UInt_t w,UInt_t h)
 
 void T2KMainFrame::DrawNext(Int_t ev)
 {
-	cout << iEvent << "	" << ev << endl;
 	// Load classes
 	DAQ daq;
   daq.loadDAQ();
@@ -200,10 +205,19 @@ void T2KMainFrame::DrawNext(Int_t ev)
 
   TCanvas *fCanvas = fEcanvas->GetCanvas();
   fCanvas->cd();
+  fCanvas->Clear();
+  TPad *p1 = new TPad("p1", "p1", 0.01, 0.01, 0.99, 0.99);
+  p1->Range(-0.5*geom::nPadx*geom::dx, -0.5*geom::nPady*geom::dy, 0.5*geom::nPadx*geom::dx, 0.5*geom::nPady*geom::dy);
+  p1->Draw();
+  p1->cd();
+
   TString nevt = "Event ";
   nevt += ev;
 
-  // Fill in histo
+  // Go back to the beginning of the file
+  fseek(param.fsrc, 0, SEEK_SET);
+
+  	// Fill in histo
 	DatumContext_Init(&dc, param.sample_index_offset_zs);
 	// decodeEvent
 	unsigned short datum;
@@ -211,17 +225,16 @@ void T2KMainFrame::DrawNext(Int_t ev)
 
 	// Initialize histos
 	histoEventInit();
-	//TPad *p1 = new TPad("p1", "p1", 0.01, 0.01, 0.99, 0.99);
-	//p1->Range(-0.5*geom::nPadx*geom::dx, -0.5*geom::nPady*geom::dy, 0.5*geom::nPadx*geom::dx, 0.5*geom::nPady*geom::dy);
-	//p1->Draw();
-	//p1->cd();
 
 	// Scan the file
 	bool done = true;
 	int current = 0;
+	//cout << "Position in bytes : " << eventPos[ev] << endl;
+	fseek(param.fsrc, eventPos[ev-1], SEEK_SET);
 	while (done)
 	{
 		// Read one short word
+		//if (fread(&datum, sizeof(unsigned short), 1, param.fsrc) != 1)
 		if (fread(&datum, sizeof(unsigned short), 1, param.fsrc) != 1)
 		{
 			printf("\n");
@@ -250,20 +263,6 @@ void T2KMainFrame::DrawNext(Int_t ev)
 						int a = (int)dc.AbsoluteSampleIndex;
 						double b = (double)dc.AdcSample;
 						hADCvsTIME[k]->Fill(a,b);
-
-/*
-						// TPolyLine Style for click and show signal
-						Pixel P;
-						P = padPlane.pad(x,y);
-						if (P.channel()!=15&&P.channel()!=28&&P.channel()!=53&&P.channel()!=66&&P.channel()<79&&P.channel()>2) // error somewhere in DAQ
-						{
-								P.setAmp(int(b));
-						}
-						int color = 2*floor(float(P.ampl())/2000*NCont);
-						if (P.ampl() > 0){padline(P,MyPalette[color])->Draw("f");}
-						else{padline(P)->Draw("f");}
-						padline(P)->Draw();
-*/
 					}
 					else{done=true;}
 			}
@@ -278,23 +277,34 @@ void T2KMainFrame::DrawNext(Int_t ev)
 	for (int q=0; q<n::pads; q++)
 	{
 		pads->Fill(iFrompad(q), jFrompad(q), hADCvsTIME[q]->GetMaximum());
+
+		// TPolyLine Style for click and show signal
+		P = padPlane.pad(iFrompad(q),jFrompad(q));
+		if (P.channel()!=15&&P.channel()!=28&&P.channel()!=53&&P.channel()!=66&&P.channel()<79&&P.channel()>2) // error somewhere in DAQ
+		{
+				P.setAmp(int(hADCvsTIME[q]->GetMaximum()));
+		}
+		int color = 2*floor(float(P.ampl())/2000*NCont);
+		if (P.ampl() > 0){padline(P, 2)->Draw("f");}
+		else{padline(P)->Draw("f");}
+		padline(P)->Draw();
 	}
 
 	pads->SetNameTitle("pads", nevt);
-  pads->SetMinimum(0);
+  	pads->SetMinimum(0);
 	//pads->SetMaximum(4096);
-  pads->SetMaximum(1000);
-  pads->SetMinimum(-0.1);
-  pads->GetXaxis()->SetTitle("Pads on X axis");
-  pads->GetYaxis()->SetTitle("Pads on Y axis");
-  pads->Draw("COLZ");
+  	pads->SetMaximum(1000);
+  	pads->SetMinimum(-0.1);
+  	pads->GetXaxis()->SetTitle("Pads on X axis");
+  	pads->GetYaxis()->SetTitle("Pads on Y axis");
+  	//pads->Draw("COLZ");
 
-	//p1->Modified();
-  fCanvas->SetTickx();
-  fCanvas->SetTicky();
-  fCanvas->SetRightMargin(0.12);
-  fCanvas->Update();
-
+	p1->Modified();
+  	fCanvas->SetTickx();
+  	fCanvas->SetTicky();
+  	fCanvas->SetRightMargin(0.12);
+  	fCanvas->Update();
+	cout << "\r" << nevt << flush;
 	// Delete histos
 	delete pads;
 	for (int q=0; q<n::pads; q++)

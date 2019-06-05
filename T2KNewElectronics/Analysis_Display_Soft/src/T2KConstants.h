@@ -5,6 +5,9 @@
 #include <cmath>
 #include "math.h"
 #include <string>
+#include "TH1D.h"
+#include "TH2D.h"
+
 
 using namespace std;
 
@@ -14,12 +17,11 @@ using namespace std;
 // Numbers of #
 namespace n
 {
-
+    static const int pads = 1152; //from i = 0 to 36 and j = 0 to 32
     static const int cards = 4;
     static const int chips = 4;
     static const int bins = 82; // +1 because connectors and arc starts at 1 not 0 so dim [81] to go until index 80 and useless 0
-    static const int samples = 511;
-
+    static const int samples = 510;
 }
 
 // Geometry
@@ -44,15 +46,14 @@ namespace geom
 // Files location
 namespace loc
 {
-    static const string mapping = "/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/Analysis_Display_Soft/src/Mapping/";
-    static const string daq = "/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/Analysis_Display_Soft/src/DAQ/";
-    static const string outputs = "/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/Analysis_Display_Soft/outputs/";
-    static const string rootfiles = "/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/test_data/root/";
-    static const string aqs = "/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/test_data/aqs/";
-    static const string txt = "/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/test_data/txt/";
+    static const string mapping = "/home/mlehuraux/GitLab/T2K/T2KNewElectronics/Monitoring/src/Mapping/";
+    static const string daq = "/home/mlehuraux/GitLab/T2K/T2KNewElectronics/Monitoring/src/DAQ/";
+    static const string outputs = "/home/mlehuraux/GitLab/T2K/T2KNewElectronics/Monitoring/outputs/";
+    static const string rootfiles = "/home/mlehuraux/GitLab/T2K/T2KNewElectronics/test_data/root/";
+    static const string aqs = "/home/mlehuraux/GitLab/T2K/T2KNewElectronics/test_data/aqs/";
+    static const string txt = "/home/mlehuraux/GitLab/T2K/T2KNewElectronics/test_data/txt/";
 
 
 }
-
 
 #endif

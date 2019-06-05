@@ -46,8 +46,52 @@ DatumContext dc;
 int verbose;
 TH1D *hADCvsTIME[n::pads];
 TH2D *pads;// = new TH2D("pads", "", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
-std::vector<int> eventPos;
+std::vector<long int> eventPos;
 int iEvent;
+Pixel P;
+
+
+void scan()
+{
+	// Reset eventPos vector
+	eventPos.clear();
+
+	// Scan the file
+	DatumContext_Init(&dc, param.sample_index_offset_zs);
+	unsigned short datum;
+	int err;
+	bool done = true;
+	int prevEvnum = -1;
+	while (done)
+	{
+		// Read one short word
+		if (fread(&datum, sizeof(unsigned short), 1, param.fsrc) != 1)
+		{
+			done = false;
+		}
+		else
+		{
+			fea.tot_file_rd += sizeof(unsigned short);
+			// Interpret datum
+			if ((err = Datum_Decode(&dc, datum)) < 0)
+			{
+				printf("%d Datum_Decode: %s\n", err, &dc.ErrorString[0]);
+				done = true;
+			}
+			else
+			{
+				int evnum = (int) dc.EventNumber;
+				if (dc.isItemComplete && evnum!=prevEvnum)
+				{
+					eventPos.push_back(fea.tot_file_rd);
+					prevEvnum = evnum;
+				}
+			}
+		}
+	}
+	cout << "Size of the vector ie. #events : " << eventPos.size() << endl;
+}
+
 
 int parse_cmd_args(int argc, char **argv, Param* p)
 {
@@ -101,9 +145,12 @@ int main(int argc, char **argv)
 	}
 	else{cout << "File " << filename << " open" << endl;}
 
+	scan();
+	cout << "Scan of the file completed..." << endl;
+	cout << eventPos[0] << "	" << eventPos[eventPos.size()-1] << endl;
 	TRint *theApp = new TRint("App", 0, 0);
 	// Popup the GUI...
-	iEvent = 20;
+	iEvent = 0;
 	new T2KMainFrame(gClient->GetRoot(),800,800);
 	theApp->Run();
 
