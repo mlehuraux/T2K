@@ -37,6 +37,7 @@ namespace geom
     // To represent geometry on canvas
     static const int wx = 420; // width of canvas in pix
     static const int wy = 340; // height of canvas in pix
+    static const int times = 2;
     static const float convx = 1.;//0.85*float(wx)/(nPadx*dx); // conversion factor
     static const float convy = convx; // conversion factor
 }
@@ -46,12 +47,13 @@ namespace geom
 // Files location
 namespace loc
 {
-    static const string mapping = "/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/Monitoring/src/Mapping/";
-    static const string daq = "/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/Monitoring/src/DAQ/";
-    static const string outputs = "/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/Monitoring/outputs/";
-    static const string rootfiles = "/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/test_data/root/";
-    static const string aqs = "/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/test_data/aqs/";
-    static const string txt = "/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/test_data/txt/";
+    static const string t2k = "/home/mlehuraux/GitLab/T2K/T2KNewElectronics/";
+    static const string mapping = t2k + "Monitoring/src/Mapping/";
+    static const string daq = t2k + "Monitoring/src/DAQ/";
+    static const string outputs = t2k + "Monitoring/outputs/";
+    static const string rootfiles = t2k + "T2KNewElectronics/test_data/root/";
+    static const string aqs = t2k + "test_data/aqs/";
+    static const string txt = t2k + "test_data/txt/";
 
 
 }
