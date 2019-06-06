@@ -45,6 +45,7 @@ Features fea;
 DatumContext dc;
 int verbose;
 TH1D *hADCvsTIME[n::pads];
+TH1I *timeWindow;
 TH2D *pads;// = new TH2D("pads", "", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
 TH3D *tracks;// = new TH2D("pads", "", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
 std::vector<long int> eventPos;
@@ -179,7 +180,5 @@ int main(int argc, char **argv)
 
 	// Close file if it has been opened
 	if (param.fsrc){fclose(param.fsrc);}
-	//delete stack;
-	//delete occupation;
 	return(0);
 }

@@ -40,6 +40,7 @@ extern Features fea;
 extern DatumContext dc;
 extern int verbose;
 extern TH1D *hADCvsTIME[n::pads];
+extern TH1I *timeWindow;
 extern TH2D *pads;// = new TH2D("pads", "", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
 extern std::vector<long int> eventPos;
 extern int iEvent;
@@ -137,8 +138,10 @@ T2KMainFrame::T2KMainFrame(const TGWindow *p,UInt_t w,UInt_t h)
   // Create canvas widget	theApp->Run();
 	// Stack
 	occupation = new TH2D("occupation", "Occupation", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
-	stack = new TCanvas("stack", "Monitoring Information", 1100, 500);
-	stack->Divide(2,1);
+	timeWindow = new TH1I("timeWindow", "Time Window", n::samples, 0, n::samples);
+
+	stack = new TCanvas("stack", "Monitoring Information", 1100, 1100);
+	stack->Divide(2,2);
 	stack->Draw();
 
   fEcanvas = new TRootEmbeddedCanvas("Ecanvas",fMain, 2*geom::times*geom::wx, geom::times*geom::wy);
@@ -248,6 +251,7 @@ void T2KMainFrame::DrawNext(Int_t ev)
 	// Scan the file
 	bool done = true;
 	int current = 0;
+	double threshold = 0; // 0 if wozs, around 250 if wzs
 	fseek(param.fsrc, eventPos[ev-1], SEEK_SET);
 	while (done)
 	{
@@ -299,7 +303,11 @@ void T2KMainFrame::DrawNext(Int_t ev)
 		pads->Fill(iFrompad(q), jFrompad(q), amp);
 		tracks->Fill(iFrompad(q), jFrompad(q), time, time);
 
-		if (ev == maxev && prevmaxev!=maxev){occupation->Fill(iFrompad(q), jFrompad(q), amp);}
+		if (ev == maxev && prevmaxev!=maxev) // stacking condition not to double count if prev
+		{
+			occupation->Fill(iFrompad(q), jFrompad(q), amp);
+			if (amp>threshold){timeWindow->Fill(int(time));}
+		}
 
 		// TPolyLine Style for click and show signal
 		P = padPlane.pad(iFrompad(q),jFrompad(q));
@@ -336,8 +344,13 @@ void T2KMainFrame::DrawNext(Int_t ev)
 	stack->cd(1);
 	gStyle->SetPalette(NCont, MyPalette);
 	occupation->Draw("COLZ");
+	stack->cd(2);
+	timeWindow->GetXaxis()->SetTitle("Time samples");
+	timeWindow->GetYaxis()->SetTitle("#pads hit");
+	timeWindow->Draw("hist");
 	stack->Update();
 	cout << "\r" << nevt << flush;
+
 	// Delete histos
 	delete pads;
 	delete tracks;
