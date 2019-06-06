@@ -29,7 +29,7 @@ private:
 public:
   T2KMainFrame(const TGWindow *p,UInt_t w,UInt_t h);
   virtual ~T2KMainFrame();
-  void DrawNext(Int_t);
+  void DrawNext(Int_t ev, int mode=0);
   void CloseWindow();
   void HandleButton(Int_t);
   void SetValue(Int_t); // *SIGNAL*

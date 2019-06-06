@@ -41,6 +41,7 @@ extern DatumContext dc;
 extern int verbose;
 extern TH1D *hADCvsTIME[n::pads];
 extern TH1I *timeWindow;
+extern TH1I *transversepads;
 extern TH2D *pads;// = new TH2D("pads", "", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
 extern std::vector<long int> eventPos;
 extern int iEvent;
@@ -139,6 +140,7 @@ T2KMainFrame::T2KMainFrame(const TGWindow *p,UInt_t w,UInt_t h)
 	// Stack
 	occupation = new TH2D("occupation", "Occupation", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
 	timeWindow = new TH1I("timeWindow", "Time Window", n::samples, 0, n::samples);
+	transversepads = new TH1I("transversepads", "#pads transverse", geom::nPadx, 0, geom::nPadx);
 
 	stack = new TCanvas("stack", "Monitoring Information", 1100, 1100);
 	stack->Divide(2,2);
@@ -183,8 +185,10 @@ T2KMainFrame::T2KMainFrame(const TGWindow *p,UInt_t w,UInt_t h)
   fMain->MapWindow();
 }
 
-void T2KMainFrame::DrawNext(Int_t ev)
+void T2KMainFrame::DrawNext(Int_t ev, int mode)
 {
+	// mode = 0 : cosmic; mode = 1 : beam
+
 	prevmaxev = maxev;
 	if (maxev < ev){maxev=ev;}
 	// Load classes
@@ -295,6 +299,8 @@ void T2KMainFrame::DrawNext(Int_t ev)
 		}
 	}
 
+	//To compute transverse pads
+	int transverse[geom::nPadx]={0};
 	// Extract max from signals for display
 	for (int q=0; q<n::pads; q++)
 	{
@@ -302,11 +308,16 @@ void T2KMainFrame::DrawNext(Int_t ev)
 		double time = double(hADCvsTIME[q]->GetMaximumBin());
 		pads->Fill(iFrompad(q), jFrompad(q), amp);
 		tracks->Fill(iFrompad(q), jFrompad(q), time, time);
+		if (mode==0 && amp>threshold){transverse[jFrompad(q)]+=1;} // cosmic mode
+		else if (mode==1&& amp>threshold){transverse[iFrompad(q)]+=1;} // beam mode
 
 		if (ev == maxev && prevmaxev!=maxev) // stacking condition not to double count if prev
 		{
 			occupation->Fill(iFrompad(q), jFrompad(q), amp);
-			if (amp>threshold){timeWindow->Fill(int(time));}
+			if (amp>threshold)
+			{
+				timeWindow->Fill(int(time));
+			}
 		}
 
 		// TPolyLine Style for click and show signal
@@ -322,6 +333,15 @@ void T2KMainFrame::DrawNext(Int_t ev)
 		padline(P)->Draw();
 	}
 	p1->Modified();
+
+	// Fill transverse size
+	if (ev == maxev && prevmaxev!=maxev) // stacking condition not to double count if prev
+	{
+		for (int i=0; i<geom::nPadx; i++)
+		{
+			if (transverse[i]>0){transversepads->Fill(transverse[i]);}
+		}
+	}
 
 	fCanvas->cd(1);
 	pads->SetNameTitle("pads", nevt);
@@ -348,6 +368,10 @@ void T2KMainFrame::DrawNext(Int_t ev)
 	timeWindow->GetXaxis()->SetTitle("Time samples");
 	timeWindow->GetYaxis()->SetTitle("#pads hit");
 	timeWindow->Draw("hist");
+	stack->cd(3);
+	transversepads->GetXaxis()->SetTitle("#pads in the transverse direction");
+	transversepads->GetYaxis()->SetTitle("#pads hit");
+	transversepads->Draw("hist");
 	stack->Update();
 	cout << "\r" << nevt << flush;
 

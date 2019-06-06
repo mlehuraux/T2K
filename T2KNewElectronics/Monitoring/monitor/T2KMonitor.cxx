@@ -46,6 +46,7 @@ DatumContext dc;
 int verbose;
 TH1D *hADCvsTIME[n::pads];
 TH1I *timeWindow;
+TH1I *transversepads;
 TH2D *pads;// = new TH2D("pads", "", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
 TH3D *tracks;// = new TH2D("pads", "", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
 std::vector<long int> eventPos;
