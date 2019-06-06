@@ -39,6 +39,7 @@ April 2019    : created from mreader.c
 #include "TFile.h"
 #include "TTree.h"
 #include "TBranch.h"
+#include "TH3.h"
 
 
 typedef struct _Param {
@@ -58,17 +59,18 @@ Param param;
 Features fea;
 DatumContext dc;
 int verbose;
-
-/*******************************************************************************
-Features_Clear
-*******************************************************************************/
-void Features_Clear(Features *f)
-{
-	int i, j;
-
-	f->tot_file_rd = 0;
-	sprintf(f->run_str, "");
-}
+TH1D *hADCvsTIME[n::pads];
+TH2D *pads;// = new TH2D("pads", "", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
+std::vector<long int> eventPos;
+int iEvent;
+Pixel P;
+TH2D *occupation;
+TH3D *tracks;// = new TH2D("pads", "", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
+TCanvas *stack;
+int maxev;
+int prevmaxev;
+const Int_t NCont = 400;
+Int_t MyPalette[NCont];
 
 /*******************************************************************************
 help() to display usage

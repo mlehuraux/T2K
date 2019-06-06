@@ -22,6 +22,8 @@ namespace n
     static const int chips = 4;
     static const int bins = 82; // +1 because connectors and arc starts at 1 not 0 so dim [81] to go until index 80 and useless 0
     static const int samples = 510;
+    static const int tmin = 200;
+    static const int tmax = 450;
 }
 
 // Geometry
@@ -47,15 +49,13 @@ namespace geom
 // Files location
 namespace loc
 {
-    static const string t2k = "/home/mlehuraux/GitLab/T2K/T2KNewElectronics/";
+    static const string t2k = "/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/";
     static const string mapping = t2k + "Monitoring/src/Mapping/";
     static const string daq = t2k + "Monitoring/src/DAQ/";
     static const string outputs = t2k + "Monitoring/outputs/";
     static const string rootfiles = t2k + "T2KNewElectronics/test_data/root/";
     static const string aqs = t2k + "test_data/aqs/";
     static const string txt = t2k + "test_data/txt/";
-
-
 }
 
 #endif

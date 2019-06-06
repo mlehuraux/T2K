@@ -36,7 +36,7 @@
 #include <RQ_OBJECT.h>
 #include <TRint.h>
 #include <TApplication.h>
-
+#include "TH3.h"
 
 using namespace std;
 
@@ -46,6 +46,7 @@ DatumContext dc;
 int verbose;
 TH1D *hADCvsTIME[n::pads];
 TH2D *pads;// = new TH2D("pads", "", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
+TH3D *tracks;// = new TH2D("pads", "", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
 std::vector<long int> eventPos;
 int iEvent;
 Pixel P;
@@ -53,6 +54,8 @@ TH2D *occupation;
 TCanvas *stack;
 int maxev;
 int prevmaxev;
+const Int_t NCont = 400;
+Int_t MyPalette[NCont];
 
 void scan()
 {
@@ -134,8 +137,6 @@ GUI framework
 int main(int argc, char **argv)
 {
 	// Palette
-	const Int_t NCont = 400;
-  Int_t MyPalette[NCont];
   const Int_t NRGBs = 5;
   Double_t stops[NRGBs] = { 0.00, 0.34, 0.61, 0.84, 1.00 };
   Double_t red[NRGBs]   = { 0.00, 0.00, 0.87, 1.00, 0.51 };

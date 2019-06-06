@@ -31,6 +31,7 @@
 #include "TPad.h"
 #include "TCanvas.h"
 #include "TPaletteAxis.h"
+#include "TH3.h"
 
 using namespace std;
 
@@ -44,9 +45,12 @@ extern std::vector<long int> eventPos;
 extern int iEvent;
 extern 	Pixel P;
 extern TH2D *occupation;
+extern TH3D *tracks;
 extern TCanvas *stack;
 extern int maxev;
 extern int prevmaxev;
+extern const Int_t NCont=400;
+extern Int_t MyPalette[NCont];
 
 /*******************************************************************************
 Useful functions
@@ -59,6 +63,7 @@ void histoEventInit()
 {
 	gStyle->SetOptStat(0);
 	pads = new TH2D("pads", "", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
+	tracks = new TH3D("tracks", "", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady, n::samples, 0, n::samples);
 
 	for(int k=0;k<n::pads;k++)
 	{
@@ -136,7 +141,7 @@ T2KMainFrame::T2KMainFrame(const TGWindow *p,UInt_t w,UInt_t h)
 	stack->Divide(2,1);
 	stack->Draw();
 
-  fEcanvas = new TRootEmbeddedCanvas("Ecanvas",fMain, geom::times*geom::wx, geom::times*geom::wy);
+  fEcanvas = new TRootEmbeddedCanvas("Ecanvas",fMain, 2*geom::times*geom::wx, geom::times*geom::wy);
   fMain->AddFrame(fEcanvas, new TGLayoutHints(kLHintsExpandX |
 									kLHintsExpandY, 10,10,10,1));
   // Create a horizontal frame widget with buttons
@@ -200,21 +205,8 @@ void T2KMainFrame::DrawNext(Int_t ev)
   gStyle->SetLabelFont(82,"XY");
   gStyle->SetLabelSize(0.04,"XY");
 
-	const Int_t NCont = 400;
-  Int_t MyPalette[NCont];
-  const Int_t NRGBs = 5;
-  Double_t stops[NRGBs] = { 0.00, 0.34, 0.61, 0.84, 1.00 };
-  Double_t red[NRGBs]   = { 0.00, 0.00, 0.87, 1.00, 0.51 };
-  Double_t green[NRGBs] = { 0.00, 0.81, 1.00, 0.20, 0.00 };
-  Double_t blue[NRGBs]  = { 0.51, 1.00, 0.12, 0.00, 0.00 };
-  gStyle->SetNumberContours(NCont);
-  Int_t FI = TColor::CreateGradientColorTable(NRGBs, stops, red, green, blue, NCont);
-  for (int i=0;i<NCont;i++)
-  {
-    MyPalette[i] = FI+int((double(NCont-1)/double(sqrt(NCont-1))))*int(sqrt(i));
-  }
 	//gStyle->SetPalette(kBird);
-	gStyle->SetPalette(NCont, MyPalette);
+	//gStyle->SetPalette(NCont, MyPalette);
 
 	// Stack window for monitoring
   occupation->SetMinimum(-0.1);
@@ -231,10 +223,12 @@ void T2KMainFrame::DrawNext(Int_t ev)
   TCanvas *fCanvas = fEcanvas->GetCanvas();
   fCanvas->cd();
   fCanvas->Clear();
-  TPad *p1 = new TPad("p1", "p1", 0.01, 0.01, 0.99, 0.99);
+  TPad *p1 = new TPad("p1", "p1", 0.01, 0.01, 0.49, 0.99);
   p1->Range(-0.5*geom::nPadx*geom::dx, -0.5*geom::nPady*geom::dy, 0.5*geom::nPadx*geom::dx, 0.5*geom::nPady*geom::dy);
   p1->Draw();
-  p1->cd();
+	TPad *p2 = new TPad("p2", "p2", 0.51, 0.01, 0.99, 0.99);
+  //p2->Range(-0.5*geom::nPadx*geom::dx, -0.5*geom::nPady*geom::dy, 0.5*geom::nPadx*geom::dx, 0.5*geom::nPady*geom::dy);
+	p2->Draw();
 
   TString nevt = "Event ";
   nevt += ev;
@@ -301,7 +295,10 @@ void T2KMainFrame::DrawNext(Int_t ev)
 	for (int q=0; q<n::pads; q++)
 	{
 		double amp = hADCvsTIME[q]->GetMaximum();
+		double time = double(hADCvsTIME[q]->GetMaximumBin());
 		pads->Fill(iFrompad(q), jFrompad(q), amp);
+		tracks->Fill(iFrompad(q), jFrompad(q), time, time);
+
 		if (ev == maxev && prevmaxev!=maxev){occupation->Fill(iFrompad(q), jFrompad(q), amp);}
 
 		// TPolyLine Style for click and show signal
@@ -310,12 +307,15 @@ void T2KMainFrame::DrawNext(Int_t ev)
 		{
 				P.setAmp(int(amp));
 		}
+		p1->cd();
 		int color = (float(P.ampl())/4096*NCont);
 		if (P.ampl() > 0){padline(P, MyPalette[color])->Draw("f");}
 		else{padline(P)->Draw("f");}
 		padline(P)->Draw();
 	}
+	p1->Modified();
 
+	fCanvas->cd(1);
 	pads->SetNameTitle("pads", nevt);
 	pads->SetMaximum(4096);
   pads->SetMinimum(-0.1);
@@ -323,18 +323,24 @@ void T2KMainFrame::DrawNext(Int_t ev)
   pads->GetYaxis()->SetTitle("Pads on Y axis");
   //pads->Draw("COLZ");
 
-	p1->Modified();
-  fCanvas->SetTickx();
-  fCanvas->SetTicky();
-  fCanvas->SetRightMargin(0.12);
+  //fCanvas->SetTickx();
+  //fCanvas->SetTicky();
+  //fCanvas->SetRightMargin(0.15);
+	p2->cd();
+	tracks->SetMinimum(200);
+	gStyle->SetPalette(kBird);
+	tracks->Draw("LEGO2");
+	p2->Modified();
   fCanvas->Update();
 
 	stack->cd(1);
+	gStyle->SetPalette(NCont, MyPalette);
 	occupation->Draw("COLZ");
 	stack->Update();
 	cout << "\r" << nevt << flush;
 	// Delete histos
 	delete pads;
+	delete tracks;
 	for (int q=0; q<n::pads; q++)
 	{
 		delete hADCvsTIME[q];
