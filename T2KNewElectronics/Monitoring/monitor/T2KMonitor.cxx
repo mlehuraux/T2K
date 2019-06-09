@@ -3,6 +3,7 @@
 #include <fcntl.h>
 #include <fstream>
 #include <vector>
+#include <iostream>
 
 #include "../src/fdecoder.h"
 #include "../src/datum_decoder.h"
@@ -58,6 +59,10 @@ int maxev;
 int prevmaxev;
 const Int_t NCont = 400;
 Int_t MyPalette[NCont];
+int autoMon;
+int mode;
+double threshold; // 0 if wozs, around 250 if wzs
+
 
 void scan()
 {
@@ -133,6 +138,13 @@ int parse_cmd_args(int argc, char **argv, Param* p)
 	return (0);
 }
 
+void paramInit()
+{
+	mode = 0; // cosmic
+	autoMon=0; // mode auto
+	threshold = 0; // amplitude threshold 0 if zero suppression
+}
+
 /******************************************************************************
 GUI framework
 *******************************************************************************/
@@ -173,6 +185,7 @@ int main(int argc, char **argv)
 
 	maxev = -1;
 	prevmaxev = -1;
+	paramInit();
 	TRint *theApp = new TRint("App", 0, 0);
 	// Popup the GUI...
 	iEvent = 0;

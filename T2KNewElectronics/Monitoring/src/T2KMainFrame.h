@@ -22,14 +22,22 @@ private:
   TGHorizontalFrame    *hframe;
   TGTextButton         *next;
   TGTextButton         *prev;
-  //TGTextButton         *start;
-  //TGTextButton         *stop;
+  TGTextButton         *beam;
+  TGTextButton         *cosmic;
+  TGTextButton         *thresplus;
+  TGTextButton         *thresminus;
+  TGTextButton         *thresplusplus;
+  TGTextButton         *start;
+  TGTextButton         *stop;
   TGTextButton         *exit;
+  TGButtonGroup        *modes;
+
 
 public:
   T2KMainFrame(const TGWindow *p,UInt_t w,UInt_t h);
   virtual ~T2KMainFrame();
-  void DrawNext(Int_t ev, int mode=0);
+  void Monitor(int mode);
+  void DrawNext(Int_t ev, int mode);
   void CloseWindow();
   void HandleButton(Int_t);
   void SetValue(Int_t); // *SIGNAL*

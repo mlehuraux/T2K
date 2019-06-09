@@ -17,6 +17,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <vector>
+//#include <boost/thread/thread.hpp>
 
 // ROOT
 #include "TH1I.h"
@@ -53,6 +54,11 @@ extern int maxev;
 extern int prevmaxev;
 extern const Int_t NCont=400;
 extern Int_t MyPalette[NCont];
+extern int autoMon;
+extern int mode;
+extern double threshold; // 0 if wozs, around 250 if wzs
+
+
 
 /*******************************************************************************
 Useful functions
@@ -111,19 +117,39 @@ void T2KMainFrame::CloseWindow()
 
 void T2KMainFrame::HandleButton(Int_t id)
 {
-//  if (id == -1) {
-//    TGButton *btn = (TGButton *) gTQSender;
-//    id = btn->WidgetId();
-//  }
   switch (id) {
-  case 1:
+  case 0: // BeamMode
+    mode = 1;
+	break;
+  case 4: // cosmic mode
+    mode = 0;
+	break;
+  case 1: // prev
+    autoMon=0;
     iEvent = iEvent-1;
-    DrawNext(iEvent);
+    DrawNext(iEvent, mode);
     break;
-  case 2:
+  case 2: // next
+    autoMon=0;
     iEvent = iEvent+1;
-    DrawNext(iEvent);
+    DrawNext(iEvent, mode);
     break;
+  case 3: // start
+    autoMon = 1;
+	Monitor(0);
+    break;
+  case 5: // thresplus
+  	threshold+= 10;
+	cout << "\n" << "Amplitude threshold set to " << threshold << endl;
+  	break;
+  case 6: // thresplusplus
+    threshold=260;
+	cout << "\n" << "Amplitude threshold set to " << threshold << endl;
+    break;
+  case 7: // thresminus
+	threshold-= 10;
+	cout << "\n" << "Amplitude threshold set to " << threshold << endl;
+	break;
   default:
     break;
   }
@@ -151,19 +177,46 @@ T2KMainFrame::T2KMainFrame(const TGWindow *p,UInt_t w,UInt_t h)
 									kLHintsExpandY, 10,10,10,1));
   // Create a horizontal frame widget with buttons
   hframe = new TGHorizontalFrame(fMain,200,40);
+
+  beam = new TGTextButton(hframe,"&BeamMode");
+  beam->Connect("Clicked()","T2KMainFrame",this,"HandleButton(=0)");
+  hframe->AddFrame(beam, new TGLayoutHints(kLHintsCenterX,
+                                           5,5,3,4));
+
+  cosmic = new TGTextButton(hframe,"&CosmicMode");
+  cosmic->Connect("Clicked()","T2KMainFrame",this,"HandleButton(=4)");
+  hframe->AddFrame(cosmic, new TGLayoutHints(kLHintsCenterX,
+										   5,5,3,4));
+
   prev = new TGTextButton(hframe,"&Prev");
   prev->Connect("Clicked()","T2KMainFrame",this,"HandleButton(=1)");
   hframe->AddFrame(prev, new TGLayoutHints(kLHintsCenterX,
                                            5,5,3,4));
+
   next = new TGTextButton(hframe,"&Next");
   next->Connect("Clicked()","T2KMainFrame",this,"HandleButton(=2)");
   hframe->AddFrame(next, new TGLayoutHints(kLHintsCenterX,
                                            5,5,3,4));
 
-	//start = new TGTextButton(hframe,"&Start");
-	//start->Connect("Clicked()","T2KMainFrame",this,"HandleButton(=3)");
-	//hframe->AddFrame(start, new TGLayoutHints(kLHintsCenterX,
-																				//	 5,5,3,4));
+  start = new TGTextButton(hframe,"&StartMonitoring");
+  start->Connect("Clicked()","T2KMainFrame",this,"HandleButton(=3)");
+  hframe->AddFrame(start, new TGLayoutHints(kLHintsCenterX,
+									   	   5,5,3,4));
+
+  thresplus = new TGTextButton(hframe,"&Threshold+");
+  thresplus->Connect("Clicked()","T2KMainFrame",this,"HandleButton(=5)");
+  hframe->AddFrame(thresplus, new TGLayoutHints(kLHintsCenterX,
+	                                       5,5,3,4));
+
+  thresminus = new TGTextButton(hframe,"&Threshold-");
+  thresminus->Connect("Clicked()","T2KMainFrame",this,"HandleButton(=7)");
+  hframe->AddFrame(thresminus, new TGLayoutHints(kLHintsCenterX,
+									       5,5,3,4));
+
+  thresplusplus = new TGTextButton(hframe,"&Threshold++");
+  thresplusplus->Connect("Clicked()","T2KMainFrame",this,"HandleButton(=6)");
+  hframe->AddFrame(thresplusplus, new TGLayoutHints(kLHintsCenterX,
+										    5,5,3,4));
 
   exit = new TGTextButton(hframe,"&Exit");
   exit->Connect("Clicked()","T2KMainFrame",this,"CloseWindow()");
@@ -173,7 +226,7 @@ T2KMainFrame::T2KMainFrame(const TGWindow *p,UInt_t w,UInt_t h)
                                             2,2,2,2));
 
   // Set a name to the main frame
-  fMain->SetWindowName("T2K Display");
+  fMain->SetWindowName("T2K Monitoring");
 
   // Map all subwindows of main frame
   fMain->MapSubwindows();
@@ -185,14 +238,24 @@ T2KMainFrame::T2KMainFrame(const TGWindow *p,UInt_t w,UInt_t h)
   fMain->MapWindow();
 }
 
+void T2KMainFrame::Monitor(int mode)
+{
+	while(autoMon)
+	{
+		iEvent = iEvent+1;
+	    DrawNext(iEvent, mode);
+		sleep(1);
+	}
+}
+
 void T2KMainFrame::DrawNext(Int_t ev, int mode)
 {
 	// mode = 0 : cosmic; mode = 1 : beam
 
-	prevmaxev = maxev;
-	if (maxev < ev){maxev=ev;}
-	// Load classes
-	DAQ daq;
+  prevmaxev = maxev;
+  if (maxev < ev){maxev=ev;}
+  // Load classes
+  DAQ daq;
   daq.loadDAQ();
   //cout << "... DAQ loaded successfully" << endl;
   Mapping T2K;
@@ -255,7 +318,6 @@ void T2KMainFrame::DrawNext(Int_t ev, int mode)
 	// Scan the file
 	bool done = true;
 	int current = 0;
-	double threshold = 0; // 0 if wozs, around 250 if wzs
 	fseek(param.fsrc, eventPos[ev-1], SEEK_SET);
 	while (done)
 	{
@@ -309,7 +371,7 @@ void T2KMainFrame::DrawNext(Int_t ev, int mode)
 		pads->Fill(iFrompad(q), jFrompad(q), amp);
 		tracks->Fill(iFrompad(q), jFrompad(q), time, time);
 		if (mode==0 && amp>threshold){transverse[jFrompad(q)]+=1;} // cosmic mode
-		else if (mode==1&& amp>threshold){transverse[iFrompad(q)]+=1;} // beam mode
+		if (mode==1&& amp>threshold){transverse[iFrompad(q)]+=1;} // beam mode
 
 		if (ev == maxev && prevmaxev!=maxev) // stacking condition not to double count if prev
 		{
@@ -373,7 +435,7 @@ void T2KMainFrame::DrawNext(Int_t ev, int mode)
 	transversepads->GetYaxis()->SetTitle("#pads hit");
 	transversepads->Draw("hist");
 	stack->Update();
-	cout << "\r" << nevt << flush;
+	cout << "\r" << "\t" << nevt << flush;
 
 	// Delete histos
 	delete pads;
