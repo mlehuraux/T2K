@@ -41,7 +41,6 @@ public:
   void HandleButton(Int_t);
   void SetValue(Int_t); // *SIGNAL*
   void ChangeStartLabel();
-  void ChangePauseLabel();
   static void *loop(void * ptr);
 };
 

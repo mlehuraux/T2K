@@ -6,9 +6,9 @@ export compile=1
 export startevent=1
 export maxevent=1000
 
-export data="/local/home/t2kt/projects/bin/pandax/data"
+#export data="/local/home/t2kt/projects/bin/pandax/data"
 
-export t2k="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics"
+export t2k="/home/mlehuraux/GitLab/T2K/T2KNewElectronics"
 #export data="/local/home/t2kt/projects/bin/pandax/data"
 export input_aqs=$t2k/test_data/aqs
 export input_txt=$t2k/test_data/txt
@@ -18,9 +18,9 @@ export make_convert=$t2k/pandax_client_16apr19/projects/pandax/mclient/linux
 export bin_convert=$t2k/pandax_client_16apr19/projects/bin/pandax/linux
 export here=$t2k/Monitoring
 
-cd $input_aqs
-ln -s $data/$fileped.aqs
-ln -s $data/$filedata.aqs
+#cd $input_aqs
+#ln -s $data/$fileped.aqs
+#ln -s $data/$filedata.aqs
 
 ###############################
 #   Pedestals visualisation   #

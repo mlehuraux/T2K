@@ -84,7 +84,7 @@ void histoEventInit()
 	}
 	pads->Reset();
 }
-
+/*
 TPolyLine *padline(Pixel& P, int color=602)
 {
     Float_t x[4] = {geom::convx*(P.coordx()-0.5*geom::dx), geom::convx*(P.coordx()-0.5*geom::dx), geom::convx*(P.coordx()+0.5*geom::dx), geom::convx*(P.coordx()+0.5*geom::dx)};
@@ -95,7 +95,7 @@ TPolyLine *padline(Pixel& P, int color=602)
     pline->SetLineWidth(1);
     return(pline);
 }
-
+*/
 void scan()
 {
 	// Reset eventPos vector
@@ -213,7 +213,7 @@ void *T2KMainFrame::loop(void* ptr)
 		if (autoMon==true)
 		{
 			iEvent = iEvent+1;
-		  p->DrawNext(iEvent, mode);
+		    p->DrawNext(iEvent, mode);
 		}
 	}
 }
@@ -329,9 +329,9 @@ void T2KMainFrame::DrawNext(Int_t ev, int mode)
   T2K.loadMapping();
   //cout << "...Mapping loaded succesfully." << endl;
 
-	Pads padPlane;
-	padPlane.loadPadPlane(daq, T2K);
-	//cout << "...Pad plane loaded succesfully." << endl;
+  Pads padPlane;
+  padPlane.loadPadPlane(daq, T2K);
+  //cout << "...Pad plane loaded succesfully." << endl;
 
   gStyle->SetTitleTextColor(602);
   gStyle->SetTitleFont(102);
@@ -342,10 +342,10 @@ void T2KMainFrame::DrawNext(Int_t ev, int mode)
   gStyle->SetLabelFont(82,"XY");
   gStyle->SetLabelSize(0.04,"XY");
 
-	//gStyle->SetPalette(kBird);
-	//gStyle->SetPalette(NCont, MyPalette);
+  //gStyle->SetPalette(kBird);
+  //gStyle->SetPalette(NCont, MyPalette);
 
-	// Stack window for monitoring
+  // Stack window for monitoring
   occupation->SetMinimum(-0.1);
   occupation->GetXaxis()->SetTitle("Pads on X axis");
   occupation->GetYaxis()->SetTitle("Pads on Y axis");
@@ -363,9 +363,9 @@ void T2KMainFrame::DrawNext(Int_t ev, int mode)
   TPad *p1 = new TPad("p1", "p1", 0.01, 0.01, 0.49, 0.99);
   p1->Range(-0.5*geom::nPadx*geom::dx, -0.5*geom::nPady*geom::dy, 0.5*geom::nPadx*geom::dx, 0.5*geom::nPady*geom::dy);
   p1->Draw();
-	TPad *p2 = new TPad("p2", "p2", 0.51, 0.01, 0.99, 0.99);
+  TPad *p2 = new TPad("p2", "p2", 0.51, 0.01, 0.99, 0.99);
   //p2->Range(-0.5*geom::nPadx*geom::dx, -0.5*geom::nPady*geom::dy, 0.5*geom::nPadx*geom::dx, 0.5*geom::nPady*geom::dy);
-	p2->Draw();
+  p2->Draw();
 
   TString nevt = "Event ";
   nevt += ev;
@@ -452,15 +452,19 @@ void T2KMainFrame::DrawNext(Int_t ev, int mode)
 
 		// TPolyLine Style for click and show signal
 		P = padPlane.pad(iFrompad(q),jFrompad(q));
-		if (P.channel()!=15&&P.channel()!=28&&P.channel()!=53&&P.channel()!=66&&P.channel()<79&&P.channel()>2) // error somewhere in DAQ
+		if (P.channel()!=15&&P.channel()!=28&&P.channel()!=53&&P.channel()!=66&&P.channel()<79&&P.channel()>2)
 		{
-				P.setAmp(int(amp));
+			P.setAmp(int(amp));
 		}
 		p1->cd();
 		int color = (float(P.ampl())/4096*NCont);
-		if (P.ampl() > 0){padline(P, MyPalette[color])->Draw("f");}
-		else{padline(P)->Draw("f");}
-		padline(P)->Draw();
+		if (P.ampl() > 0)
+		{
+			P.line()->SetFillColor(MyPalette[color]);
+			P.line()->Draw("f");
+		}
+		else{P.line()->Draw("f");}
+		P.line()->Draw();
 	}
 	p1->Modified();
 
@@ -476,20 +480,20 @@ void T2KMainFrame::DrawNext(Int_t ev, int mode)
 	fCanvas->cd(1);
 	pads->SetNameTitle("pads", nevt);
 	pads->SetMaximum(4096);
-  pads->SetMinimum(-0.1);
-  pads->GetXaxis()->SetTitle("Pads on X axis");
-  pads->GetYaxis()->SetTitle("Pads on Y axis");
-  //pads->Draw("COLZ");
+  	pads->SetMinimum(-0.1);
+  	pads->GetXaxis()->SetTitle("Pads on X axis");
+  	pads->GetYaxis()->SetTitle("Pads on Y axis");
+  	//pads->Draw("COLZ");
 
-  //fCanvas->SetTickx();
-  //fCanvas->SetTicky();
-  //fCanvas->SetRightMargin(0.15);
+  	//fCanvas->SetTickx();
+  	//fCanvas->SetTicky();
+  	//fCanvas->SetRightMargin(0.15);
 	p2->cd();
 	tracks->SetMinimum(200);
 	gStyle->SetPalette(kBird);
 	tracks->Draw("LEGO2");
 	p2->Modified();
-  fCanvas->Update();
+  	fCanvas->Update();
 
 	stack->cd(1);
 	gStyle->SetPalette(NCont, MyPalette);
