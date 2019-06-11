@@ -33,6 +33,7 @@
 #include "TCanvas.h"
 #include "TPaletteAxis.h"
 #include "TH3.h"
+#include "TThread.h"
 
 using namespace std;
 
@@ -54,7 +55,7 @@ extern int maxev;
 extern int prevmaxev;
 extern const Int_t NCont=400;
 extern Int_t MyPalette[NCont];
-extern int autoMon;
+extern bool autoMon,endMon;
 extern int mode;
 extern double threshold; // 0 if wozs, around 250 if wzs
 
@@ -95,6 +96,45 @@ TPolyLine *padline(Pixel& P, int color=602)
     return(pline);
 }
 
+void scan()
+{
+	// Reset eventPos vector
+	eventPos.clear();
+
+	// Scan the file
+	DatumContext_Init(&dc, param.sample_index_offset_zs);
+	unsigned short datum;
+	int err;
+	bool done = true;
+	int prevEvnum = -1;
+	while (done)
+	{
+		// Read one short word
+		if (fread(&datum, sizeof(unsigned short), 1, param.fsrc) != 1)
+		{
+			done = false;
+		}
+		else
+		{
+			fea.tot_file_rd += sizeof(unsigned short);
+			// Interpret datum
+			if ((err = Datum_Decode(&dc, datum)) < 0)
+			{
+				printf("%d Datum_Decode: %s\n", err, &dc.ErrorString[0]);
+				done = true;
+			}
+			else
+			{
+				int evnum = (int) dc.EventNumber;
+				if (dc.isItemComplete && evnum!=prevEvnum)
+				{
+					eventPos.push_back(fea.tot_file_rd);
+					prevEvnum = evnum;
+				}
+			}
+		}
+	}
+}
 /********************************************************************************/
 
 void Features_Clear(Features *f)
@@ -115,44 +155,67 @@ void T2KMainFrame::CloseWindow()
   gApplication->Terminate(0);
 }
 
+void T2KMainFrame::ChangeStartLabel()
+{
+  fStart->SetState(kButtonDown);
+  if (!autoMon) {
+     fStart->SetText("&StopMonitoring");
+     autoMon= kTRUE;
+  } else {
+     fStart->SetText("&StartMonitoring");
+     autoMon = kFALSE;
+  }
+  fStart->SetState(kButtonUp);
+}
+
 void T2KMainFrame::HandleButton(Int_t id)
 {
   switch (id) {
   case 0: // BeamMode
     mode = 1;
-	break;
+		break;
   case 4: // cosmic mode
     mode = 0;
-	break;
+		break;
   case 1: // prev
-    autoMon=0;
+    autoMon=false;
     iEvent = iEvent-1;
     DrawNext(iEvent, mode);
     break;
   case 2: // next
-    autoMon=0;
+    autoMon=false;
     iEvent = iEvent+1;
     DrawNext(iEvent, mode);
     break;
-  case 3: // start
-    autoMon = 1;
-	Monitor(0);
-    break;
   case 5: // thresplus
   	threshold+= 10;
-	cout << "\n" << "Amplitude threshold set to " << threshold << endl;
+		cout << "\n" << "Amplitude threshold set to " << threshold << endl;
   	break;
   case 6: // thresplusplus
     threshold=260;
-	cout << "\n" << "Amplitude threshold set to " << threshold << endl;
+		cout << "\n" << "Amplitude threshold set to " << threshold << endl;
     break;
   case 7: // thresminus
-	threshold-= 10;
-	cout << "\n" << "Amplitude threshold set to " << threshold << endl;
-	break;
+		threshold-= 10;
+		cout << "\n" << "Amplitude threshold set to " << threshold << endl;
+		break;
   default:
     break;
   }
+}
+
+void *T2KMainFrame::loop(void* ptr)
+{
+	T2KMainFrame * p=(T2KMainFrame *)ptr;
+	while(true)
+	{
+		sleep(0.5);
+		if (autoMon==true)
+		{
+			iEvent = iEvent+1;
+		  p->DrawNext(iEvent, mode);
+		}
+	}
 }
 
 T2KMainFrame::T2KMainFrame(const TGWindow *p,UInt_t w,UInt_t h)
@@ -198,9 +261,9 @@ T2KMainFrame::T2KMainFrame(const TGWindow *p,UInt_t w,UInt_t h)
   hframe->AddFrame(next, new TGLayoutHints(kLHintsCenterX,
                                            5,5,3,4));
 
-  start = new TGTextButton(hframe,"&StartMonitoring");
-  start->Connect("Clicked()","T2KMainFrame",this,"HandleButton(=3)");
-  hframe->AddFrame(start, new TGLayoutHints(kLHintsCenterX,
+  fStart = new TGTextButton(hframe,"&StartMonitoring");
+  fStart->Connect("Clicked()","T2KMainFrame",this,"ChangeStartLabel()");
+  hframe->AddFrame(fStart, new TGLayoutHints(kLHintsCenterX,
 									   	   5,5,3,4));
 
   thresplus = new TGTextButton(hframe,"&Threshold+");
@@ -236,6 +299,10 @@ T2KMainFrame::T2KMainFrame(const TGWindow *p,UInt_t w,UInt_t h)
 
   // Map main frame
   fMain->MapWindow();
+
+	TThread *monitoring = new TThread("monitoring", (void(*)(void *))&loop, (void*)this);
+	monitoring->Run();
+
 }
 
 void T2KMainFrame::Monitor(int mode)
@@ -243,7 +310,7 @@ void T2KMainFrame::Monitor(int mode)
 	while(autoMon)
 	{
 		iEvent = iEvent+1;
-	    DrawNext(iEvent, mode);
+	  DrawNext(iEvent, mode);
 		sleep(1);
 	}
 }
@@ -306,7 +373,7 @@ void T2KMainFrame::DrawNext(Int_t ev, int mode)
   // Go back to the beginning of the file
   fseek(param.fsrc, 0, SEEK_SET);
 
-  	// Fill in histo
+  // Fill in histo
 	DatumContext_Init(&dc, param.sample_index_offset_zs);
 	// decodeEvent
 	unsigned short datum;
@@ -327,7 +394,8 @@ void T2KMainFrame::DrawNext(Int_t ev, int mode)
 		{
 			printf("\n");
 			printf("*** End of file reached ***\n");
-			done = false;
+			scan();
+			//done = false;
 		}
 		else
 		{

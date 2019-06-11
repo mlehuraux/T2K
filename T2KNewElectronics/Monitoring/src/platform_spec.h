@@ -7,8 +7,8 @@
  Description: Specific include file and definitions for Linux PC
 
  Author:      D. Calvet,        calvet@hep.saclay.cea.fr
-              
-              
+
+
  History:
   March 2006: created
 
@@ -31,9 +31,8 @@ extern int errno;
 
 #define yield() sched_yield()
 #define xil_printf printf
-#define Sleep(ms) usleep(1000*(ms))
+//#define Sleep(ms) usleep(1000*(ms))
 
 #define __int64 long long
 
 #endif
-

@@ -59,52 +59,9 @@ int maxev;
 int prevmaxev;
 const Int_t NCont = 400;
 Int_t MyPalette[NCont];
-int autoMon;
+bool autoMon, endMon;
 int mode;
 double threshold; // 0 if wozs, around 250 if wzs
-
-
-void scan()
-{
-	// Reset eventPos vector
-	eventPos.clear();
-
-	// Scan the file
-	DatumContext_Init(&dc, param.sample_index_offset_zs);
-	unsigned short datum;
-	int err;
-	bool done = true;
-	int prevEvnum = -1;
-	while (done)
-	{
-		// Read one short word
-		if (fread(&datum, sizeof(unsigned short), 1, param.fsrc) != 1)
-		{
-			done = false;
-		}
-		else
-		{
-			fea.tot_file_rd += sizeof(unsigned short);
-			// Interpret datum
-			if ((err = Datum_Decode(&dc, datum)) < 0)
-			{
-				printf("%d Datum_Decode: %s\n", err, &dc.ErrorString[0]);
-				done = true;
-			}
-			else
-			{
-				int evnum = (int) dc.EventNumber;
-				if (dc.isItemComplete && evnum!=prevEvnum)
-				{
-					eventPos.push_back(fea.tot_file_rd);
-					prevEvnum = evnum;
-				}
-			}
-		}
-	}
-	cout << "Size of the vector ie. #events : " << eventPos.size() << endl;
-}
-
 
 int parse_cmd_args(int argc, char **argv, Param* p)
 {
@@ -141,7 +98,8 @@ int parse_cmd_args(int argc, char **argv, Param* p)
 void paramInit()
 {
 	mode = 0; // cosmic
-	autoMon=0; // mode auto
+	autoMon=false; // mode auto
+	endMon=false;
 	threshold = 0; // amplitude threshold 0 if zero suppression
 }
 

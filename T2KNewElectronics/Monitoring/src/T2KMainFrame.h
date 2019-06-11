@@ -27,10 +27,9 @@ private:
   TGTextButton         *thresplus;
   TGTextButton         *thresminus;
   TGTextButton         *thresplusplus;
-  TGTextButton         *start;
-  TGTextButton         *stop;
   TGTextButton         *exit;
   TGButtonGroup        *modes;
+  TGTextButton         *fStart;
 
 
 public:
@@ -41,6 +40,11 @@ public:
   void CloseWindow();
   void HandleButton(Int_t);
   void SetValue(Int_t); // *SIGNAL*
+  void ChangeStartLabel();
+  void ChangePauseLabel();
+  static void *loop(void * ptr);
 };
+
+void scan();
 
 #endif
