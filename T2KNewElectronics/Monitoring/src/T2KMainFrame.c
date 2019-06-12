@@ -445,8 +445,8 @@ void T2KMainFrame::DrawNext(Int_t ev, int mode)
 		if (ev == maxev && prevmaxev!=maxev) // stacking condition not to double count if prev
 		{
 			occupation->Fill(iFrompad(q), jFrompad(q), amp);
-			//if (amp>(260+threshold)*1.5)
-			if (amp>0)
+			if (amp>(260+threshold)*1.5)
+			//if (amp>0)
 			{
 				timeWindow->Fill(int(time));
 			}
