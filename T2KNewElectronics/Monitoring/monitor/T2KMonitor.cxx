@@ -54,7 +54,7 @@ std::vector<long int> eventPos;
 int iEvent;
 Pixel P;
 TH2D *occupation;
-TCanvas *stack;
+TCanvas *stack, *test;
 int maxev;
 int prevmaxev;
 const Int_t NCont = 400;

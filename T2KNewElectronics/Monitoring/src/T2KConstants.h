@@ -49,7 +49,7 @@ namespace geom
 // Files location
 namespace loc
 {
-    static const string t2k = "/home/mlehuraux/GitLab/T2K/T2KNewElectronics/";
+    static const string t2k = "/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics/";
     static const string mapping = t2k + "Monitoring/src/Mapping/";
     static const string daq = t2k + "Monitoring/src/DAQ/";
     static const string outputs = t2k + "Monitoring/outputs/";

@@ -60,17 +60,22 @@ Features fea;
 DatumContext dc;
 int verbose;
 TH1D *hADCvsTIME[n::pads];
+TH1I *timeWindow;
+TH1I *transversepads;
 TH2D *pads;// = new TH2D("pads", "", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
+TH3D *tracks;// = new TH2D("pads", "", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
 std::vector<long int> eventPos;
 int iEvent;
 Pixel P;
 TH2D *occupation;
-TH3D *tracks;// = new TH2D("pads", "", geom::nPadx, 0, geom::nPadx, geom::nPady, 0, geom::nPady);
-TCanvas *stack;
+TCanvas *stack, *test;
 int maxev;
 int prevmaxev;
 const Int_t NCont = 400;
 Int_t MyPalette[NCont];
+bool autoMon, endMon;
+int mode;
+double threshold; // 0 if wozs, around 250 if wzs
 
 /*******************************************************************************
 help() to display usage

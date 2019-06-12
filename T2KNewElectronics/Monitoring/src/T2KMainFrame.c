@@ -50,7 +50,7 @@ extern int iEvent;
 extern 	Pixel P;
 extern TH2D *occupation;
 extern TH3D *tracks;
-extern TCanvas *stack;
+extern TCanvas *stack, *test;
 extern int maxev;
 extern int prevmaxev;
 extern const Int_t NCont=400;
@@ -84,18 +84,7 @@ void histoEventInit()
 	}
 	pads->Reset();
 }
-/*
-TPolyLine *padline(Pixel& P, int color=602)
-{
-    Float_t x[4] = {geom::convx*(P.coordx()-0.5*geom::dx), geom::convx*(P.coordx()-0.5*geom::dx), geom::convx*(P.coordx()+0.5*geom::dx), geom::convx*(P.coordx()+0.5*geom::dx)};
-    Float_t y[4] = {geom::convy*(P.coordy()-0.5*geom::dy), geom::convy*(P.coordy()+0.5*geom::dy), geom::convy*(P.coordy()+0.5*geom::dy), geom::convy*(P.coordy()-0.5*geom::dy)};
-    TPolyLine *pline = new TPolyLine(4,x,y);
-    pline->SetFillColor(color);
-    pline->SetLineColor(kGray);
-    pline->SetLineWidth(1);
-    return(pline);
-}
-*/
+
 void scan()
 {
 	// Reset eventPos vector
@@ -232,6 +221,7 @@ T2KMainFrame::T2KMainFrame(const TGWindow *p,UInt_t w,UInt_t h)
 	transversepads = new TH1I("transversepads", "#pads transverse", geom::nPadx, 0, geom::nPadx);
 
 	stack = new TCanvas("stack", "Monitoring Information", 1100, 1100);
+	//test = new TCanvas("test", "test", 600, 600);
 	stack->Divide(2,2);
 	stack->Draw();
 
@@ -407,8 +397,12 @@ void T2KMainFrame::DrawNext(Int_t ev, int mode)
 				done = true;
 			}
 			else{ done=true;}
-			int evnum = (int) dc.EventNumber;
-			if (dc.isItemComplete && evnum==ev)
+			int evnum;
+			if (dc.isItemComplete && dc.ItemType==IT_START_OF_EVENT)
+			{
+				evnum = (int) dc.EventNumber;
+			}
+			if (dc.isItemComplete && evnum==ev && dc.ItemType==IT_ADC_SAMPLE)//dc.AbsoluteSampleIndex!=timesampleprev)
 			{
 					if (dc.ChannelIndex!=15&&dc.ChannelIndex!=28&&dc.ChannelIndex!=53&&dc.ChannelIndex!=66&&dc.ChannelIndex>2&&dc.ChannelIndex<79)
 					{
@@ -419,6 +413,13 @@ void T2KMainFrame::DrawNext(Int_t ev, int mode)
 						int a = (int)dc.AbsoluteSampleIndex;
 						double b = (double)dc.AdcSample;
 						hADCvsTIME[k]->Fill(a,b);
+						/*
+						if (b>0)
+						{
+							printf("Type : 0x%x \t", dc.ItemType);
+							cout << "Event " << dc.EventNumber << " Card " << dc.CardIndex << " Chip " << dc.ChipIndex << " Channel " << dc.ChannelIndex << " Time " << dc.AbsoluteSampleIndex << " Ampl " << dc.AdcSample << endl;
+						}
+						*/
 					}
 					else{done=true;}
 			}
@@ -444,7 +445,8 @@ void T2KMainFrame::DrawNext(Int_t ev, int mode)
 		if (ev == maxev && prevmaxev!=maxev) // stacking condition not to double count if prev
 		{
 			occupation->Fill(iFrompad(q), jFrompad(q), amp);
-			if (amp>threshold)
+			//if (amp>(260+threshold)*1.5)
+			if (amp>0)
 			{
 				timeWindow->Fill(int(time));
 			}
@@ -458,8 +460,20 @@ void T2KMainFrame::DrawNext(Int_t ev, int mode)
 		}
 		p1->cd();
 		int color = (float(P.ampl())/4096*NCont);
-		if (P.ampl() > 0)
+		if (P.ampl() > threshold)
 		{
+			// Test
+			/*
+			if (amp > 400)
+			{
+				test->Clear();
+				test->cd();
+				hADCvsTIME[q]->Draw("hist");
+				test->SaveAs((loc::outputs + "signals/test_" + to_string((int) dc.EventNumber) + "_" + to_string(P.card()) + "_" + to_string(P.chip()) + "_" + to_string(P.channel())+ ".gif" ).c_str());
+			}
+			*/
+			//end test
+			p1->cd();
 			P.line()->SetFillColor(MyPalette[color]);
 			P.line()->Draw("f");
 		}
@@ -476,7 +490,6 @@ void T2KMainFrame::DrawNext(Int_t ev, int mode)
 			if (transverse[i]>0){transversepads->Fill(transverse[i]);}
 		}
 	}
-
 	fCanvas->cd(1);
 	pads->SetNameTitle("pads", nevt);
 	pads->SetMaximum(4096);
@@ -489,7 +502,7 @@ void T2KMainFrame::DrawNext(Int_t ev, int mode)
   	//fCanvas->SetTicky();
   	//fCanvas->SetRightMargin(0.15);
 	p2->cd();
-	tracks->SetMinimum(200);
+	tracks->SetMinimum(100);
 	gStyle->SetPalette(kBird);
 	tracks->Draw("LEGO2");
 	p2->Modified();
