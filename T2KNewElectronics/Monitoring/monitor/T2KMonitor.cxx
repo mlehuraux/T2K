@@ -146,6 +146,7 @@ int main(int argc, char **argv)
 	paramInit();
 	TRint *theApp = new TRint("App", 0, 0);
 	// Popup the GUI...
+	iEvent = 0;
 	new T2KMainFrame(gClient->GetRoot(),800,800);
 	theApp->Run();
 

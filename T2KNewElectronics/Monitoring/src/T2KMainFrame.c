@@ -96,7 +96,6 @@ void scan()
 	int err;
 	bool done = true;
 	int prevEvnum = -1;
-	int count=1;
 	while (done)
 	{
 		// Read one short word
@@ -115,14 +114,8 @@ void scan()
 			}
 			else
 			{
-				int evnum;
-				if (dc.isItemComplete && dc.ItemType==IT_START_OF_EVENT)
-				{
-					evnum = (int) dc.EventNumber;
-					if (count == 1){iEvent=evnum;}
-					count++;
-				}
-				if (dc.isItemComplete && evnum!=prevEvnum && dc.ItemType==IT_ADC_SAMPLE)
+				int evnum = (int) dc.EventNumber;
+				if (dc.isItemComplete && evnum!=prevEvnum)
 				{
 					eventPos.push_back(fea.tot_file_rd);
 					prevEvnum = evnum;
@@ -130,7 +123,6 @@ void scan()
 			}
 		}
 	}
-	cout << "Events in the file : " << eventPos.size() << endl;
 }
 /********************************************************************************/
 
