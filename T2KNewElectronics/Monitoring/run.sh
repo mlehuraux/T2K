@@ -2,7 +2,7 @@ export fileped=R2019_06_13-11_28_28-000
 export filedata=R2019_06_12-18_08_08-000
 #export filedata=R2019_05_16-08_31_25-000 #clean tracks
 
-export compile=0
+export compile=1
 export startevent=1
 export maxevent=1000
 
@@ -32,8 +32,8 @@ cd $input_aqs
 #  make clean
 #	make
 #fi
-cd $here/bin
-./pedestals -i $input_aqs/ $fileped.aqs 0 412 370 250 5
+#cd $here/bin
+#./pedestals -i $input_aqs/ $fileped.aqs 0 412 370 250 5
 
 if [ $compile = 1 ]
 then

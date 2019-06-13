@@ -59,6 +59,7 @@ extern const Int_t NCont=400;
 extern Int_t MyPalette[NCont];
 extern bool autoMon,endMon;
 extern int mode;
+extern int firstEv;
 extern double threshold; // 0 if wozs, around 250 if wzs
 
 
@@ -98,6 +99,7 @@ void scan()
 	int err;
 	bool done = true;
 	int prevEvnum = -1;
+	firstEv = -1;
 	while (done)
 	{
 		// Read one short word
@@ -117,6 +119,7 @@ void scan()
 			else
 			{
 				int evnum = (int) dc.EventNumber;
+				if (firstEv < 0){firstEv=evnum;}
 				if (dc.isItemComplete && evnum!=prevEvnum)
 				{
 					eventPos.push_back(fea.tot_file_rd);
@@ -309,9 +312,10 @@ void T2KMainFrame::Monitor(int mode)
 	}
 }
 
-void T2KMainFrame::DrawNext(Int_t ev, int mode)
+void T2KMainFrame::DrawNext(Int_t ev0, int mode)
 {
 	// mode = 0 : cosmic; mode = 1 : beam
+	int ev = ev0  + firstEv; // to handle files with subscript =! 0
 
   prevmaxev = maxev;
   if (maxev < ev){maxev=ev;}
@@ -449,8 +453,8 @@ void T2KMainFrame::DrawNext(Int_t ev, int mode)
 		if (ev == maxev && prevmaxev!=maxev) // stacking condition not to double count if prev
 		{
 			occupation->Fill(iFrompad(q), jFrompad(q), amp);
-			if (amp>(260+threshold)*1.5)
-			//if (amp>0)
+			//if (amp>(260+threshold)*1.5)
+			if (amp>threshold)
 			{
 				timeWindow->Fill(int(time));
 			}

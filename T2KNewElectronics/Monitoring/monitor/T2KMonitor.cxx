@@ -64,6 +64,7 @@ Int_t MyPalette[NCont];
 bool autoMon, endMon;
 int mode;
 double threshold; // 0 if wozs, around 250 if wzs
+int firstEv;
 
 int parse_cmd_args(int argc, char **argv, Param* p)
 {

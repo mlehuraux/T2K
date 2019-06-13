@@ -36,7 +36,7 @@ public:
   T2KMainFrame(const TGWindow *p,UInt_t w,UInt_t h);
   virtual ~T2KMainFrame();
   void Monitor(int mode);
-  void DrawNext(Int_t ev, int mode);
+  void DrawNext(Int_t ev0, int mode);
   void CloseWindow();
   void HandleButton(Int_t);
   void SetValue(Int_t); // *SIGNAL*
