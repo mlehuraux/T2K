@@ -1,12 +1,12 @@
-export fileped=R2019_06_12-16_23_13-000
-export filedata=R2019_06_11-21_34_46-000
+export fileped=R2019_06_13-11_28_28-000
+export filedata=R2019_06_12-18_08_08-000
 #export filedata=R2019_05_16-08_31_25-000 #clean tracks
 
-export compile=1
+export compile=0
 export startevent=1
 export maxevent=1000
 
-export data="/local/home/t2kt/projects/bin/pandax/data"
+export data="/local/home/t2kt/projects/bin/pandax/data/"
 
 export t2k="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics"
 #export data="/local/home/t2kt/projects/bin/pandax/data"
@@ -19,7 +19,7 @@ export bin_convert=$t2k/pandax_client_16apr19/projects/bin/pandax/linux
 export here=$t2k/Monitoring
 
 cd $input_aqs
-ln -s $data/$fileped.aqs
+#ln -s $data/$fileped.aqs
 #ln -s $data/$filedata.aqs
 
 ###############################
@@ -32,8 +32,8 @@ ln -s $data/$fileped.aqs
 #  make clean
 #	make
 #fi
-#cd $here/bin
-#./pedestals -i $input_aqs/ $fileped.aqs 0 200 370 250 5
+cd $here/bin
+./pedestals -i $input_aqs/ $fileped.aqs 0 412 370 250 5
 
 if [ $compile = 1 ]
 then

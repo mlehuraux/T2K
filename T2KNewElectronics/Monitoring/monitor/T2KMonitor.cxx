@@ -18,6 +18,7 @@
 #include "../src/T2KConstants.h"
 #include "../src/T2KMainFrame.h"
 #include "Globals.h"
+#include "PadSignal.h"
 
 // ROOT
 #include "TH1I.h"
@@ -53,6 +54,7 @@ TH3D *tracks;// = new TH2D("pads", "", geom::nPadx, 0, geom::nPadx, geom::nPady,
 std::vector<long int> eventPos;
 int iEvent;
 Pixel P;
+PadSignal *Pad;
 TH2D *occupation;
 TCanvas *stack, *test;
 int maxev;

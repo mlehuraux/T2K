@@ -53,7 +53,7 @@ namespace loc
     static const string mapping = t2k + "Monitoring/src/Mapping/";
     static const string daq = t2k + "Monitoring/src/DAQ/";
     static const string outputs = t2k + "Monitoring/outputs/";
-    static const string rootfiles = t2k + "T2KNewElectronics/test_data/root/";
+    static const string rootfiles = t2k + "test_data/root/";
     static const string aqs = t2k + "test_data/aqs/";
     static const string txt = t2k + "test_data/txt/";
 }

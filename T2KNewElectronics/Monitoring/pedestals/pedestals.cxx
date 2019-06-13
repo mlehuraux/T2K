@@ -260,9 +260,9 @@ int main(int argc, char **argv)
 
 			// Print item
 			//Item_Print(stdout, &dc, param.vflag);
-			if (dc.isItemComplete)
+			if (dc.isItemComplete && dc.ItemType==IT_PED_HISTO_MD)
 			{
-				if (dc.ChannelIndex==78 && dc.ChannelIndex==daqprev){continue;}
+				//if (dc.ChannelIndex==78 && dc.ChannelIndex==daqprev){continue;}
 				fprintf(output2, "%hi\t%hi\t%hi\t%f\t%f\n", dc.CardIndex, dc.ChipIndex, dc.ChannelIndex, 0.01*dc.PedestalMean, 0.01*dc.PedestalDev);
 
 				// 0.1 because 10 evts in pedestal run and stored as int so x10

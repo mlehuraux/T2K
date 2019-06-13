@@ -11,6 +11,7 @@
 #include "T2KConstants.h"
 #include "T2KMainFrame.h"
 #include "Globals.h"
+#include "PadSignal.h"
 
 #include <fstream>
 #include <string>
@@ -48,6 +49,7 @@ extern TH2D *pads;// = new TH2D("pads", "", geom::nPadx, 0, geom::nPadx, geom::n
 extern std::vector<long int> eventPos;
 extern int iEvent;
 extern 	Pixel P;
+extern PadSignal *Pad;
 extern TH2D *occupation;
 extern TH3D *tracks;
 extern TCanvas *stack, *test;
@@ -123,6 +125,7 @@ void scan()
 			}
 		}
 	}
+	cout << "Events in the file : " << eventPos.size() << endl;
 }
 /********************************************************************************/
 
@@ -134,6 +137,7 @@ void Features_Clear(Features *f)
 
 T2KMainFrame::~T2KMainFrame()
 {
+	//monitoring->Kill();
   // Clean up used widgets: frames, buttons, layout hints
   fMain->Cleanup();
   delete fMain;
@@ -148,10 +152,10 @@ void T2KMainFrame::ChangeStartLabel()
 {
   fStart->SetState(kButtonDown);
   if (!autoMon) {
-     fStart->SetText("&StopMonitoring");
+     fStart->SetText("&Stop Monitoring");
      autoMon= kTRUE;
   } else {
-     fStart->SetText("&StartMonitoring");
+     fStart->SetText("&Start Monitoring");
      autoMon = kFALSE;
   }
   fStart->SetState(kButtonUp);
@@ -231,12 +235,12 @@ T2KMainFrame::T2KMainFrame(const TGWindow *p,UInt_t w,UInt_t h)
   // Create a horizontal frame widget with buttons
   hframe = new TGHorizontalFrame(fMain,200,40);
 
-  beam = new TGTextButton(hframe,"&BeamMode");
+  beam = new TGTextButton(hframe,"&Beam Mode");
   beam->Connect("Clicked()","T2KMainFrame",this,"HandleButton(=0)");
   hframe->AddFrame(beam, new TGLayoutHints(kLHintsCenterX,
                                            5,5,3,4));
 
-  cosmic = new TGTextButton(hframe,"&CosmicMode");
+  cosmic = new TGTextButton(hframe,"&Cosmic Mode");
   cosmic->Connect("Clicked()","T2KMainFrame",this,"HandleButton(=4)");
   hframe->AddFrame(cosmic, new TGLayoutHints(kLHintsCenterX,
 										   5,5,3,4));
@@ -251,7 +255,7 @@ T2KMainFrame::T2KMainFrame(const TGWindow *p,UInt_t w,UInt_t h)
   hframe->AddFrame(next, new TGLayoutHints(kLHintsCenterX,
                                            5,5,3,4));
 
-  fStart = new TGTextButton(hframe,"&StartMonitoring");
+  fStart = new TGTextButton(hframe,"&Start Monitoring");
   fStart->Connect("Clicked()","T2KMainFrame",this,"ChangeStartLabel()");
   hframe->AddFrame(fStart, new TGLayoutHints(kLHintsCenterX,
 									   	   5,5,3,4));
@@ -451,15 +455,27 @@ void T2KMainFrame::DrawNext(Int_t ev, int mode)
 				timeWindow->Fill(int(time));
 			}
 		}
-
+		p1->cd();
 		// TPolyLine Style for click and show signal
 		P = padPlane.pad(iFrompad(q),jFrompad(q));
 		if (P.channel()!=15&&P.channel()!=28&&P.channel()!=53&&P.channel()!=66&&P.channel()<79&&P.channel()>2)
 		{
 			P.setAmp(int(amp));
 		}
-		p1->cd();
 		int color = (float(P.ampl())/4096*NCont);
+		/*********************************
+		Pad = new PadSignal(P);
+		if (P.ampl()>threshold)
+		{
+			Pad->polyline()->SetFillColor(MyPalette[color]);
+			Pad->polyline()->Draw("f");
+		}
+		else{Pad->polyline()->Draw("f");}
+		Pad->polyline()->Draw();
+
+		*********************************/
+
+
 		if (P.ampl() > threshold)
 		{
 			// Test
@@ -473,13 +489,20 @@ void T2KMainFrame::DrawNext(Int_t ev, int mode)
 			}
 			*/
 			//end test
-			p1->cd();
+			//p1->cd();
+
+			// Commented out to try PadSignal
 			P.line()->SetFillColor(MyPalette[color]);
 			P.line()->Draw("f");
 		}
-		else{P.line()->Draw("f");}
+		else
+		{
+			P.line()->Draw("f");
+		}
 		P.line()->Draw();
+
 	}
+
 	p1->Modified();
 
 	// Fill transverse size
@@ -530,5 +553,5 @@ void T2KMainFrame::DrawNext(Int_t ev, int mode)
 		delete hADCvsTIME[q];
 	}
 
-	ev++;
+	//ev++;
 }
