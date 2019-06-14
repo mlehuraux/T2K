@@ -8,7 +8,7 @@
 
 
  Author:      D. Calvet,        denis.calvetATcea.fr
-              
+
 
  History:
    April 2019 : created
@@ -19,14 +19,24 @@
 
    May 2019: added DT_PED_HISTO_MD_xx and IT_PED_HISTO_MD
 
+   May 2019: added
+
 *******************************************************************************/
 
 #ifndef _DATUM_DECODER_H
 #define _DATUM_DECODER_H
 
-#ifdef __cplusplus 
+#ifdef __cplusplus
 extern "C" {
 #endif
+
+/*******************************************************************************
+Definition of constants
+*******************************************************************************/
+#define CHIP_TYPE_AGET  0
+#define CHIP_TYPE_AFTER 1
+#define PEDTHR_LIST_SIZE_AGET  72
+#define PEDTHR_LIST_SIZE_AFTER 79
 
 /*******************************************************************************
 Definition of types and structures
@@ -49,28 +59,33 @@ typedef enum {
 	DT_PED_HISTO_MD_MEAN_LSB,
 	DT_PED_HISTO_MD_MEAN_MSB,
 	DT_PED_HISTO_MD_DEV_LSB,
-	DT_PED_HISTO_MD_DEV_MSB
+	DT_PED_HISTO_MD_DEV_MSB,
+	DT_PED_THR_LIST_HEADER,
+	DT_CHAN_PED_CORRECTION,
+	DT_CHAN_ZERO_SUPPRESS_THRESHOLD
 } DatumTypes;
 
 typedef enum {
-	IT_UNKNOWN              = 0x00000001,
-	IT_SHORT_MESSAGE        = 0x00000002,
-	IT_LONG_MESSAGE         = 0x00000004,
-	IT_DATA_FRAME           = 0x00000008,
-	IT_MONITORING_FRAME     = 0x00000010,
-	IT_CONFIGURATION_FRAME  = 0x00000020,
-	IT_END_OF_FRAME         = 0x00000040,
-	IT_START_OF_EVENT       = 0x00000080,
-	IT_CHANNEL_HIT_COUNT    = 0x00000100,
-	IT_LAST_CELL_READ       = 0x00000200,
-	IT_END_OF_EVENT         = 0x00000400,
-	IT_CHANNEL_HIT_HEADER   = 0x00000800,
-	IT_TIME_BIN_INDEX       = 0x00001000,
-	IT_ADC_SAMPLE           = 0x00002000,
-	IT_NULL_DATUM           = 0x00004000,
-	IT_START_OF_BUILT_EVENT = 0x00008000,
-	IT_END_OF_BUILT_EVENT   = 0x00010000,
-	IT_PED_HISTO_MD         = 0x00020000
+	IT_UNKNOWN                      = 0x00000001,
+	IT_SHORT_MESSAGE                = 0x00000002,
+	IT_LONG_MESSAGE                 = 0x00000004,
+	IT_DATA_FRAME                   = 0x00000008,
+	IT_MONITORING_FRAME             = 0x00000010,
+	IT_CONFIGURATION_FRAME          = 0x00000020,
+	IT_END_OF_FRAME                 = 0x00000040,
+	IT_START_OF_EVENT               = 0x00000080,
+	IT_CHANNEL_HIT_COUNT            = 0x00000100,
+	IT_LAST_CELL_READ               = 0x00000200,
+	IT_END_OF_EVENT                 = 0x00000400,
+	IT_CHANNEL_HIT_HEADER           = 0x00000800,
+	IT_TIME_BIN_INDEX               = 0x00001000,
+	IT_ADC_SAMPLE                   = 0x00002000,
+	IT_NULL_DATUM                   = 0x00004000,
+	IT_START_OF_BUILT_EVENT         = 0x00008000,
+	IT_END_OF_BUILT_EVENT           = 0x00010000,
+	IT_PED_HISTO_MD                 = 0x00020000,
+	IT_CHAN_PED_CORRECTION          = 0x00040000,
+	IT_CHAN_ZERO_SUPPRESS_THRESHOLD = 0x00080000
 } ItemTypes;
 
 typedef struct _DatumContext {
@@ -100,7 +115,7 @@ typedef struct _DatumContext {
 	unsigned short SourceId;
 	unsigned int   EventNumber;
 	unsigned short EventTimeStampLsb;
-	unsigned short EventTimeStampMid;
+	unsigned short EventTimeStampMid; // by unit of 10 ns and restart at 0 on each run
 	unsigned short EventTimeStampMsb;
 	unsigned int   EventSize;
 	unsigned short CardIndex;
@@ -114,6 +129,9 @@ typedef struct _DatumContext {
 	short          AbsoluteSampleIndex;
 	unsigned int   PedestalMean;
 	unsigned int   PedestalDev;
+	short          PedestalCorrection;
+	unsigned short ZeroSuppressThreshold;
+	unsigned int   ChipType;
 	/* Public Counters */
 	unsigned int   DatumCount;
 	unsigned int   StartOfEventFeCount;
@@ -162,7 +180,7 @@ int Datum_Decode(DatumContext *dc, unsigned short datum);
 void Item_PrintFilter_Init(PrintFilter *pf);
 int Item_Print(void *fp, DatumContext *dc, PrintFilter *pf);
 
-#ifdef __cplusplus 
+#ifdef __cplusplus
 }
 #endif
 

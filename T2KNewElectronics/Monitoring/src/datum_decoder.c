@@ -48,6 +48,9 @@
    May 2019 : (version 1.2) added the capability to decode pedestal histograms
    in condensed format, i.e. pedestal mean and rms.
 
+   May 2019 : (version 1.3) added the capability to decode lists of pedestal
+   correction values and zero suppression thresholds
+
 *******************************************************************************/
 
 #include "datum_decoder.h"
@@ -58,7 +61,7 @@
 Manage Major/Minor version numbering manually
 *******************************************************************************/
 #define DECODER_VERSION_MAJOR 1
-#define DECODER_VERSION_MINOR 2
+#define DECODER_VERSION_MINOR 3
 char decoder_date[] = __DATE__;
 char decoder_time[] = __TIME__;
 /******************************************************************************/
@@ -128,6 +131,9 @@ void DatumContext_Init(DatumContext *dc, unsigned short sample_index_offset_zs)
 	dc->AbsoluteSampleIndex            = -1;
 	dc->PedestalMean                   = 0;
 	dc->PedestalDev                    = 0;
+	dc->PedestalCorrection             = 0;
+	dc->ZeroSuppressThreshold          = 0;
+	dc->ChipType                       = -1;
 	/* Public Counters */
 	dc->DatumCount = 0;
 	dc->StartOfEventFeCount            = 0;
@@ -281,9 +287,77 @@ int Datum_Decode(DatumContext *dc, unsigned short datum)
 			dc->PedestalDev         = (((unsigned int)datum) << 16) | (dc->PedestalDev);
 			dc->isItemComplete      = 1;
 		}
+		else if (dc->DatumType == DT_PED_THR_LIST_HEADER)
+		{
+			dc->isDatumTypeImplicit = 1;
+			// Determine the type of list, pedestal correction or zero suppression threshold
+			if (GET_EXTD_PEDTHR_LIST_TYPE(datum) == 0) // Pedestal Correction List
+			{
+				dc->ItemType  = IT_CHAN_PED_CORRECTION;
+				dc->DatumType = DT_CHAN_PED_CORRECTION;
+			}
+			else // Zero Suppression List
+			{
+				dc->ItemType  = IT_CHAN_ZERO_SUPPRESS_THRESHOLD;
+				dc->DatumType = DT_CHAN_ZERO_SUPPRESS_THRESHOLD;
+			}
+			// Determine the type of chip, AGET or AFTER
+			if (GET_EXTD_PEDTHR_LIST_MODE(datum) == 0) // AGET
+			{
+				dc->ChipType = CHIP_TYPE_AGET;
+			}
+			else // AFTER
+			{
+				dc->ChipType = CHIP_TYPE_AFTER;
+			}
+			dc->CardIndex      = GET_EXTD_PEDTHR_LIST_FEM(datum);
+			dc->ChipIndex      = GET_EXTD_PEDTHR_LIST_ASIC(datum);
+			dc->ChannelIndex   = -1;
+			dc->isItemComplete = 0;
+		}
+		else if (dc->DatumType == DT_CHAN_PED_CORRECTION)
+		{
+			dc->ChannelIndex       = dc->ChannelIndex + 1;
+			dc->PedestalCorrection = (short) datum;
+			dc->isItemComplete     = 1;
+			if (dc->ChipType == CHIP_TYPE_AGET)
+			{
+				if (dc->ChannelIndex == (PEDTHR_LIST_SIZE_AGET-1))
+				{
+					dc->isDatumTypeImplicit = 0;
+				}
+			}
+			else
+			{
+				if (dc->ChannelIndex == (PEDTHR_LIST_SIZE_AFTER - 1))
+				{
+					dc->isDatumTypeImplicit = 0;
+				}
+			}
+		}
+		else if (dc->DatumType == DT_CHAN_ZERO_SUPPRESS_THRESHOLD)
+		{
+			dc->ChannelIndex          = dc->ChannelIndex + 1;
+			dc->ZeroSuppressThreshold = (short)datum;
+			dc->isItemComplete        = 1;
+			if (dc->ChipType == CHIP_TYPE_AGET)
+			{
+				if (dc->ChannelIndex == (PEDTHR_LIST_SIZE_AGET - 1))
+				{
+					dc->isDatumTypeImplicit = 0;
+				}
+			}
+			else
+			{
+				if (dc->ChannelIndex == (PEDTHR_LIST_SIZE_AFTER - 1))
+				{
+					dc->isDatumTypeImplicit = 0;
+				}
+			}
+		}
 		else
 		{
-			sprintf(&(dc->ErrorString[0]), "Datum(%d) Implicit_Type: %04d: interpretation unknown.", dc->DatumCount, datum);
+			sprintf(&(dc->ErrorString[0]), "Datum(%d) = 0x%04x Implicit_Type: 0x%04x: interpretation unknown.", dc->DatumCount, datum, dc->DatumType);
 			return(-1);
 		}
 	}
@@ -571,8 +645,8 @@ int Datum_Decode(DatumContext *dc, unsigned short datum)
 		}
 		else if (datum == PFX_EXTD_PEDTHR_LIST)
 		{
-			sprintf(&(dc->ErrorString[0]), "Datum(%d) PFX_EXTD_PEDTHR_LIST : interpretation not implemented.", dc->DatumCount);
-			return(-1);
+			dc->isDatumTypeImplicit = 1;
+			dc->DatumType           = DT_PED_THR_LIST_HEADER;
 		}
 		// No interpretable data
 		else
@@ -807,11 +881,25 @@ int Item_Print(void *fp, DatumContext *dc, PrintFilter *pf)
 			break;
 
 		case IT_PED_HISTO_MD:
-			if (pf->flags & IT_NULL_DATUM)
+			if (pf->flags & IT_PED_HISTO_MD)
 			{
 				ped_mean = ((float) dc->PedestalMean) / 100.0;
 				ped_dev  = ((float) dc->PedestalDev)  / 100.0;
 				fprintf((FILE *)fp, "Card %02d Chip %02d Channel %02d Mean/Std_dev : %.2f  %.2f\n", dc->CardIndex, dc->ChipIndex, dc->ChannelIndex, ped_mean, ped_dev);
+			}
+			break;
+
+		case IT_CHAN_PED_CORRECTION:
+			if (pf->flags & IT_CHAN_PED_CORRECTION)
+			{
+				fprintf((FILE *)fp, "Card %02d Chip %02d Channel %02d Ped_Correct %+03d\n", dc->CardIndex, dc->ChipIndex, dc->ChannelIndex, dc->PedestalCorrection);
+			}
+			break;
+
+		case IT_CHAN_ZERO_SUPPRESS_THRESHOLD:
+			if (pf->flags & IT_CHAN_PED_CORRECTION)
+			{
+				fprintf((FILE *)fp, "Card %02d Chip %02d Channel %02d Zero_Sup_Thr %03d\n", dc->CardIndex, dc->ChipIndex, dc->ChannelIndex, dc->ZeroSuppressThreshold);
 			}
 			break;
 

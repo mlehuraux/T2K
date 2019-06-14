@@ -100,6 +100,7 @@ void scan()
 	bool done = true;
 	int prevEvnum = -1;
 	firstEv = -1;
+	int evnum;
 	while (done)
 	{
 		// Read one short word
@@ -118,13 +119,33 @@ void scan()
 			}
 			else
 			{
-				int evnum = (int) dc.EventNumber;
-				if (firstEv < 0){firstEv=evnum;}
-				if (dc.isItemComplete && evnum!=prevEvnum)
+				if(dc.isItemComplete && dc.ItemType==IT_START_OF_EVENT)
+				{
+					//printf("Type : 0x%x \n", dc.ItemType);
+					evnum = (int) dc.EventNumber;
+					if (firstEv < 0)
+					{
+						//printf("Is first event type : 0x%x  and number %u \n", dc.ItemType, dc.EventNumber);
+						cout << dc.EventNumber << endl;
+						firstEv=evnum;
+					}
+				}
+				else if (dc.isItemComplete && evnum!=prevEvnum)
 				{
 					eventPos.push_back(fea.tot_file_rd);
 					prevEvnum = evnum;
 				}
+				else if (dc.isItemComplete && dc.ItemType==IT_ADC_SAMPLE){}
+				else if (dc.isItemComplete && dc.ItemType==IT_TIME_BIN_INDEX){}
+				else if (dc.isItemComplete && dc.ItemType==IT_CHANNEL_HIT_HEADER){}
+				else if (dc.isItemComplete && dc.ItemType==IT_DATA_FRAME){}
+				else if (dc.isItemComplete && dc.ItemType==IT_CHAN_PED_CORRECTION){}
+				else if (dc.isItemComplete && dc.ItemType==IT_CHAN_ZERO_SUPPRESS_THRESHOLD){}
+				else if (dc.isItemComplete && dc.ItemType==IT_NULL_DATUM){}
+				else if (dc.isItemComplete && dc.ItemType==IT_CHANNEL_HIT_COUNT){}
+				else if (dc.isItemComplete && dc.ItemType==IT_LAST_CELL_READ){}
+				else if (dc.isItemComplete && dc.ItemType==IT_END_OF_EVENT){}
+				else if (dc.isItemComplete){}//printf("Type : 0x%x \n", dc.ItemType);}
 			}
 		}
 	}
@@ -232,7 +253,7 @@ T2KMainFrame::T2KMainFrame(const TGWindow *p,UInt_t w,UInt_t h)
 	stack->Divide(2,2);
 	stack->Draw();
 
-  fEcanvas = new TRootEmbeddedCanvas("Ecanvas",fMain, 2*geom::times*geom::wx, geom::times*geom::wy);
+  fEcanvas = new TRootEmbeddedCanvas("Ecanvas",fMain, 4*geom::times*geom::wx, 2*geom::times*geom::wy);
   fMain->AddFrame(fEcanvas, new TGLayoutHints(kLHintsExpandX |
 									kLHintsExpandY, 10,10,10,1));
   // Create a horizontal frame widget with buttons
@@ -405,35 +426,40 @@ void T2KMainFrame::DrawNext(Int_t ev0, int mode)
 				done = true;
 			}
 			else{ done=true;}
-			int evnum;
-			if (dc.isItemComplete && dc.ItemType==IT_START_OF_EVENT)
+			// Decode
+			if (dc.isItemComplete && dc.ItemType!=IT_START_OF_EVENT && dc.ItemType!=IT_ADC_SAMPLE){done=true;}
+			else
 			{
-				evnum = (int) dc.EventNumber;
-			}
-			if (dc.isItemComplete && evnum==ev && dc.ItemType==IT_ADC_SAMPLE)//dc.AbsoluteSampleIndex!=timesampleprev)
-			{
-					if (dc.ChannelIndex!=15&&dc.ChannelIndex!=28&&dc.ChannelIndex!=53&&dc.ChannelIndex!=66&&dc.ChannelIndex>2&&dc.ChannelIndex<79)
-					{
-						// histo and display
-						int x = T2K.i(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex));
-						int y = T2K.j(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex));
-						int k = padNum(x, y);
-						int a = (int)dc.AbsoluteSampleIndex;
-						double b = (double)dc.AdcSample;
-						hADCvsTIME[k]->Fill(a,b);
-						/*
-						if (b>0)
+				int evnum;
+				if (dc.isItemComplete && dc.ItemType==IT_START_OF_EVENT)
+				{
+					evnum = (int) dc.EventNumber;
+				}
+				if (dc.isItemComplete && evnum==ev && dc.ItemType==IT_ADC_SAMPLE)//dc.AbsoluteSampleIndex!=timesampleprev)
+				{
+						if (dc.ChannelIndex!=15&&dc.ChannelIndex!=28&&dc.ChannelIndex!=53&&dc.ChannelIndex!=66&&dc.ChannelIndex>2&&dc.ChannelIndex<79)
 						{
-							printf("Type : 0x%x \t", dc.ItemType);
-							cout << "Event " << dc.EventNumber << " Card " << dc.CardIndex << " Chip " << dc.ChipIndex << " Channel " << dc.ChannelIndex << " Time " << dc.AbsoluteSampleIndex << " Ampl " << dc.AdcSample << endl;
+							// histo and display
+							int x = T2K.i(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex));
+							int y = T2K.j(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex));
+							int k = padNum(x, y);
+							int a = (int)dc.AbsoluteSampleIndex;
+							double b = (double)dc.AdcSample;
+							hADCvsTIME[k]->Fill(a,b);
+							/*
+							if (b>0)
+							{
+								printf("Type : 0x%x \t", dc.ItemType);
+								cout << "Event " << dc.EventNumber << " Card " << dc.CardIndex << " Chip " << dc.ChipIndex << " Channel " << dc.ChannelIndex << " Time " << dc.AbsoluteSampleIndex << " Ampl " << dc.AdcSample << endl;
+							}
+							*/
 						}
-						*/
-					}
-					else{done=true;}
-			}
-			if (dc.isItemComplete && evnum>ev && evnum < 1000000)
-			{
-				done = false;
+						else{done=true;}
+				}
+				if (dc.isItemComplete && evnum>ev && evnum < 1000000)
+				{
+					done = false;
+				}
 			}
 		}
 	}
@@ -453,8 +479,8 @@ void T2KMainFrame::DrawNext(Int_t ev0, int mode)
 		if (ev == maxev && prevmaxev!=maxev) // stacking condition not to double count if prev
 		{
 			occupation->Fill(iFrompad(q), jFrompad(q), amp);
-			//if (amp>(260+threshold)*1.5)
-			if (amp>threshold)
+			if (amp>(260+threshold)*1.5)
+			//if (amp>threshold)
 			{
 				timeWindow->Fill(int(time));
 			}
@@ -480,7 +506,7 @@ void T2KMainFrame::DrawNext(Int_t ev0, int mode)
 		*********************************/
 
 
-		if (P.ampl() > threshold)
+		if (P.ampl() > threshold )//&& time < 250)
 		{
 			// Test
 			/*
@@ -496,6 +522,10 @@ void T2KMainFrame::DrawNext(Int_t ev0, int mode)
 			//p1->cd();
 
 			// Commented out to try PadSignal
+			//if (color == 399){cout << "Amplitude in last bin : " << P.ampl()<< endl;}
+			//else if (color == 398){cout << "Amplitude in prev last bin : " << P.ampl()<< endl;}
+			//else if (color == 397){cout << "Amplitude in prev prev last bin : " << P.ampl()<< endl;}
+
 			P.line()->SetFillColor(MyPalette[color]);
 			P.line()->Draw("f");
 		}
