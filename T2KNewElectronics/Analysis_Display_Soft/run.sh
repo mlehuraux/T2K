@@ -2,13 +2,13 @@
 #export file=R2019_05_13-16_10_24-000
 #export file=R2019_05_15-08_06_29-000
 export file=$1
-export compile=0
+export compile=1
 export startevent=1
 export nevent=20
 
 export t2k="/home/mlehuraux/GitLab/T2K/T2KNewElectronics"
 #export data="/local/home/t2kt/projects/bin/pandax/data"
-export input_aqs= $t2k/test_data/aqs
+export input_aqs=$t2k/test_data/aqs
 export input_txt=$t2k/test_data/txt
 export output_root=$t2k/test_data/root
 
@@ -16,8 +16,8 @@ export make_convert=$t2k/pandax_client_16apr19/projects/pandax/mclient/linux
 export bin_convert=$t2k/pandax_client_16apr19/projects/bin/pandax/linux
 export here=$t2k/Analysis_Display_Soft
 
-cd $input_aqs
-ln -s $data/$file.aqs
+#cd $input_aqs
+#ln -s $data/$file.aqs
 
 ###############################
 # Convert .aqs file into .txt #
@@ -30,7 +30,7 @@ then
 	make
 fi
 cd $bin_convert
-./fconverter -i $input_aqs/ $file.aqs
+#./fconverter -i $input_aqs/ $file.aqs
 #./fdecoder -i $input_aqs/$file.aqs -vflags 0x00003100
 
 ###################
