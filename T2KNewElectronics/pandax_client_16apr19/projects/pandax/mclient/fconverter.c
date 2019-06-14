@@ -274,6 +274,8 @@ int main(int argc, char **argv)
 	i    = 0;
 	int current = 0;
 	int prev = 0;
+	int evnum;
+
 	while (!done)
 	{
 		// Read one short word
@@ -296,11 +298,15 @@ int main(int argc, char **argv)
 
 			// Print item
 			Item_Print(stdout, &dc, param.vflag);
-			if (dc.isItemComplete)
+			if (dc.isItemComplete && dc.ItemType==IT_START_OF_EVENT)
 			{
-				printf("Event number : %u", dc.EventNumber);
+				evnum=(int)dc.EventNumber;
+			}
+			if (dc.isItemComplete && dc.ItemType==IT_ADC_SAMPLE)
+			{
+				printf("Event number : %i", evnum);
 				printf("\n");
-				fprintf(output, "%i\t%hi\t%hi\t%hi\t%d\t%hi\n", dc.EventNumber, dc.CardIndex, dc.ChipIndex, dc.ChannelIndex, dc.AbsoluteSampleIndex, dc.AdcSample);
+				fprintf(output, "%i\t%hi\t%hi\t%hi\t%d\t%hi\n", evnum, dc.CardIndex, dc.ChipIndex, dc.ChannelIndex, dc.AbsoluteSampleIndex, dc.AdcSample);
 			}
 			/*
 			current = dc.StartOfEventBeCount;
