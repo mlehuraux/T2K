@@ -7,6 +7,8 @@
 #include <TF1.h>
 #include <TRandom.h>
 #include <TGButton.h>
+#include <TGButtonGroup.h>
+#include <TGNumberEntry.h>
 #include <TGFrame.h>
 #include <TRootEmbeddedCanvas.h>
 #include <RQ_OBJECT.h>
@@ -22,6 +24,7 @@ private:
   TGHorizontalFrame    *hframe;
   TGTextButton         *next;
   TGTextButton         *prev;
+  TGNumberEntry        *jump;
   TGTextButton         *beam;
   TGTextButton         *cosmic;
   TGTextButton         *thresplus;
@@ -30,6 +33,9 @@ private:
   TGTextButton         *exit;
   TGButtonGroup        *modes;
   TGTextButton         *fStart;
+
+  TGRadioButton        *rbeam;
+  TGRadioButton        *rcosmic;
 
 
 public:

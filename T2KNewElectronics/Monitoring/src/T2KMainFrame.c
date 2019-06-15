@@ -119,33 +119,44 @@ void scan()
 			}
 			else
 			{
-				if(dc.isItemComplete && dc.ItemType==IT_START_OF_EVENT)
+				if (dc.isItemComplete)
 				{
-					//printf("Type : 0x%x \n", dc.ItemType);
-					evnum = (int) dc.EventNumber;
-					if (firstEv < 0)
+					if(dc.ItemType==IT_START_OF_EVENT)
 					{
-						//printf("Is first event type : 0x%x  and number %u \n", dc.ItemType, dc.EventNumber);
-						cout << dc.EventNumber << endl;
-						firstEv=evnum;
+						//printf("Type : 0x%x \n", dc.ItemType);
+						evnum = (int) dc.EventNumber;
+						if (firstEv < 0)
+						{
+							//printf("Is first event type : 0x%x  and number %u \n", dc.ItemType, dc.EventNumber);
+							cout << dc.EventNumber << endl;
+							firstEv=evnum;
+						}
 					}
+					else if (evnum!=prevEvnum)
+					{
+						eventPos.push_back(fea.tot_file_rd);
+						prevEvnum = evnum;
+					}
+					else if (dc.ItemType==IT_ADC_SAMPLE){}
+					else if (dc.ItemType==IT_DATA_FRAME){}
+					else if (dc.ItemType==IT_END_OF_FRAME){}
+					else if (dc.ItemType==IT_MONITORING_FRAME){}
+					else if (dc.ItemType==IT_CONFIGURATION_FRAME){}
+					else if (dc.ItemType==IT_SHORT_MESSAGE){}
+					else if (dc.ItemType==IT_LONG_MESSAGE){}
+					else if (dc.ItemType==IT_TIME_BIN_INDEX){}
+					else if (dc.ItemType==IT_CHANNEL_HIT_HEADER){}
+					else if (dc.ItemType==IT_DATA_FRAME){}
+					else if (dc.ItemType==IT_NULL_DATUM){}
+					else if (dc.ItemType==IT_CHANNEL_HIT_COUNT){}
+					else if (dc.ItemType==IT_LAST_CELL_READ){}
+					else if (dc.ItemType==IT_END_OF_EVENT){}
+					else if (dc.ItemType==IT_PED_HISTO_MD){}
+					else if (dc.ItemType==IT_UNKNOWN){}
+					else if (dc.ItemType==IT_CHAN_PED_CORRECTION){}//printf("Type : 0x%x \n", dc.ItemType);}
+					else if (dc.ItemType==IT_CHAN_ZERO_SUPPRESS_THRESHOLD){}//printf("Type : 0x%x \n", dc.ItemType);}
+					else {printf("Unknow Item Type : 0x%04x\n", dc.ItemType);}
 				}
-				else if (dc.isItemComplete && evnum!=prevEvnum)
-				{
-					eventPos.push_back(fea.tot_file_rd);
-					prevEvnum = evnum;
-				}
-				else if (dc.isItemComplete && dc.ItemType==IT_ADC_SAMPLE){}
-				else if (dc.isItemComplete && dc.ItemType==IT_TIME_BIN_INDEX){}
-				else if (dc.isItemComplete && dc.ItemType==IT_CHANNEL_HIT_HEADER){}
-				else if (dc.isItemComplete && dc.ItemType==IT_DATA_FRAME){}
-				else if (dc.isItemComplete && dc.ItemType==IT_CHAN_PED_CORRECTION){}
-				else if (dc.isItemComplete && dc.ItemType==IT_CHAN_ZERO_SUPPRESS_THRESHOLD){}
-				else if (dc.isItemComplete && dc.ItemType==IT_NULL_DATUM){}
-				else if (dc.isItemComplete && dc.ItemType==IT_CHANNEL_HIT_COUNT){}
-				else if (dc.isItemComplete && dc.ItemType==IT_LAST_CELL_READ){}
-				else if (dc.isItemComplete && dc.ItemType==IT_END_OF_EVENT){}
-				else if (dc.isItemComplete){}//printf("Type : 0x%x \n", dc.ItemType);}
 			}
 		}
 	}
@@ -188,20 +199,22 @@ void T2KMainFrame::ChangeStartLabel()
 void T2KMainFrame::HandleButton(Int_t id)
 {
   switch (id) {
-  case 0: // BeamMode
-    mode = 1;
+	case 1:
+		mode = 1;
+		rcosmic->SetState(kButtonUp);
 		break;
-  case 4: // cosmic mode
-    mode = 0;
+	case 2:
+		mode = 0;
+		rbeam->SetState(kButtonUp);
 		break;
-  case 1: // prev
+  case 3: // prev
     autoMon=false;
-    iEvent = iEvent-1;
+    iEvent = iEvent-1; // because there has been a "next" before so it ended up by a +1
     DrawNext(iEvent, mode);
     break;
-  case 2: // next
+  case 4: // next
     autoMon=false;
-    iEvent = iEvent+1;
+		iEvent = iEvent+1;
     DrawNext(iEvent, mode);
     break;
   case 5: // thresplus
@@ -216,6 +229,17 @@ void T2KMainFrame::HandleButton(Int_t id)
 		threshold-= 10;
 		cout << "\n" << "Amplitude threshold set to " << threshold << endl;
 		break;
+	case 8: // jump
+    {
+    int numJ = jump->GetNumber();
+    autoMon=false;
+    if (numJ>=firstEv && numJ<firstEv+eventPos.size()) {
+      iEvent = numJ;
+      DrawNext(iEvent, mode);
+    }
+    break;
+    }
+
   default:
     break;
   }
@@ -259,23 +283,34 @@ T2KMainFrame::T2KMainFrame(const TGWindow *p,UInt_t w,UInt_t h)
   // Create a horizontal frame widget with buttons
   hframe = new TGHorizontalFrame(fMain,200,40);
 
-  beam = new TGTextButton(hframe,"&Beam Mode");
-  beam->Connect("Clicked()","T2KMainFrame",this,"HandleButton(=0)");
-  hframe->AddFrame(beam, new TGLayoutHints(kLHintsCenterX,
-                                           5,5,3,4));
+  // beam = new TGTextButton(hframe,"&Beam Mode");
+  // beam->Connect("Clicked()","T2KMainFrame",this,"HandleButton(=0)");
+  // hframe->AddFrame(beam, new TGLayoutHints(kLHintsCenterX,
+  //                                          5,5,3,4));
+	//
+  // cosmic = new TGTextButton(hframe,"&Cosmic Mode");
+  // cosmic->Connect("Clicked()","T2KMainFrame",this,"HandleButton(=4)");
+  // hframe->AddFrame(cosmic, new TGLayoutHints(kLHintsCenterX,
+	// 									   5,5,3,4));
 
-  cosmic = new TGTextButton(hframe,"&Cosmic Mode");
-  cosmic->Connect("Clicked()","T2KMainFrame",this,"HandleButton(=4)");
-  hframe->AddFrame(cosmic, new TGLayoutHints(kLHintsCenterX,
-										   5,5,3,4));
+	//modes = new TGButtonGroup(hframe,"Mode",kHorizontalFrame);
+	rbeam = new TGRadioButton(hframe,new TGHotString("&Beam"));
+	rbeam->Connect("Clicked()","T2KMainFrame",this,"HandleButton(=1)");
+    hframe->AddFrame(rbeam, new TGLayoutHints(kLHintsCenterX,
+                                           5,5,3,4));
+	rcosmic = new TGRadioButton(hframe,new TGHotString("&Cosmic"));
+	rcosmic->Connect("Clicked()","T2KMainFrame",this,"HandleButton(=2)");
+    hframe->AddFrame(rcosmic, new TGLayoutHints(kLHintsCenterX,
+                                           5,5,3,4));
+	rcosmic->SetState(kButtonDown);
 
   prev = new TGTextButton(hframe,"&Prev");
-  prev->Connect("Clicked()","T2KMainFrame",this,"HandleButton(=1)");
+  prev->Connect("Clicked()","T2KMainFrame",this,"HandleButton(=3)");
   hframe->AddFrame(prev, new TGLayoutHints(kLHintsCenterX,
                                            5,5,3,4));
 
   next = new TGTextButton(hframe,"&Next");
-  next->Connect("Clicked()","T2KMainFrame",this,"HandleButton(=2)");
+  next->Connect("Clicked()","T2KMainFrame",this,"HandleButton(=4)");
   hframe->AddFrame(next, new TGLayoutHints(kLHintsCenterX,
                                            5,5,3,4));
 
@@ -298,6 +333,12 @@ T2KMainFrame::T2KMainFrame(const TGWindow *p,UInt_t w,UInt_t h)
   thresplusplus->Connect("Clicked()","T2KMainFrame",this,"HandleButton(=6)");
   hframe->AddFrame(thresplusplus, new TGLayoutHints(kLHintsCenterX,
 										    5,5,3,4));
+
+  jump = new TGNumberEntry(hframe, 1, 5, -1, TGNumberFormat::kNESInteger);
+  jump->Connect("ValueSet(Long_t)","T2KMainFrame",this,"HandleButton(=8)");
+  jump->GetNumberEntry()->Connect("ReturnPressed()","T2KMainFrame",this,"HandleButton(=8)");
+  hframe->AddFrame(jump, new TGLayoutHints(kLHintsCenterX,
+					   5,5,3,4));
 
   exit = new TGTextButton(hframe,"&Exit");
   exit->Connect("Clicked()","T2KMainFrame",this,"CloseWindow()");
@@ -336,7 +377,11 @@ void T2KMainFrame::Monitor(int mode)
 void T2KMainFrame::DrawNext(Int_t ev0, int mode)
 {
 	// mode = 0 : cosmic; mode = 1 : beam
-	int ev = ev0  + firstEv; // to handle files with subscript =! 0
+	int ev = ev0  + firstEv -1; // to handle files with subscript =! 0
+
+  //--------------------
+  jump->SetNumber(ev);
+  //--------------------
 
   prevmaxev = maxev;
   if (maxev < ev){maxev=ev;}
@@ -351,6 +396,9 @@ void T2KMainFrame::DrawNext(Int_t ev0, int mode)
   Pads padPlane;
   padPlane.loadPadPlane(daq, T2K);
   //cout << "...Pad plane loaded succesfully." << endl;
+
+  // Create an array of empty pads signals
+  PadSignal* tpcPad[n::pads];
 
   gStyle->SetTitleTextColor(602);
   gStyle->SetTitleFont(102);
@@ -381,11 +429,21 @@ void T2KMainFrame::DrawNext(Int_t ev0, int mode)
   fCanvas->Clear();
   TPad *p1 = new TPad("p1", "p1", 0.01, 0.01, 0.49, 0.99);
   p1->Range(-0.5*geom::nPadx*geom::dx, -0.5*geom::nPady*geom::dy, 0.5*geom::nPadx*geom::dx, 0.5*geom::nPady*geom::dy);
+
+  /************************************************************
+  for (int ipad=0; ipad<n::pads; ipad++)
+  {
+  fCanvas->Connect("ProcessedEvent(Int_t,Int_t,Int_t,TObject*)",
+				       "PadSignal", "PadSelected(Int_t)", tpcPad[ipad],
+				       "ExecuteEvent(Int_t,Int_t,Int_t,TObject*)");
+  }
+  **************************************************************/
+
   p1->Draw();
   TPad *p2 = new TPad("p2", "p2", 0.51, 0.01, 0.99, 0.99);
   //p2->Range(-0.5*geom::nPadx*geom::dx, -0.5*geom::nPady*geom::dy, 0.5*geom::nPadx*geom::dx, 0.5*geom::nPady*geom::dy);
   p2->Draw();
-
+https://www.google.com/search?client=ubuntu&channel=fs&q=root+making+dictionnary+unused+class+rule&ie=utf-8&oe=utf-8
   TString nevt = "Event ";
   nevt += ev;
 
@@ -404,7 +462,7 @@ void T2KMainFrame::DrawNext(Int_t ev0, int mode)
 	// Scan the file
 	bool done = true;
 	int current = 0;
-	fseek(param.fsrc, eventPos[ev-1], SEEK_SET);
+	fseek(param.fsrc, eventPos[ev], SEEK_SET);
 	while (done)
 	{
 		// Read one short word
@@ -418,6 +476,7 @@ void T2KMainFrame::DrawNext(Int_t ev0, int mode)
 		}
 		else
 		{
+			int evnum;
 			fea.tot_file_rd += sizeof(unsigned short);
 			// Interpret datum
 			if ((err = Datum_Decode(&dc, datum)) < 0)
@@ -425,20 +484,17 @@ void T2KMainFrame::DrawNext(Int_t ev0, int mode)
 				printf("%d Datum_Decode: %s\n", err, &dc.ErrorString[0]);
 				done = true;
 			}
-			else{ done=true;}
 			// Decode
-			if (dc.isItemComplete && dc.ItemType!=IT_START_OF_EVENT && dc.ItemType!=IT_ADC_SAMPLE){done=true;}
-			else
+			if (dc.isItemComplete)
 			{
-				int evnum;
-				if (dc.isItemComplete && dc.ItemType==IT_START_OF_EVENT)
+				if (dc.ItemType==IT_START_OF_EVENT)
 				{
 					evnum = (int) dc.EventNumber;
 				}
-				if (dc.isItemComplete && evnum==ev && dc.ItemType==IT_ADC_SAMPLE)//dc.AbsoluteSampleIndex!=timesampleprev)
+				else if (evnum==ev && dc.ItemType==IT_ADC_SAMPLE)//dc.AbsoluteSampleIndex!=timesampleprev)
 				{
-						if (dc.ChannelIndex!=15&&dc.ChannelIndex!=28&&dc.ChannelIndex!=53&&dc.ChannelIndex!=66&&dc.ChannelIndex>2&&dc.ChannelIndex<79)
-						{
+					if (dc.ChannelIndex!=15&&dc.ChannelIndex!=28&&dc.ChannelIndex!=53&&dc.ChannelIndex!=66&&dc.ChannelIndex>2&&dc.ChannelIndex<79)
+					{
 							// histo and display
 							int x = T2K.i(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex));
 							int y = T2K.j(dc.CardIndex, dc.ChipIndex, daq.connector(dc.ChannelIndex));
@@ -454,15 +510,29 @@ void T2KMainFrame::DrawNext(Int_t ev0, int mode)
 							}
 							*/
 						}
-						else{done=true;}
 				}
-				if (dc.isItemComplete && evnum>ev && evnum < 1000000)
-				{
-					done = false;
+				else if (dc.ItemType==IT_DATA_FRAME){}
+				else if (dc.ItemType==IT_END_OF_FRAME){}
+				else if (dc.ItemType==IT_MONITORING_FRAME){}
+				else if (dc.ItemType==IT_CONFIGURATION_FRAME){}
+				else if (dc.ItemType==IT_SHORT_MESSAGE){}
+				else if (dc.ItemType==IT_LONG_MESSAGE){}
+				else if (evnum==ev && dc.ItemType==IT_TIME_BIN_INDEX){}
+				else if (evnum==ev && dc.ItemType==IT_CHANNEL_HIT_HEADER){}
+				else if (dc.ItemType==IT_DATA_FRAME){}
+				else if (dc.ItemType==IT_NULL_DATUM){}
+				else if (dc.ItemType==IT_CHANNEL_HIT_COUNT){}
+				else if (dc.ItemType==IT_LAST_CELL_READ){}
+				else if (dc.ItemType==IT_END_OF_EVENT){}
+				else if (dc.ItemType==IT_PED_HISTO_MD){}
+				else if (dc.ItemType==IT_UNKNOWN){}
+				else if (dc.ItemType==IT_CHAN_PED_CORRECTION){}//printf("Type : 0x%x \n", dc.ItemType);}
+				else if (dc.ItemType==IT_CHAN_ZERO_SUPPRESS_THRESHOLD){}//printf("Type : 0x%x \n", dc.ItemType);}
+				else if (evnum>ev && evnum < 100000 ){done = false;}//}&& dc.ItemType==IT_START_OF_EVENT
+				else {}
 				}
 			}
 		}
-	}
 
 	//To compute transverse pads
 	int transverse[geom::nPadx]={0};
@@ -493,19 +563,18 @@ void T2KMainFrame::DrawNext(Int_t ev0, int mode)
 			P.setAmp(int(amp));
 		}
 		int color = (float(P.ampl())/4096*NCont);
-		/*********************************
-		Pad = new PadSignal(P);
+		//*********************************
+		tpcPad[q]= new PadSignal(P, p1);
 		if (P.ampl()>threshold)
 		{
-			Pad->polyline()->SetFillColor(MyPalette[color]);
-			Pad->polyline()->Draw("f");
+			tpcPad[q]->polyline()->SetFillColor(MyPalette[color]);
+			tpcPad[q]->polyline()->Draw("f");
 		}
-		else{Pad->polyline()->Draw("f");}
-		Pad->polyline()->Draw();
+		else{tpcPad[q]->polyline()->Draw("f");}
+		tpcPad[q]->polyline()->Draw();
+		//*********************************
 
-		*********************************/
-
-
+/*
 		if (P.ampl() > threshold )//&& time < 250)
 		{
 			// Test
@@ -517,7 +586,7 @@ void T2KMainFrame::DrawNext(Int_t ev0, int mode)
 				hADCvsTIME[q]->Draw("hist");
 				test->SaveAs((loc::outputs + "signals/test_" + to_string((int) dc.EventNumber) + "_" + to_string(P.card()) + "_" + to_string(P.chip()) + "_" + to_string(P.channel())+ ".gif" ).c_str());
 			}
-			*/
+
 			//end test
 			//p1->cd();
 
@@ -534,7 +603,7 @@ void T2KMainFrame::DrawNext(Int_t ev0, int mode)
 			P.line()->Draw("f");
 		}
 		P.line()->Draw();
-
+*/
 	}
 
 	p1->Modified();

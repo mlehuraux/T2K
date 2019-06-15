@@ -302,7 +302,7 @@ int main(int argc, char **argv)
 			{
 				evnum=(int)dc.EventNumber;
 			}
-			if (dc.isItemComplete && dc.ItemType==IT_ADC_SAMPLE)
+			else if (dc.isItemComplete && dc.ItemType==IT_ADC_SAMPLE)
 			{
 				printf("Event number : %i", evnum);
 				printf("\n");

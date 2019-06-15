@@ -6,9 +6,9 @@ export compile=1
 export startevent=1
 export maxevent=1000
 
-export data="/local/home/t2kt/projects/bin/pandax/data/"
+#export data="/local/home/t2kt/projects/bin/pandax/data/"
 
-export t2k="/local/home/t2kt/Documents/GitLab/T2K/T2KNewElectronics"
+export t2k="/home/mlehuraux/GitLab/T2K/T2KNewElectronics"
 #export data="/local/home/t2kt/projects/bin/pandax/data"
 export input_aqs=$t2k/test_data/aqs
 export input_txt=$t2k/test_data/txt

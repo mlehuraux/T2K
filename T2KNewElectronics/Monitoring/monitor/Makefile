@@ -53,11 +53,6 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	@echo ""
 	@echo "Compiling $< to $@"
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
-# Create the directory 
-MyDict.cxx: $ Linkdef.h
-	@echo "Building the directory..."
-	rootcint -f $@ -c $(CXXFLAGS) -p $^
-
 
 .PHONY: build
 build:

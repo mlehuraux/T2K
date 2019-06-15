@@ -4,6 +4,7 @@
 using namespace std;
 
 #include "TH1F.h"
+#include "TPad.h"
 #include "TROOT.h"
 
 #include "TCanvas.h"
@@ -14,10 +15,11 @@ using namespace std;
 //-----------------------------------------------------------------------------
 // Primitive Class for KeyStone Pad :
 //-----------------------------------
-TCanvas *PadSignal::fPad;
+TPad *PadSignal::fPad;
 
-PadSignal::PadSignal(Pixel& P)
+PadSignal::PadSignal(Pixel& P, TPad* pad)
 {
+  fPad = pad;
   fi = P.coordi();
   fj = P.coordj();
   fId =P.id();
@@ -34,7 +36,7 @@ PadSignal::PadSignal(Pixel& P)
 // Mouse button event handler
 void PadSignal::ExecuteEvent(Int_t event, Int_t px, Int_t py, TObject *sel)
 {
-  if ( event == kButton1Down )
+  if (event == kButton1Down )
   {
       // Is the mouse inside ?
       if ( TMath::IsInside(fPad->AbsPixeltoX(px), fPad->AbsPixeltoY(py), 5, fPolyLine->GetX(), fPolyLine->GetY()))

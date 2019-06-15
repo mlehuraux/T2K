@@ -5,6 +5,8 @@
 
 #include "TPolyLine.h"
 #include "Pixel.h"
+#include "TPad.h"
+#include "TObject.h"
 
 class TCanvas;
 
@@ -14,7 +16,7 @@ class PadSignal
 
   public:
 
-    PadSignal(Pixel& P);
+    PadSignal(Pixel& P, TPad* pad);
     ~PadSignal() { delete fPolyLine; }
 
     // Getters
@@ -37,13 +39,7 @@ class PadSignal
     int fj;
     int fampl;
     TPolyLine *fPolyLine;
-    static TCanvas *fPad;
+    static TPad *fPad;
   };
-
-inline void PadSignal::SetCanvas( TCanvas* canv )
-{
-  if ( fPad ) return;
-  fPad = canv;
-}
 
 #endif
