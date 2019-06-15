@@ -16,7 +16,7 @@ class PadSignal
 
   public:
 
-    PadSignal(Pixel& P, TPad* pad);
+    PadSignal(Pixel& P, TCanvas* canvas);
     ~PadSignal() { delete fPolyLine; }
 
     // Getters
@@ -24,8 +24,6 @@ class PadSignal
     int i(){return fi;}
     int j(){return fj;}
     TPolyLine *polyline(){return fPolyLine;}
-
-    void SetCanvas( TCanvas* canv );
 
     // Mouse button event handler
     void ExecuteEvent(Int_t event, Int_t px, Int_t py, TObject *sel);
@@ -39,7 +37,7 @@ class PadSignal
     int fj;
     int fampl;
     TPolyLine *fPolyLine;
-    static TPad *fPad;
+    static TCanvas *fCanvas;
   };
 
 #endif

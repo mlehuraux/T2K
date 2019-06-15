@@ -65,6 +65,8 @@ bool autoMon, endMon;
 int mode;
 double threshold; // 0 if wozs, around 250 if wzs
 int firstEv;
+PadSignal* tpcPad[n::pads];
+
 
 int parse_cmd_args(int argc, char **argv, Param* p)
 {
@@ -111,6 +113,14 @@ GUI framework
 *******************************************************************************/
 int main(int argc, char **argv)
 {
+  // For the CINT to generate its dictionnaries
+  gInterpreter->GenerateDictionary("DAQ","../src/DAQ.h");
+  gInterpreter->GenerateDictionary("Mapping","../src/Mapping.h");
+  gInterpreter->GenerateDictionary("Pads","../src/Pads.h");
+  gInterpreter->GenerateDictionary("PadSignal","../src/PadSignal.h");
+  gInterpreter->GenerateDictionary("Pixel","../src/Pixel.h");
+  gInterpreter->GenerateDictionary("T2KMainFrame","../src/T2KMainFrame.h");
+
 	// Palette
   const Int_t NRGBs = 5;
   Double_t stops[NRGBs] = { 0.00, 0.34, 0.61, 0.84, 1.00 };

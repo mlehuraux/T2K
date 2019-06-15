@@ -61,6 +61,7 @@ extern bool autoMon,endMon;
 extern int mode;
 extern int firstEv;
 extern double threshold; // 0 if wozs, around 250 if wzs
+extern PadSignal* tpcPad[n::pads];
 
 
 
@@ -277,7 +278,9 @@ T2KMainFrame::T2KMainFrame(const TGWindow *p,UInt_t w,UInt_t h)
 	stack->Divide(2,2);
 	stack->Draw();
 
-  fEcanvas = new TRootEmbeddedCanvas("Ecanvas",fMain, 4*geom::times*geom::wx, 2*geom::times*geom::wy);
+  //fEcanvas = new TRootEmbeddedCanvas("Ecanvas",fMain, 4*geom::times*geom::wx, 2*geom::times*geom::wy);
+  fEcanvas = new TRootEmbeddedCanvas("Ecanvas",fMain, 2*geom::times*geom::wx, 2*geom::times*geom::wy);
+
   fMain->AddFrame(fEcanvas, new TGLayoutHints(kLHintsExpandX |
 									kLHintsExpandY, 10,10,10,1));
   // Create a horizontal frame widget with buttons
@@ -398,8 +401,6 @@ void T2KMainFrame::DrawNext(Int_t ev0, int mode)
   //cout << "...Pad plane loaded succesfully." << endl;
 
   // Create an array of empty pads signals
-  PadSignal* tpcPad[n::pads];
-
   gStyle->SetTitleTextColor(602);
   gStyle->SetTitleFont(102);
   gStyle->SetTitleColor(60, "XY");
@@ -427,23 +428,14 @@ void T2KMainFrame::DrawNext(Int_t ev0, int mode)
   TCanvas *fCanvas = fEcanvas->GetCanvas();
   fCanvas->cd();
   fCanvas->Clear();
-  TPad *p1 = new TPad("p1", "p1", 0.01, 0.01, 0.49, 0.99);
-  p1->Range(-0.5*geom::nPadx*geom::dx, -0.5*geom::nPady*geom::dy, 0.5*geom::nPadx*geom::dx, 0.5*geom::nPady*geom::dy);
+  gPad->Range(-0.5*geom::nPadx*geom::dx, -0.5*geom::nPady*geom::dy, 0.5*geom::nPadx*geom::dx, 0.5*geom::nPady*geom::dy);
 
-  /************************************************************
-  for (int ipad=0; ipad<n::pads; ipad++)
-  {
-  fCanvas->Connect("ProcessedEvent(Int_t,Int_t,Int_t,TObject*)",
-				       "PadSignal", "PadSelected(Int_t)", tpcPad[ipad],
-				       "ExecuteEvent(Int_t,Int_t,Int_t,TObject*)");
-  }
-  **************************************************************/
-
-  p1->Draw();
-  TPad *p2 = new TPad("p2", "p2", 0.51, 0.01, 0.99, 0.99);
+  //TPad *p1 = new TPad("p1", "p1", 0.01, 0.01, 0.49, 0.99);
+  //p1->Range(-0.5*geom::nPadx*geom::dx, -0.5*geom::nPady*geom::dy, 0.5*geom::nPadx*geom::dx, 0.5*geom::nPady*geom::dy);
+  //p1->Draw();
+  //TPad *p2 = new TPad("p2", "p2", 0.51, 0.01, 0.99, 0.99);
   //p2->Range(-0.5*geom::nPadx*geom::dx, -0.5*geom::nPady*geom::dy, 0.5*geom::nPadx*geom::dx, 0.5*geom::nPady*geom::dy);
-  p2->Draw();
-https://www.google.com/search?client=ubuntu&channel=fs&q=root+making+dictionnary+unused+class+rule&ie=utf-8&oe=utf-8
+  //p2->Draw();
   TString nevt = "Event ";
   nevt += ev;
 
@@ -502,13 +494,6 @@ https://www.google.com/search?client=ubuntu&channel=fs&q=root+making+dictionnary
 							int a = (int)dc.AbsoluteSampleIndex;
 							double b = (double)dc.AdcSample;
 							hADCvsTIME[k]->Fill(a,b);
-							/*
-							if (b>0)
-							{
-								printf("Type : 0x%x \t", dc.ItemType);
-								cout << "Event " << dc.EventNumber << " Card " << dc.CardIndex << " Chip " << dc.ChipIndex << " Channel " << dc.ChannelIndex << " Time " << dc.AbsoluteSampleIndex << " Ampl " << dc.AdcSample << endl;
-							}
-							*/
 						}
 				}
 				else if (dc.ItemType==IT_DATA_FRAME){}
@@ -555,7 +540,7 @@ https://www.google.com/search?client=ubuntu&channel=fs&q=root+making+dictionnary
 				timeWindow->Fill(int(time));
 			}
 		}
-		p1->cd();
+		//p1->cd();
 		// TPolyLine Style for click and show signal
 		P = padPlane.pad(iFrompad(q),jFrompad(q));
 		if (P.channel()!=15&&P.channel()!=28&&P.channel()!=53&&P.channel()!=66&&P.channel()<79&&P.channel()>2)
@@ -564,7 +549,7 @@ https://www.google.com/search?client=ubuntu&channel=fs&q=root+making+dictionnary
 		}
 		int color = (float(P.ampl())/4096*NCont);
 		//*********************************
-		tpcPad[q]= new PadSignal(P, p1);
+		tpcPad[q]= new PadSignal(P, fCanvas);
 		if (P.ampl()>threshold)
 		{
 			tpcPad[q]->polyline()->SetFillColor(MyPalette[color]);
@@ -606,7 +591,15 @@ https://www.google.com/search?client=ubuntu&channel=fs&q=root+making+dictionnary
 */
 	}
 
-	p1->Modified();
+	/************************************************************
+    for (int ipad=0; ipad<n::pads; ipad++)
+    {
+		fCanvas->Connect("ProcessedEvent(Int_t,Int_t,Int_t,TObject*)",
+	  				       "PadSignal", "PadSelected(Int_t)", tpcPad[ipad],
+	  				       "ExecuteEvent(Int_t,Int_t,Int_t,TObject*)");
+    }
+    /**************************************************************/
+	//p1->Modified();
 
 	// Fill transverse size
 	if (ev == maxev && prevmaxev!=maxev) // stacking condition not to double count if prev
@@ -616,7 +609,7 @@ https://www.google.com/search?client=ubuntu&channel=fs&q=root+making+dictionnary
 			if (transverse[i]>0){transversepads->Fill(transverse[i]);}
 		}
 	}
-	fCanvas->cd(1);
+	fCanvas->cd();
 	pads->SetNameTitle("pads", nevt);
 	pads->SetMaximum(4096);
   	pads->SetMinimum(-0.1);
@@ -627,11 +620,11 @@ https://www.google.com/search?client=ubuntu&channel=fs&q=root+making+dictionnary
   	//fCanvas->SetTickx();
   	//fCanvas->SetTicky();
   	//fCanvas->SetRightMargin(0.15);
-	p2->cd();
+	//p2->cd();
 	tracks->SetMinimum(100);
 	gStyle->SetPalette(kBird);
-	tracks->Draw("LEGO2");
-	p2->Modified();
+	//tracks->Draw("LEGO2");
+	//p2->Modified();
   	fCanvas->Update();
 
 	stack->cd(1);

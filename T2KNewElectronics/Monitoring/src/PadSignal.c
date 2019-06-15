@@ -15,11 +15,11 @@ using namespace std;
 //-----------------------------------------------------------------------------
 // Primitive Class for KeyStone Pad :
 //-----------------------------------
-TPad *PadSignal::fPad;
+TCanvas *PadSignal::fCanvas;
 
-PadSignal::PadSignal(Pixel& P, TPad* pad)
+PadSignal::PadSignal(Pixel& P, TCanvas* canvas)
 {
-  fPad = pad;
+  fCanvas = canvas;
   fi = P.coordi();
   fj = P.coordj();
   fId =P.id();
@@ -38,12 +38,14 @@ void PadSignal::ExecuteEvent(Int_t event, Int_t px, Int_t py, TObject *sel)
 {
   if (event == kButton1Down )
   {
+      cout << "Click" << endl;
       // Is the mouse inside ?
-      if ( TMath::IsInside(fPad->AbsPixeltoX(px), fPad->AbsPixeltoY(py), 5, fPolyLine->GetX(), fPolyLine->GetY()))
+      if ( TMath::IsInside(fCanvas->AbsPixeltoX(px), fCanvas->AbsPixeltoY(py), 5, fPolyLine->GetX(), fPolyLine->GetY()))
       {
         cout << "Mouse is inside pad " << fId << endl;
       }
-    }
+  }
+  PadSelected( fId );
 }
 
 void PadSignal::PadSelected(Int_t)
