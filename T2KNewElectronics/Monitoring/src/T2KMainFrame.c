@@ -215,7 +215,7 @@ void T2KMainFrame::HandleButton(Int_t id)
     break;
   case 4: // next
     autoMon=false;
-		iEvent = iEvent+1;
+	iEvent = iEvent+1;
     DrawNext(iEvent, mode);
     break;
   case 5: // thresplus
@@ -274,9 +274,12 @@ T2KMainFrame::T2KMainFrame(const TGWindow *p,UInt_t w,UInt_t h)
 	transversepads = new TH1I("transversepads", "#pads transverse", geom::nPadx, 0, geom::nPadx);
 
 	stack = new TCanvas("stack", "Monitoring Information", 1100, 1100);
-	//test = new TCanvas("test", "test", 600, 600);
 	stack->Divide(2,2);
 	stack->Draw();
+	test = new TCanvas("test", "test", 500, 500);
+	test->Divide(2,2);
+	test->Draw();
+
 
   //fEcanvas = new TRootEmbeddedCanvas("Ecanvas",fMain, 4*geom::times*geom::wx, 2*geom::times*geom::wy);
   fEcanvas = new TRootEmbeddedCanvas("Ecanvas",fMain, 2*geom::times*geom::wx, 2*geom::times*geom::wy);
@@ -425,6 +428,9 @@ void T2KMainFrame::DrawNext(Int_t ev0, int mode)
 	param.show_run               = 0;
 	verbose                      = 0;
 
+	test->Clear();
+
+
   TCanvas *fCanvas = fEcanvas->GetCanvas();
   fCanvas->cd();
   fCanvas->Clear();
@@ -524,6 +530,7 @@ void T2KMainFrame::DrawNext(Int_t ev0, int mode)
 	// Extract max from signals for display
 	for (int q=0; q<n::pads; q++)
 	{
+
 		double amp = hADCvsTIME[q]->GetMaximum();
 		double time = double(hADCvsTIME[q]->GetMaximumBin());
 		pads->Fill(iFrompad(q), jFrompad(q), amp);
@@ -550,12 +557,17 @@ void T2KMainFrame::DrawNext(Int_t ev0, int mode)
 		int color = (float(P.ampl())/4096*NCont);
 		//*********************************
 		tpcPad[q]= new PadSignal(P, fCanvas);
+		//tpcPad[q]= new PadSignal(P, p1);
 		if (P.ampl()>threshold)
 		{
 			tpcPad[q]->polyline()->SetFillColor(MyPalette[color]);
 			tpcPad[q]->polyline()->Draw("f");
 		}
-		else{tpcPad[q]->polyline()->Draw("f");}
+		else
+		{
+			tpcPad[q]->polyline()->SetFillColor(602);
+			tpcPad[q]->polyline()->Draw("f");
+		}
 		tpcPad[q]->polyline()->Draw();
 		//*********************************
 
@@ -591,14 +603,17 @@ void T2KMainFrame::DrawNext(Int_t ev0, int mode)
 */
 	}
 
-	/************************************************************
+	//************************************************************
     for (int ipad=0; ipad<n::pads; ipad++)
     {
-		fCanvas->Connect("ProcessedEvent(Int_t,Int_t,Int_t,TObject*)",
-	  				       "PadSignal", "PadSelected(Int_t)", tpcPad[ipad],
+		//cout << "Ipad = " << ipad << endl;
+		tpcPad[ipad]->Connect("PadSelected(Int_t)",
+	  				       "PadSignal", tpcPad[ipad],
 	  				       "ExecuteEvent(Int_t,Int_t,Int_t,TObject*)");
+		//tpcPad[ipad]->Connect("PadSelected(Int_t)", 0,
+		//	                     0, "ExecuteEvent(Int_t,Int_t,Int_t,TObject*)");
     }
-    /**************************************************************/
+    //**************************************************************/
 	//p1->Modified();
 
 	// Fill transverse size
@@ -639,6 +654,14 @@ void T2KMainFrame::DrawNext(Int_t ev0, int mode)
 	transversepads->GetYaxis()->SetTitle("#pads hit");
 	transversepads->Draw("hist");
 	stack->Update();
+
+	// Test
+	test->cd(1);
+	hADCvsTIME[23]->Draw("hist");
+
+	test->Update();
+	// end test
+
 	cout << "\r" << "\t" << nevt << flush;
 
 	// Delete histos

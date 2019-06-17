@@ -8,8 +8,8 @@
 #include "TPad.h"
 #include "TObject.h"
 
-class TCanvas;
-
+//class TCanvas;
+class TPad;
 class PadSignal
 {
   RQ_OBJECT("PadSignal")
@@ -17,6 +17,7 @@ class PadSignal
   public:
 
     PadSignal(Pixel& P, TCanvas* canvas);
+    //PadSignal(Pixel& P, TPad* pad);
     ~PadSignal() { delete fPolyLine; }
 
     // Getters
@@ -38,6 +39,7 @@ class PadSignal
     int fampl;
     TPolyLine *fPolyLine;
     static TCanvas *fCanvas;
+    //static TPad *fPad;
   };
 
 #endif
