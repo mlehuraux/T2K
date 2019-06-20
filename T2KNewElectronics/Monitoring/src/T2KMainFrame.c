@@ -277,7 +277,7 @@ T2KMainFrame::T2KMainFrame(const TGWindow *p,UInt_t w,UInt_t h)
 	stack->Divide(2,2);
 	stack->Draw();
 	test = new TCanvas("test", "test", 500, 500);
-	test->Divide(2,2);
+	//test->Divide(2,2);
 	test->Draw();
 
 
@@ -656,7 +656,7 @@ void T2KMainFrame::DrawNext(Int_t ev0, int mode)
 	stack->Update();
 
 	// Test
-	test->cd(1);
+	test->cd();
 	hADCvsTIME[23]->Draw("hist");
 
 	test->Update();
