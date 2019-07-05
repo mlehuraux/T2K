@@ -5,11 +5,16 @@
 #include "Mapping.h"
 #include "DAQ.h"
 #include <iostream>
+#include "TPolyLine.h"
+#include "RQ_OBJECT.h"
+#include "TQObject.h"
 
 using namespace std;
 
 class Pixel
 {
+    //RQ_OBJECT("Pixel")
+
     public :
         // Constructors
         Pixel();
@@ -29,6 +34,8 @@ class Pixel
         int ampl();
         float coordx();
         float coordy();
+        int id();
+        TPolyLine* line();
 
         // Display cell address content.
 	    friend ostream& operator<<(ostream& os, const Pixel& P)
@@ -44,8 +51,6 @@ class Pixel
 		    return os;
         }
 
-        // Other
-
     private :
         int m_card;
         int m_chip;
@@ -58,6 +63,9 @@ class Pixel
         float m_x;
         float m_y;
         int m_amp;
+        int m_id;
+        TPolyLine* m_line;
+
 };
 
 #endif

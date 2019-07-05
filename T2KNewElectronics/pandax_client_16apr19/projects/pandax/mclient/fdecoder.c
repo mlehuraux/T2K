@@ -26,8 +26,6 @@ typedef struct _Param {
 	char inp_file[120];
 	FILE *fsrc;
 	int  has_no_run;
-	int  show_run;
-	unsigned int vflag;
 	int  sample_index_offset_zs;
 } Param;
 
@@ -37,6 +35,7 @@ Global Variables
 Param param;
 Features fea;
 DatumContext dc;
+PrintFilter pf;
 int verbose;
 
 /*******************************************************************************
@@ -56,21 +55,33 @@ help() to display usage
 void help()
 {
 	printf("fdecoder <options>\n");
-	printf("   -h                   : print this message help\n");
-	printf("   -i <file>            : input file name\n");
-	printf("   -zs_preamble <Value> : number of pre-samples below threshold in zero-suppressed mode\n");
-	printf("   -v <level>           : verbose\n");
-	printf("   -vflag <0xFlags>     : flags to determine printed items\n");
+	printf("   -h                               : print this message help\n");
+	printf("   -i <file>                        : input file name\n");
+	printf("   -zs_preamble <Value>             : number of pre-samples below threshold in zero-suppressed mode\n");
+	printf("   -v <level>                       : verbose\n");
+	printf("   -flags <0xFlags>                 : flags to determine printed items\n");
+	printf("   -condensed                       : show channel data in condensed format\n");
+	printf("   -event <Max:Min or index>        : select event number or event range for printout\n");
+	printf("   -card <Max:Min or index>         : select card or card range for printout\n");
+	printf("   -chip <Max:Min or index>         : select chip or chip range for printout\n");
+	printf("   -channel <Max:Min or index>      : select channel or channel range for printout\n");
+	printf("   -sample_index <Max:Min or index> : select timebin or timebin range for printout\n");
+	printf("   -sample_ampl <Max:Min>           : select sample amplitude range for printout\n");
+	printf("   -show_all                        : show all content\n");
+	printf("   -show_frame                      : show frame boundaries\n");
+	printf("   -show_event                      : show event boundaries\n");
+	printf("   -show_wave                       : show channel header and waveform samples\n");
 }
 
 /*******************************************************************************
 parse_cmd_args() to parse command line arguments
 *******************************************************************************/
-int parse_cmd_args(int argc, char **argv, Param* p)
+int parse_cmd_args(int argc, char **argv, Param *p, PrintFilter *f)
 {
 	int i;
 	int match;
 	int err = 0;
+	int param[4];
 
 	for (i = 1; i<argc; i++)
 	{
@@ -92,26 +103,282 @@ int parse_cmd_args(int argc, char **argv, Param* p)
 			}
 		}
 
-		// vflag
-		else if (strncmp(argv[i], "-vflag", 6) == 0)
+		// condensed
+		else if (strncmp(argv[i], "-condensed", 10) == 0)
+		{
+			match = 1;
+			f->isCondensedFormat = 1;
+		}
+
+		// show_frame
+		else if (strncmp(argv[i], "-show_all", 9) == 0)
+		{
+			match = 1;
+			f->flags |= 0xFFFFFFFF;
+		}
+
+		// show_frame
+		else if (strncmp(argv[i], "-show_frame", 11) == 0)
+		{
+			match = 1;
+			f->flags |= (IT_DATA_FRAME | IT_MONITORING_FRAME | IT_CONFIGURATION_FRAME | IT_END_OF_FRAME);
+		}
+
+		// show_event
+		else if (strncmp(argv[i], "-show_event", 11) == 0)
+		{
+			match = 1;
+			f->flags |= (IT_START_OF_EVENT | IT_END_OF_EVENT);
+		}
+
+		// show_wave
+		else if (strncmp(argv[i], "-show_wave", 10) == 0)
+		{
+			match = 1;
+			f->flags |= (IT_CHANNEL_HIT_HEADER | IT_TIME_BIN_INDEX | IT_ADC_SAMPLE);
+		}
+
+		// flags
+		else if (strncmp(argv[i], "-flags", 6) == 0)
 		{
 			match = 1;
 			if ((i + 1) < argc)
 			{
-				if (sscanf(argv[i + 1], "%i", &(p->vflag)) == 1)
+				if (sscanf(argv[i + 1], "%i", &(f->flags)) == 1)
 				{
 					i++;
 				}
 				else
 				{
-					printf("Warning: could not scan argument after option -vflag. Ignored\n");
+					printf("Warning: could not scan argument after option -flags. Ignored\n");
 				}
 			}
 			else
 			{
-				printf("Warning: missing argument after option -vflag. Ignored\n");
+				printf("Warning: missing argument after option -flags. Ignored\n");
 			}
+		}
 
+		// event
+		else if (strncmp(argv[i], "-event", 6) == 0)
+		{
+			match = 1;
+			if ((i + 1) < argc)
+			{
+				if ((sscanf(argv[i + 1], "%i:%i", &param[0], &param[1])) == 2)
+				{
+					i++;
+					if (param[0] > param[1])
+					{
+						param[2] = param[0];
+						param[0] = param[1];
+						param[1] = param[2];
+					}
+					f->EventIndexMin = param[0];
+					f->EventIndexMax = param[1];
+					f->isAnyEvent    = 0;
+				}
+				else if ((sscanf(argv[i + 1], "%i", &param[0])) == 1)
+				{
+					i++;
+					f->EventIndexMin = param[0];
+					f->EventIndexMax = param[0];
+					f->isAnyEvent    = 0;
+				}
+				else
+				{
+					printf("Warning: could not scan argument after option -card. Ignored\n");
+				}
+			}
+			else
+			{
+				printf("Warning: missing argument after option -card. Ignored\n");
+			}
+		}
+
+		// card
+		else if (strncmp(argv[i], "-card", 5) == 0)
+		{
+			match = 1;
+			if ((i + 1) < argc)
+			{
+				if ((sscanf(argv[i + 1], "%i:%i", &param[0], &param[1])) == 2)
+				{
+					i++;
+					if (param[0] > param[1])
+					{
+						param[2] = param[0];
+						param[0] = param[1];
+						param[1] = param[2];
+					}
+					f->CardIndexMin = param[0];
+					f->CardIndexMax = param[1];
+					f->isAnyCard    = 0;
+				}
+				else if ((sscanf(argv[i + 1], "%i", &param[0])) == 1)
+				{
+					i++;
+					f->CardIndexMin = param[0];
+					f->CardIndexMax = param[0];
+					f->isAnyCard = 0;
+				}
+				else
+				{
+					printf("Warning: could not scan argument after option -card. Ignored\n");
+				}
+			}
+			else
+			{
+				printf("Warning: missing argument after option -card. Ignored\n");
+			}
+		}
+
+		// chip
+		else if (strncmp(argv[i], "-chip", 5) == 0)
+		{
+			match = 1;
+			if ((i + 1) < argc)
+			{
+				if ((sscanf(argv[i + 1], "%i:%i", &param[0], &param[1])) == 2)
+				{
+					i++;
+					if (param[0] > param[1])
+					{
+						param[2] = param[0];
+						param[0] = param[1];
+						param[1] = param[2];
+					}
+					f->ChipIndexMin = param[0];
+					f->ChipIndexMax = param[1];
+					f->isAnyChip = 0;
+				}
+				else if ((sscanf(argv[i + 1], "%i", &param[0])) == 1)
+				{
+					i++;
+					f->ChipIndexMin = param[0];
+					f->ChipIndexMax = param[0];
+					f->isAnyChip = 0;
+				}
+				else
+				{
+					printf("Warning: could not scan argument after option -chip. Ignored\n");
+				}
+			}
+			else
+			{
+				printf("Warning: missing argument after option -chip. Ignored\n");
+			}
+		}
+
+		// channel
+		else if (strncmp(argv[i], "-channel", 8) == 0)
+		{
+			match = 1;
+			if ((i + 1) < argc)
+			{
+				if ((sscanf(argv[i + 1], "%i:%i", &param[0], &param[1])) == 2)
+				{
+					i++;
+					if (param[0] > param[1])
+					{
+						param[2] = param[0];
+						param[0] = param[1];
+						param[1] = param[2];
+					}
+					f->ChannelIndexMin = param[0];
+					f->ChannelIndexMax = param[1];
+					f->isAnyChannel = 0;
+				}
+				else if ((sscanf(argv[i + 1], "%i", &param[0])) == 1)
+				{
+					i++;
+					f->ChannelIndexMin = param[0];
+					f->ChannelIndexMax = param[0];
+					f->isAnyChannel = 0;
+				}
+				else
+				{
+					printf("Warning: could not scan argument after option -channel. Ignored\n");
+				}
+			}
+			else
+			{
+				printf("Warning: missing argument after option -channel. Ignored\n");
+			}
+		}
+
+		// sample_index
+		else if (strncmp(argv[i], "-sample_index", 13) == 0)
+		{
+			match = 1;
+			if ((i + 1) < argc)
+			{
+				if ((sscanf(argv[i + 1], "%i:%i", &param[0], &param[1])) == 2)
+				{
+					i++;
+					if (param[0] > param[1])
+					{
+						param[2] = param[0];
+						param[0] = param[1];
+						param[1] = param[2];
+					}
+					f->AbsoluteSampleIndexMin = param[0];
+					f->AbsoluteSampleIndexMax = param[1];
+					f->isAnySampleIndex       = 0;
+				}
+				else if ((sscanf(argv[i + 1], "%i", &param[0])) == 1)
+				{
+					i++;
+					f->AbsoluteSampleIndexMin = param[0];
+					f->AbsoluteSampleIndexMax = param[0];
+					f->isAnySampleIndex       = 0;
+				}
+				else
+				{
+					printf("Warning: could not scan argument after option -timebin. Ignored\n");
+				}
+			}
+			else
+			{
+				printf("Warning: missing argument after option -timebin. Ignored\n");
+			}
+		}
+
+		// sample_ampl
+		else if (strncmp(argv[i], "-sample_ampl", 12) == 0)
+		{
+			match = 1;
+			if ((i + 1) < argc)
+			{
+				if ((sscanf(argv[i + 1], "%i:%i", &param[0], &param[1])) == 2)
+				{
+					i++;
+					if (param[0] > param[1])
+					{
+						param[2] = param[0];
+						param[0] = param[1];
+						param[1] = param[2];
+					}
+					f->SampleAmplMin   = param[0];
+					f->SampleAmplMax   = param[1];
+					f->isAnySampleAmpl = 0;
+				}
+				else if ((sscanf(argv[i + 1], "%i", &param[0])) == 1)
+				{
+					i++;
+					f->AbsoluteSampleIndexMin = param[0];
+					f->AbsoluteSampleIndexMax = param[0];
+					f->isAnySampleIndex       = 0;
+				}
+				else
+				{
+					printf("Warning: could not scan argument after option -timebin. Ignored\n");
+				}
+			}
+			else
+			{
+				printf("Warning: missing argument after option -timebin. Ignored\n");
+			}
 		}
 
 		// zs_preamble
@@ -187,15 +454,13 @@ int main(int argc, char **argv)
 	int done;
 	
 	// Default parameters
-	sprintf(param.inp_file, "C:\\users\\calvet\\projects\\bin\\pandax\\data\\R2018_11_27-15_24_07-000.aqs"); //Change default file path 
+	sprintf(param.inp_file, "C:\\users\\calvet\\projects\\bin\\pandax\\data\\R2018_11_27-15_24_07-000.aqs");
 	param.sample_index_offset_zs = 4;
-	param.vflag                  = 0;
-	param.has_no_run             = 0;
-	param.show_run               = 0;
 	verbose                      = 0;
+	Item_PrintFilter_Init(&pf);
 
 	// Parse command line arguments
-	if (parse_cmd_args(argc, argv, &param) < 0)
+	if (parse_cmd_args(argc, argv, &param, &pf) < 0)
 	{
 		return (-1);
 	}
@@ -240,7 +505,7 @@ int main(int argc, char **argv)
 			}
 
 			// Print item
-			Item_Print(stdout, &dc, param.vflag);
+			Item_Print(stdout, &dc, &pf);
 		}
 	}
 

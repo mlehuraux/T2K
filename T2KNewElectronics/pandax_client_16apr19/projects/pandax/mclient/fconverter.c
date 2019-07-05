@@ -39,6 +39,7 @@ Global Variables
 Param param;
 Features fea;
 DatumContext dc;
+PrintFilter pf;
 int verbose;
 
 /*******************************************************************************
@@ -262,13 +263,18 @@ int main(int argc, char **argv)
 	strncpy(name, param.inp_file, l-1); // name without extension
 	name[l-1]='\0';
 	strcat(name, ".txt");
-	printf("Output .txt file : %s", name);
-	printf("\n");
+	printf("Output my new .txt file : %s\n", name);
+	printf("File open0"); // <-- here segmentation fault while previous print OK
 
 	strcat(output_dir, name);
+	printf("File open1");
+
 	FILE * output;
+	printf("File open");
+
 	output = fopen(output_dir, "w");
 
+	printf("File open");
 	// Scan the file
 	done = 0;
 	i    = 0;
@@ -297,30 +303,38 @@ int main(int argc, char **argv)
 			}
 
 			// Print item
-			Item_Print(stdout, &dc, param.vflag);
-			if (dc.isItemComplete && dc.ItemType==IT_START_OF_EVENT)
+			Item_Print(stdout, &dc, &pf);
+			if (dc.isItemComplete)
 			{
-				evnum=(int)dc.EventNumber;
+				if (dc.ItemType==IT_START_OF_EVENT)
+				{
+					evnum=(int)dc.EventNumber;
+				}
+				else if (dc.ItemType==IT_ADC_SAMPLE)
+				{
+					printf("Event number : %i", evnum);
+					printf("\n");
+					fprintf(output, "%i\t%hi\t%hi\t%hi\t%d\t%hi\n", evnum, dc.CardIndex, dc.ChipIndex, dc.ChannelIndex, dc.AbsoluteSampleIndex, dc.AdcSample);
+				}
+				else if (dc.ItemType==IT_DATA_FRAME){}
+				else if (dc.ItemType==IT_END_OF_FRAME){}
+				else if (dc.ItemType==IT_MONITORING_FRAME){}
+				else if (dc.ItemType==IT_CONFIGURATION_FRAME){}
+				else if (dc.ItemType==IT_SHORT_MESSAGE){}
+				else if (dc.ItemType==IT_LONG_MESSAGE){}
+				else if (dc.ItemType==IT_TIME_BIN_INDEX){}
+				else if (dc.ItemType==IT_CHANNEL_HIT_HEADER){}
+				else if (dc.ItemType==IT_DATA_FRAME){}
+				else if (dc.ItemType==IT_NULL_DATUM){}
+				else if (dc.ItemType==IT_CHANNEL_HIT_COUNT){}
+				else if (dc.ItemType==IT_LAST_CELL_READ){}
+				else if (dc.ItemType==IT_END_OF_EVENT){}
+				else if (dc.ItemType==IT_PED_HISTO_MD){}
+				else if (dc.ItemType==IT_UNKNOWN){}
+				else if (dc.ItemType==IT_CHAN_PED_CORRECTION){}//printf("Type : 0x%x \n", dc.ItemType);}
+				else if (dc.ItemType==IT_CHAN_ZERO_SUPPRESS_THRESHOLD){}//printf("Type : 0x%x \n", dc.ItemType);}
+				else {}
 			}
-			else if (dc.isItemComplete && dc.ItemType==IT_ADC_SAMPLE)
-			{
-				printf("Event number : %i", evnum);
-				printf("\n");
-				fprintf(output, "%i\t%hi\t%hi\t%hi\t%d\t%hi\n", evnum, dc.CardIndex, dc.ChipIndex, dc.ChannelIndex, dc.AbsoluteSampleIndex, dc.AdcSample);
-			}
-			/*
-			current = dc.StartOfEventBeCount;
-			if (current-prev != 0) // new event
-			{
-				fprintf(output, "%i\t%i\t%i\t%i\t%i\t%i\n", dc.EventNumber, dc.CardIndex, dc.ChipIndex, dc.ChannelIndex, dc.TimeBinIndex, dc.AdcSample);
-			}
-			else
-			{
-				fprintf(output, "%i\t%i\t%i\t%i\t%i\t%i\n", dc.EventNumber, dc.CardIndex, dc.ChipIndex, dc.ChannelIndex, dc.TimeBinIndex, dc.AdcSample);
-
-			}
-			prev = dc.StartOfEventBeCount;
-			*/
 		}
 	}
 

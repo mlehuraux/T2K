@@ -16,8 +16,8 @@ class PadSignal
 
   public:
 
-    PadSignal(Pixel& P, TCanvas* canvas);
-    //PadSignal(Pixel& P, TPad* pad);
+    //PadSignal(Pixel& P, TCanvas* canvas);
+    PadSignal(Pixel& P, TPad* pad);
     ~PadSignal() { delete fPolyLine; }
 
     // Getters
@@ -38,8 +38,8 @@ class PadSignal
     int fj;
     int fampl;
     TPolyLine *fPolyLine;
-    static TCanvas *fCanvas;
-    //static TPad *fPad;
+    //static TCanvas *fCanvas;
+    static TPad *fPad;
   };
 
 #endif

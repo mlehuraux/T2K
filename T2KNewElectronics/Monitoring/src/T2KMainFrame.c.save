@@ -403,25 +403,6 @@ void T2KMainFrame::DrawNext(Int_t ev0, int mode)
   padPlane.loadPadPlane(daq, T2K);
   //cout << "...Pad plane loaded succesfully." << endl;
 
-  TFile *output_file = new TFile("toto.root", "RECREATE");
-  TTree *tree = new TTree("tree", "tree");
-
-  Int_t eventNumber;
-  Int_t ADCAmpl[n::cards][n::chips][n::bins][n::samples]={};
-  Double_t MaxAmpl[n::cards][n::chips][n::bins]={};
-  Int_t MaxAmplTimeSample[n::cards][n::chips][n::bins]={};
-  Int_t PadAmpl[geom::nPadx][geom::nPady][n::samples]={};
-  Int_t PadMaxAmpl[geom::nPadx][geom::nPady]={};
-  Int_t PadMaxAmplTimeSample[geom::nPadx][geom::nPady]={};
-
-  TBranch *b0 = tree->Branch("eventNumber", &eventNumber, "eventNumber/I");
-  TBranch *b1 = tree->Branch("ADCAmpl", &ADCAmpl, TString::Format("ADCAmpl[%i][%i][%i][%i]/I", n::cards, n::chips, n::bins, n::samples));
-  TBranch *b2 = tree->Branch("MaxAmpl", &MaxAmpl, Form("MaxAmpl[%i][%i][%i]/D", n::cards, n::chips, n::bins));
-  TBranch *b3 = tree->Branch("MaxAmplTimeSample", &MaxAmplTimeSample, Form("MaxAmplTimeSample[%i][%i][%i]/I", n::cards, n::chips, n::bins));
-  TBranch *b4 = tree->Branch("PadAmpl", &PadAmpl, Form("PadAmpl[%i][%i][%i]/I", geom::nPadx, geom::nPady, n::samples));
-  TBranch *b5 = tree->Branch("PadMaxAmpl", &PadMaxAmpl, Form("PadMaxAmpl[%i][%i]/I", geom::nPadx, geom::nPady));
-  TBranch *b6 = tree->Branch("PadMaxAmplTimeSample", &PadMaxAmplTimeSample, Form("PadMaxAmplTimeSample[%i][%i]/I", geom::nPadx, geom::nPady));
-
   // Create an array of empty pads signals
   gStyle->SetTitleTextColor(602);
   gStyle->SetTitleFont(102);
@@ -519,12 +500,6 @@ void T2KMainFrame::DrawNext(Int_t ev0, int mode)
 							int a = (int)dc.AbsoluteSampleIndex;
 							double b = (double)dc.AdcSample;
 							hADCvsTIME[k]->Fill(a,b);
-							// Fill branches
-							int card = (int)dc.CardIndex;
-							int chip = (int)dc.ChipIndex;
-							int channel = (int)dc.ChannelIndex;
-							ADCAmpl[card][chip][channel][a] = b;
-							PadAmpl[x][y][a] = b;
 						}
 				}
 				else if (dc.ItemType==IT_DATA_FRAME){}
@@ -558,16 +533,6 @@ void T2KMainFrame::DrawNext(Int_t ev0, int mode)
 
 		double amp = hADCvsTIME[q]->GetMaximum();
 		double time = double(hADCvsTIME[q]->GetMaximumBin());
-
-		// Fill branches
-		//cout << "Carte : " << P.card() << " Chip : " << P.chip() << " Channel : " << P.channel() << endl;
-		MaxAmpl[P.card()][P.chip()][P.channel()] = amp; // channel 0,1,2,15,28,53,66,79,80,81 will stay at 0
-		PadMaxAmpl[iFrompad(q)][jFrompad(q)] = amp;
-		//cout << "PadMaxAmp after filling : " << PadMaxAmpl[iFrompad(q)][jFrompad(q)] << endl;
-		MaxAmplTimeSample[P.card()][P.chip()][P.channel()] = time;
-		PadMaxAmplTimeSample[iFrompad(q)][jFrompad(q)] = time;
-
-
 		pads->Fill(iFrompad(q), jFrompad(q), amp);
 		tracks->Fill(iFrompad(q), jFrompad(q), time, time);
 		if (mode==0 && amp>threshold){transverse[jFrompad(q)]+=1;} // cosmic mode
@@ -637,11 +602,6 @@ void T2KMainFrame::DrawNext(Int_t ev0, int mode)
 		P.line()->Draw();
 */
 	}
-
-	// Fill in the tree
-	tree->Fill();
-	tree->Write("");
-
 
 	//************************************************************
     for (int ipad=0; ipad<n::pads; ipad++)
